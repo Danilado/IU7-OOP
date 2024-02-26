@@ -482,7 +482,14 @@
      </widget>
     </item>
     <item row="0" column="0" colspan="5">
-     <widget class="QGraphicsView" name="canvas"/>
+     <widget class="QGraphicsView" name="canvas">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
     </item>
     <item row="4" column="0" rowspan="5" colspan="2">
      <layout class="QFormLayout" name="formLayout_5">

@@ -26,12 +26,16 @@ MainWindow::MainWindow(QWidget *parent)
     graph = nullptr;
     filename.clear();
 
+    scene = new QGraphicsScene();
+
     ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    destroy_graph(&graph);
+    delete scene;
 }
 
 void MainWindow::update_filename()
@@ -62,6 +66,8 @@ void MainWindow::on_file_load_clicked()
     this->update_filename();
 
     graph = create_graph_from_file(filename);
+
+    ctx_draw_graph();
 }
 
 void MainWindow::on_file_save_clicked()
@@ -83,8 +89,67 @@ void MainWindow::on_file_save_clicked()
     write_graph_to_file(graph, filename);
 }
 
-void MainWindow::on_do_scale_clicked() {}
+void MainWindow::ctx_draw_graph()
+{
+    if (graph == nullptr)
+        return;
 
-void MainWindow::on_do_shift_clicked() {}
+    QImage img = QImage(ui->canvas->width(), ui->canvas->height(), QImage::Format_RGB32);
+    QPainter p(&img);
 
-void MainWindow::on_do_rotate_clicked() {}
+    p.fillRect(0, 0, ui->canvas->width(), ui->canvas->height(), QColor(255, 255, 255));
+
+    draw_graph(graph,
+               &p,
+               QColor(0, 0, 0),
+               QColor(200, 0, 0),
+               ui->canvas->width() / 2,
+               ui->canvas->height() / 2);
+
+    QPixmap pixmap = QPixmap::fromImage(img);
+    scene->clear();
+    scene->addPixmap(pixmap);
+    ui->canvas->setScene(scene);
+}
+
+void MainWindow::on_do_scale_clicked()
+{
+    if (graph == nullptr)
+        return;
+
+    point_t origin = create_point(s_cx, s_cy, s_cz);
+    if (origin == nullptr)
+        return;
+
+    graph_apply_scale(graph, origin, kx, ky, kz);
+
+    destroy_point(&origin);
+
+    ctx_draw_graph();
+}
+
+void MainWindow::on_do_shift_clicked()
+{
+    if (graph == nullptr)
+        return;
+
+    graph_apply_shift(graph, dx, dy, dz);
+
+    ctx_draw_graph();
+}
+
+void MainWindow::on_do_rotate_clicked()
+{
+    if (graph == nullptr)
+        return;
+
+    point_t origin = create_point(r_cx, r_cy, r_cz);
+    if (origin == nullptr)
+        return;
+
+    graph_apply_rotate(graph, origin, ax, ay, az);
+
+    destroy_point(&origin);
+
+    ctx_draw_graph();
+}

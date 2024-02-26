@@ -254,3 +254,93 @@ void write_graph_to_file(graph_t gr, QString filename)
 
     fclose(f);
 }
+
+void draw_graph(
+    graph_t gr, QPainter *ctx, QColor linecolor, QColor pointcolor, double offset_x, double offset_y)
+{
+    if (gr == nullptr)
+        return;
+
+    draw_connections(gr, ctx, linecolor, offset_x, offset_y);
+
+    draw_points(gr, ctx, pointcolor, offset_x, offset_y);
+}
+
+void draw_connections(graph_t gr, QPainter *ctx, QColor color, double offset_x, double offset_y)
+{
+    if (gr == nullptr)
+        return;
+
+    ctx->setPen(color);
+
+    for (size_t i = 0; i < gr->conns_len; ++i) {
+        connection_t tmp = gr->conns[i];
+        if (tmp == nullptr)
+            continue;
+
+        QLineF *tmpline = connection_to_QLineF(tmp, offset_x, offset_y);
+        if (tmpline == nullptr)
+            continue;
+
+        ctx->drawLine(*tmpline);
+        delete tmpline;
+    }
+}
+
+void draw_points(graph_t gr, QPainter *ctx, QColor color, double offset_x, double offset_y)
+{
+    if (gr == nullptr)
+        return;
+
+    ctx->setBrush(color);
+
+    for (size_t i = 0; i < gr->points_len; ++i) {
+        point_t tmp = gr->points[i];
+        if (tmp == nullptr)
+            continue;
+
+        QPointF *tmppoint = point_to_QPointF(tmp, offset_x, offset_y);
+        if (tmppoint == nullptr)
+            continue;
+
+        ctx->drawPoint(*tmppoint);
+        delete tmppoint;
+    }
+}
+
+QPointF *point_to_QPointF(point_t pt, double offset_x, double offset_y)
+{
+    if (pt == nullptr)
+        return nullptr;
+
+    return new QPointF(pt->x + offset_x, pt->y + offset_y);
+}
+
+QLineF *connection_to_QLineF(connection_t con, double offset_x, double offset_y)
+{
+    if (con == nullptr)
+        return nullptr;
+
+    return new QLineF(con->p1->x + offset_x,
+                      con->p1->y + offset_y,
+                      con->p2->x + offset_x,
+                      con->p2->y + offset_y);
+}
+
+void graph_apply_scale(graph_t gr, const point_t origin, double kx, double ky, double kz)
+{
+    for (size_t i = 0; i < gr->points_len; ++i)
+        transform_point_scale(gr->points[i], origin, kx, ky, kz);
+}
+
+void graph_apply_rotate(graph_t gr, const point_t origin, double ax, double ay, double az)
+{
+    for (size_t i = 0; i < gr->points_len; ++i)
+        transform_point_rotate(gr->points[i], origin, ax, ay, az);
+}
+
+void graph_apply_shift(graph_t gr, double dx, double dy, double dz)
+{
+    for (size_t i = 0; i < gr->points_len; ++i)
+        transform_point_shift(gr->points[i], dx, dy, dz);
+}

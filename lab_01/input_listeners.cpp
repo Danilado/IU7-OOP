@@ -62,15 +62,15 @@ void MainWindow::on_scale_Kz_valueChanged(double arg1)
 
 void MainWindow::on_rotate_Ax_valueChanged(double arg1)
 {
-    this->r_cx = arg1;
+    this->ax = arg1;
 }
 
 void MainWindow::on_rotate_Ay_valueChanged(double arg1)
 {
-    this->r_cy = arg1;
+    this->ay = arg1;
 }
 
 void MainWindow::on_rotate_Az_valueChanged(double arg1)
 {
-    this->r_cz = arg1;
+    this->az = arg1;
 }

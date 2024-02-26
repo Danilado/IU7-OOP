@@ -3,6 +3,7 @@
 
 #include <QErrorMessage>
 #include <QFileDialog>
+#include <QGraphicsScene>
 #include <QMainWindow>
 
 #include "my_graph.h"
@@ -24,6 +25,8 @@ class MainWindow : public QMainWindow
 
     QString filename;
 
+    QGraphicsScene *scene;
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -32,6 +35,8 @@ private slots:
     void update_filename();
 
     void on_choose_file_clicked();
+
+    void ctx_draw_graph();
 
     void on_shift_Dz_valueChanged(double arg1);
 
