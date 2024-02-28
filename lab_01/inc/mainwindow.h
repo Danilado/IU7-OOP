@@ -7,6 +7,7 @@
 #include <QMainWindow>
 
 #include "my_graph.h"
+#include "my_graph_funcs.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
