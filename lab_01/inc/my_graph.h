@@ -1,7 +1,6 @@
 #ifndef MY_GRAPH_H
 #define MY_GRAPH_H
 
-#include <math.h>
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>

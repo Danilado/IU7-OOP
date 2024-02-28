@@ -13,7 +13,7 @@ QPointF *point_to_QPointF(point_t pt, double offset_x, double offset_y);
 QLineF *connection_to_QLineF(connection_t con, double offset_x,
                              double offset_y);
 
-void write_graph_to_file(graph_t gr, QString filename);
+void write_graph_to_file(graph_t gr, FILE *f);
 
 void draw_graph(graph_t gr, QPainter *ctx, QColor linecolor, QColor pointcolor,
                 double offset_x, double offset_y);
@@ -23,6 +23,6 @@ void draw_connections(graph_t gr, QPainter *ctx, QColor color, double offset_x,
 void draw_points(graph_t gr, QPainter *ctx, QColor color, double offset_x,
                  double offset_y);
 
-graph_t create_graph_from_file(QString filename);
+graph_t create_graph_from_file(FILE *f);
 
 #endif

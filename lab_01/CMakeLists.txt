@@ -7,6 +7,7 @@ set(HEADER_LIST
 "${lab_01_SOURCE_DIR}/inc/mainwindow.h"
 "${lab_01_SOURCE_DIR}/inc/my_graph.h"
 "${lab_01_SOURCE_DIR}/inc/my_graph_funcs.h"
+"${lab_01_SOURCE_DIR}/inc/controller.h"
 )
 
 set(CMAKE_AUTOUIC ON)
@@ -26,24 +27,26 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 
 set( CMAKE_CXX_FLAGS "-Iinc")
 
-add_library(main SHARED src/input_listeners.cpp src/main.cpp src/mainwindow.cpp src/my_graph.cpp src/my_graph_funcs.cpp ui/mainwindow.ui ${HEADER_LIST})
+add_library(main SHARED  src/main.cpp src/mainwindow.cpp src/my_graph.cpp src/my_graph_funcs.cpp ui/mainwindow.ui src/controller.cpp ${HEADER_LIST})
 target_include_directories(main PUBLIC ./inc)
 target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_compile_features(main PUBLIC cxx_std_17)
 
 set(PROJECT_SOURCES
-        ./src/main.cpp
-        ./src/mainwindow.cpp
-        ./inc/mainwindow.h
-        ./ui/mainwindow.ui
-        ./src/input_listeners.cpp
-        ./inc/my_graph.h
-        ./src/my_graph.cpp
-        ./inc/my_graph_funcs.h
-        ./src/my_graph_funcs.cpp
+        src/main.cpp
+        src/mainwindow.cpp
+        inc/mainwindow.h
+        ui/mainwindow.ui
+        inc/my_graph.h
+        src/my_graph.cpp
+        inc/my_graph_funcs.h
+        src/my_graph_funcs.cpp
+        inc/controller.h
+        src/controller.cpp
 )
 
-add_executable(lab_01 src/main.cpp ui/mainwindow.ui)
+add_executable(lab_01 src/main.cpp ui/mainwindow.ui
+   )
 target_compile_features(lab_01 PRIVATE cxx_std_17)
 target_link_libraries(lab_01 PRIVATE main Qt${QT_VERSION_MAJOR}::Widgets)
 

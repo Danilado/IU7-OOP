@@ -1,4 +1,5 @@
 #include "my_graph.h"
+#include <cmath>
 
 struct point {
   double x;
