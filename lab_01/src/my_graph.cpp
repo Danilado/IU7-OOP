@@ -1,19 +1,24 @@
 #include "my_graph.h"
 #include <cmath>
 
-struct point {
+struct point
+{
   double x;
   double y;
   double z;
 };
 
-struct connection {
+struct connection
+{
   point_t p1;
   point_t p2;
 };
 
-point_t create_point(double x, double y, double z) {
+point_t create_point(double x, double y, double z)
+{
   point_t res = (point_t)calloc(1, sizeof(struct point));
+  if (res == nullptr)
+    return nullptr;
 
   res->x = x;
   res->y = y;
@@ -22,71 +27,101 @@ point_t create_point(double x, double y, double z) {
   return res;
 }
 
-void destroy_point(point_t *pt) {
-  free(*pt);
-  *pt = nullptr;
+void destroy_point(point_t &pt)
+{
+  free(pt);
+  pt = nullptr;
 }
 
-double point_get_x(const point_t pt) {
+double point_get_x(const point_t pt)
+{
   if (pt == nullptr)
     return NAN;
   return pt->x;
 }
 
-double point_get_y(const point_t pt) {
+double point_get_y(const point_t pt)
+{
   if (pt == nullptr)
     return NAN;
   return pt->y;
 }
 
-double point_get_z(const point_t pt) {
+double point_get_z(const point_t pt)
+{
   if (pt == nullptr)
     return NAN;
   return pt->z;
 }
 
-void transform_point_scale(point_t pt, const point_t origin, double kx,
-                           double ky, double kz) {
-  pt->x = pt->x * kx + origin->x * (1 - kx);
-  pt->y = pt->y * ky + origin->y * (1 - ky);
-  pt->z = pt->z * kz + origin->z * (1 - kz);
+int transform_point_scale(point_t pt, const point_t origin, const point_t coeffs)
+{
+  if (pt == nullptr)
+    return TRANSFORM_NO_POINT;
+  if (origin == nullptr)
+    return TRANSFORM_NO_ORIGIN;
+  if (coeffs == nullptr)
+    return TRANSFORM_NO_DATA;
+
+  pt->x = (pt->x - origin->x) * coeffs->x + origin->x;
+  pt->y = (pt->y - origin->y) * coeffs->y + origin->y;
+  pt->z = (pt->z - origin->z) * coeffs->z + origin->z;
+
+  return 0;
 }
 
-void transform_point_rotate(point_t pt, const point_t origin, double ax,
-                            double ay, double az) {
-  if (pt == nullptr || origin == nullptr)
-    return;
+int transform_point_rotate(point_t pt, const point_t origin, const point_t angles)
+{
+  if (pt == nullptr)
+    return TRANSFORM_NO_POINT;
+  if (origin == nullptr)
+    return TRANSFORM_NO_ORIGIN;
+  if (angles == nullptr)
+    return TRANSFORM_NO_DATA;
 
   // https://ru.wikipedia.org/wiki/Матрица_поворота#Матрица_поворота_в_трёхмерном_пространстве
-  double newx = (pt->x - origin->x) * cos(ay) * cos(az)      // x part
-                - (pt->y - origin->y) * sin(az) * cos(ay)    // y part
-                + (pt->z - origin->z) * sin(ay) + origin->x; // z part
+  double newx = (pt->x - origin->x) * cos(angles->y) * cos(angles->y)   // x part
+                - (pt->y - origin->y) * sin(angles->y) * cos(angles->y) // y part
+                + (pt->z - origin->z) * sin(angles->y) + origin->x;     // z part
 
-  double newy = (pt->x - origin->x) * sin(ax) * sin(ay) * cos(az) +    //
-                (pt->x - origin->x) * sin(az) * cos(ax)                // x part
-                - (pt->y - origin->y) * sin(ax) * sin(ay) * sin(az) +  //
-                (pt->y - origin->y) * cos(ax) * cos(az)                // y part
-                - (pt->z - origin->z) * sin(ax) * cos(ay) + origin->y; // z part
+  double newy = (pt->x - origin->x) * sin(angles->y) * sin(angles->y) * cos(angles->y) +   //
+                (pt->x - origin->x) * sin(angles->y) * cos(angles->y)                      // x part
+                - (pt->y - origin->y) * sin(angles->y) * sin(angles->y) * sin(angles->y) + //
+                (pt->y - origin->y) * cos(angles->y) * cos(angles->y)                      // y part
+                - (pt->z - origin->z) * sin(angles->y) * cos(angles->y) + origin->y;       // z part
 
-  double newz = (pt->x - origin->x) * sin(ax) * sin(az) -              //
-                (pt->x - origin->x) * sin(ay) * cos(ax) * cos(az)      // x part
-                + (pt->y - origin->y) * sin(ax) * cos(az) +            //
-                (pt->y - origin->y) * sin(ay) * sin(az) * cos(ax)      // y part
-                + (pt->z - origin->z) * cos(ax) * cos(ay) + origin->z; // z part
+  double newz = (pt->x - origin->x) * sin(angles->y) * sin(angles->y) -                //
+                (pt->x - origin->x) * sin(angles->y) * cos(angles->y) * cos(angles->y) // x part
+                + (pt->y - origin->y) * sin(angles->y) * cos(angles->y) +              //
+                (pt->y - origin->y) * sin(angles->y) * sin(angles->y) * cos(angles->y) // y part
+                + (pt->z - origin->z) * cos(angles->y) * cos(angles->y) + origin->z;   // z part
 
   pt->x = newx;
   pt->y = newy;
   pt->z = newz;
+
+  return 0;
 }
 
-void transform_point_shift(point_t pt, double dx, double dy, double dz) {
-  pt->x += dx;
-  pt->y += dy;
-  pt->z += dz;
+int transform_point_shift(point_t pt, const point_t shifts)
+{
+  if (pt == nullptr)
+    return TRANSFORM_NO_POINT;
+  if (shifts == nullptr)
+    return TRANSFORM_NO_DATA;
+
+  pt->x += shifts->x;
+  pt->y += shifts->y;
+  pt->z += shifts->z;
+
+  return 0;
 }
 
-connection_t create_connection(point_t p1, point_t p2) {
+connection_t create_connection(point_t p1, point_t p2)
+{
   connection_t res = (connection_t)calloc(1, sizeof(struct connection));
+  if (res == nullptr)
+    return nullptr;
 
   res->p1 = p1;
   res->p2 = p2;
@@ -94,89 +129,131 @@ connection_t create_connection(point_t p1, point_t p2) {
   return res;
 }
 
-void destroy_connection(connection_t *con) {
-  free(*con);
-  *con = nullptr;
+void destroy_connection(connection_t &con)
+{
+  free(con);
+  con = nullptr;
 }
 
-struct graph {
+struct graph
+{
   size_t conns_len;
   size_t points_len;
   connection_t *conns;
   point_t *points;
 };
 
-graph_t create_graph(size_t points_len, point_t *points, size_t connections_len,
-                     connection_t *connections) {
+graph_t create_graph(pt_arr_t pt_arr, con_arr_t con_arr)
+{
   graph_t gr = (graph_t)calloc(1, sizeof(struct graph));
-  if (!gr)
-    return gr;
+  if (gr == nullptr)
+    return nullptr;
 
-  gr->points_len = points_len;
-  gr->conns_len = connections_len;
+  gr->points_len = pt_arr.len;
+  gr->conns_len = con_arr.len;
 
-  gr->points = points;
-  gr->conns = connections;
+  gr->points = pt_arr.arr;
+  gr->conns = con_arr.arr;
 
   return gr;
 }
 
-void destroy_graph(graph_t *gr) {
-  if (!gr || !*gr)
+void destroy_graph(graph_t &gr)
+{
+  if (gr == nullptr)
     return;
 
-  for (size_t i = 0; i < (*gr)->points_len; ++i)
-    destroy_point(&((*gr)->points[i]));
+  if (gr->points)
+    for (size_t i = 0; i < gr->points_len; ++i)
+      destroy_point(gr->points[i]);
 
-  for (size_t i = 0; i < (*gr)->conns_len; ++i)
-    destroy_connection(&((*gr)->conns[i]));
+  if (gr->conns)
+    for (size_t i = 0; i < gr->conns_len; ++i)
+      destroy_connection(gr->conns[i]);
 
-  free(*gr);
-  *gr = nullptr;
+  free(gr);
+  gr = nullptr;
 }
 
-void graph_apply_scale(graph_t gr, const point_t origin, double kx, double ky,
-                       double kz) {
-  for (size_t i = 0; i < gr->points_len; ++i)
-    transform_point_scale(gr->points[i], origin, kx, ky, kz);
+int graph_apply_scale(graph_t gr, const point_t origin, const point_t coeffs)
+{
+  if (gr == nullptr)
+    return TRANSFORM_NO_GRAPH;
+  if (origin == nullptr)
+    return TRANSFORM_NO_ORIGIN;
+  if (coeffs == nullptr)
+    return TRANSFORM_NO_DATA;
+
+  int rc = 0;
+
+  for (size_t i = 0; !rc && i < gr->points_len; ++i)
+    rc = transform_point_scale(gr->points[i], origin, coeffs);
+
+  return rc;
 }
 
-void graph_apply_rotate(graph_t gr, const point_t origin, double ax, double ay,
-                        double az) {
-  for (size_t i = 0; i < gr->points_len; ++i)
-    transform_point_rotate(gr->points[i], origin, ax, ay, az);
+int graph_apply_rotate(graph_t gr, const point_t origin, const point_t angles)
+{
+  if (gr == nullptr)
+    return TRANSFORM_NO_GRAPH;
+  if (origin == nullptr)
+    return TRANSFORM_NO_ORIGIN;
+  if (angles == nullptr)
+    return TRANSFORM_NO_DATA;
+
+  int rc = 0;
+
+  for (size_t i = 0; !rc && i < gr->points_len; ++i)
+    rc = transform_point_rotate(gr->points[i], origin, angles);
+
+  return rc;
 }
 
-void graph_apply_shift(graph_t gr, double dx, double dy, double dz) {
-  for (size_t i = 0; i < gr->points_len; ++i)
-    transform_point_shift(gr->points[i], dx, dy, dz);
+int graph_apply_shift(graph_t gr, const point_t shifts)
+{
+  if (gr == nullptr)
+    return TRANSFORM_NO_GRAPH;
+  if (shifts == nullptr)
+    return TRANSFORM_NO_DATA;
+
+  int rc = 0;
+
+  for (size_t i = 0; !rc && i < gr->points_len; ++i)
+    rc = transform_point_shift(gr->points[i], shifts);
+
+  return rc;
 }
 
-point_t connection_get_p1(const connection_t con) {
+point_t connection_get_p1(const connection_t con)
+{
   if (con == nullptr)
     return nullptr;
   return con->p1;
 }
 
-point_t connection_get_p2(const connection_t con) {
+point_t connection_get_p2(const connection_t con)
+{
   if (con == nullptr)
     return nullptr;
   return con->p2;
 }
 
-size_t graph_get_pt_len(const graph_t gr) {
+size_t graph_get_pt_len(const graph_t gr)
+{
   if (gr == nullptr)
     return 0;
   return gr->points_len;
 }
 
-size_t graph_get_con_len(const graph_t gr) {
+size_t graph_get_con_len(const graph_t gr)
+{
   if (gr == nullptr)
     return 0;
   return gr->conns_len;
 }
 
-point_t graph_get_point(const graph_t gr, size_t index) {
+point_t graph_get_point(const graph_t gr, size_t index)
+{
   if (gr == nullptr)
     return nullptr;
   if (index >= gr->points_len)
@@ -184,7 +261,8 @@ point_t graph_get_point(const graph_t gr, size_t index) {
   return gr->points[index];
 }
 
-connection_t graph_get_connection(const graph_t gr, size_t index) {
+connection_t graph_get_connection(const graph_t gr, size_t index)
+{
   if (gr == nullptr)
     return nullptr;
   if (index >= gr->conns_len)
@@ -192,7 +270,8 @@ connection_t graph_get_connection(const graph_t gr, size_t index) {
   return gr->conns[index];
 }
 
-size_t graph_get_point_index(graph_t gr, point_t pt) {
+size_t graph_get_point_index(graph_t gr, point_t pt)
+{
   size_t i = 0;
   for (i = 0; i < gr->points_len && pt != gr->points[i]; ++i)
     ;

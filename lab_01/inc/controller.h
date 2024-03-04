@@ -1,10 +1,15 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "ui_mainwindow.h"
-#include <qstring.h>
+#include "my_error.h"
+#include "my_graph.h"
 
-typedef enum {
+#include "io_handlers.h"
+#include "transform_handlers.h"
+#include "draw_handlers.h"
+
+typedef enum
+{
     EXIT,
     LOAD,
     SAVE,
@@ -12,23 +17,19 @@ typedef enum {
     ROTATE,
     SHIFT,
     DRAW,
-    SET_UI,
-    SET_SCENE,
+} option_t;
+
+typedef struct
+{
+    option_t option;
+    union {
+        io_data_t io_data;
+        transform_data_t t_data;
+        draw_data_t d_data;
+        int* empty_data;
+    };
 } request_t;
 
-enum controller_errors {
-    ALL_OK, // :)
-    NO_GRAPH,
-    BAD_ARGS,
-    NO_MEMORY,
-};
-
-typedef union {
-    FILE *f;
-    Ui::MainWindow *ui;
-    QGraphicsScene *scene;
-} req_data_t;
-
-int handle(request_t req, req_data_t *req_data);
+int handle(request_t req);
 
 #endif // CONTROLLER_H

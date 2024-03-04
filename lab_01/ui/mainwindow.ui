@@ -474,13 +474,6 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="4">
-     <widget class="QPushButton" name="choose_file">
-      <property name="text">
-       <string>Выбрать файл</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0" colspan="5">
      <widget class="QGraphicsView" name="canvas">
       <property name="verticalScrollBarPolicy">
@@ -545,13 +538,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="3" column="4">
-     <widget class="QLabel" name="filename_box">
-      <property name="text">
-       <string>Файл не выбран</string>
-      </property>
-     </widget>
     </item>
     <item row="9" column="3">
      <widget class="QPushButton" name="do_rotate">

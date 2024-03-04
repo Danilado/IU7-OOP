@@ -7,17 +7,15 @@
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
-    QString filename;
-
     QGraphicsScene *scene;
 
 public:
@@ -25,10 +23,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void update_filename();
-
-    void on_choose_file_clicked();
-
     void draw_graph();
 
     void on_do_scale_clicked();
