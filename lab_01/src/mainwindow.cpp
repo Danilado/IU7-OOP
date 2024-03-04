@@ -22,7 +22,7 @@ void MainWindow::on_file_load_clicked()
     if (filename.isNull())
         return;
 
-    char *buf = (char *) calloc(filename.length() + 1, sizeof(char));
+    char *buf = (char *)calloc(filename.length() + 1, sizeof(char));
     if (buf == nullptr)
         return;
 
@@ -32,6 +32,8 @@ void MainWindow::on_file_load_clicked()
     req.io_data = {buf};
 
     int rc = handle(req);
+    free(buf);
+
     if (!rc)
         draw_graph();
 }
@@ -42,7 +44,7 @@ void MainWindow::on_file_save_clicked()
     if (filename.isNull())
         return;
 
-    char *buf = (char *) calloc(filename.length() + 1, sizeof(char));
+    char *buf = (char *)calloc(filename.length() + 1, sizeof(char));
     if (buf == nullptr)
         return;
 
@@ -51,8 +53,11 @@ void MainWindow::on_file_save_clicked()
     request_t req = {SAVE, nullptr};
     req.io_data = {buf};
 
-    handle(req);
-    draw_graph();
+    int rc = handle(req);
+    free(buf);
+
+    if (!rc)
+        draw_graph();
 }
 
 void MainWindow::draw_graph()
@@ -76,7 +81,8 @@ void MainWindow::on_do_scale_clicked()
     point_t coeffs = create_point(ui->scale_Kx->value(),
                                   ui->scale_Ky->value(),
                                   ui->scale_Kz->value());
-    if (coeffs == nullptr) {
+    if (coeffs == nullptr)
+    {
         destroy_point(origin);
         return;
     }
@@ -93,14 +99,13 @@ void MainWindow::on_do_scale_clicked()
 
 void MainWindow::on_do_shift_clicked()
 {
-    request_t req = {ROTATE, nullptr};
+    request_t req = {SHIFT, nullptr};
 
-    point_t shifts = create_point(ui->rotate_Ax->value(),
-                                  ui->rotate_Ay->value(),
-                                  ui->rotate_Az->value());
-    if (shifts == nullptr) {
+    point_t shifts = create_point(ui->shift_Dx->value(),
+                                  ui->shift_Dy->value(),
+                                  ui->shift_Dz->value());
+    if (shifts == nullptr)
         return;
-    }
 
     req.t_data = {nullptr, shifts};
     int rc = handle(req);
@@ -123,7 +128,8 @@ void MainWindow::on_do_rotate_clicked()
     point_t angles = create_point(ui->rotate_Ax->value(),
                                   ui->rotate_Ay->value(),
                                   ui->rotate_Az->value());
-    if (angles == nullptr) {
+    if (angles == nullptr)
+    {
         destroy_point(origin);
         return;
     }
