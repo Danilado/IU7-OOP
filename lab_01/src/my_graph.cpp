@@ -228,6 +228,7 @@ point_t connection_get_p1(const connection_t con)
 {
   if (con == nullptr)
     return nullptr;
+
   return con->p1;
 }
 
@@ -235,6 +236,7 @@ point_t connection_get_p2(const connection_t con)
 {
   if (con == nullptr)
     return nullptr;
+
   return con->p2;
 }
 
@@ -242,6 +244,7 @@ size_t graph_get_pt_len(const graph_t gr)
 {
   if (gr == nullptr)
     return 0;
+
   return gr->points_len;
 }
 
@@ -249,6 +252,7 @@ size_t graph_get_con_len(const graph_t gr)
 {
   if (gr == nullptr)
     return 0;
+
   return gr->conns_len;
 }
 
@@ -258,6 +262,7 @@ point_t graph_get_point(const graph_t gr, size_t index)
     return nullptr;
   if (index >= gr->points_len)
     return nullptr;
+
   return gr->points[index];
 }
 
@@ -267,11 +272,17 @@ connection_t graph_get_connection(const graph_t gr, size_t index)
     return nullptr;
   if (index >= gr->conns_len)
     return nullptr;
+
   return gr->conns[index];
 }
 
 size_t graph_get_point_index(graph_t gr, point_t pt)
 {
+  if (gr == nullptr)
+    return SIZE_MAX;
+  if (pt == nullptr)
+    return SIZE_MAX;
+
   size_t i = 0;
   for (i = 0; i < gr->points_len && pt != gr->points[i]; ++i)
     ;

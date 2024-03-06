@@ -2,6 +2,9 @@
 
 static void destroy_point_arr(point_t *&arr, size_t len)
 {
+    if (arr == nullptr)
+        return;
+
     for (size_t i = 0; i < len; ++i)
         destroy_point(arr[i]);
     free(arr);
@@ -9,6 +12,9 @@ static void destroy_point_arr(point_t *&arr, size_t len)
 
 static void destroy_con_arr(connection_t *&arr, size_t len)
 {
+    if (arr == nullptr)
+        return;
+
     for (size_t i = 0; i < len; ++i)
         destroy_connection(arr[i]);
     free(arr);
