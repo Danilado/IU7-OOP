@@ -81,21 +81,19 @@ int transform_point_rotate(point_t pt, const point_t origin, const point_t angle
     return TRANSFORM_NO_DATA;
 
   // https://ru.wikipedia.org/wiki/Матрица_поворота#Матрица_поворота_в_трёхмерном_пространстве
-  double newx = (pt->x - origin->x) * cos(angles->y) * cos(angles->y)   // x part
-                - (pt->y - origin->y) * sin(angles->y) * cos(angles->y) // y part
-                + (pt->z - origin->z) * sin(angles->y) + origin->x;     // z part
-
-  double newy = (pt->x - origin->x) * sin(angles->y) * sin(angles->y) * cos(angles->y) +   //
-                (pt->x - origin->x) * sin(angles->y) * cos(angles->y)                      // x part
-                - (pt->y - origin->y) * sin(angles->y) * sin(angles->y) * sin(angles->y) + //
-                (pt->y - origin->y) * cos(angles->y) * cos(angles->y)                      // y part
-                - (pt->z - origin->z) * sin(angles->y) * cos(angles->y) + origin->y;       // z part
-
-  double newz = (pt->x - origin->x) * sin(angles->y) * sin(angles->y) -                //
-                (pt->x - origin->x) * sin(angles->y) * cos(angles->y) * cos(angles->y) // x part
-                + (pt->y - origin->y) * sin(angles->y) * cos(angles->y) +              //
-                (pt->y - origin->y) * sin(angles->y) * sin(angles->y) * cos(angles->y) // y part
-                + (pt->z - origin->z) * cos(angles->y) * cos(angles->y) + origin->z;   // z part
+  double newx = (pt->x - origin->x) * cos(angles->y) * cos(angles->z)                      // x part
+                - (pt->y - origin->y) * sin(angles->z) * cos(angles->y)                    // y part
+                + (pt->z - origin->z) * sin(angles->y) + origin->x;                        // z part
+  double newy = (pt->x - origin->x) * sin(angles->x) * sin(angles->y) * cos(angles->z) +   //
+                (pt->x - origin->x) * sin(angles->z) * cos(angles->x)                      // x part
+                - (pt->y - origin->y) * sin(angles->x) * sin(angles->y) * sin(angles->z) + //
+                (pt->y - origin->y) * cos(angles->x) * cos(angles->z)                      // y part
+                - (pt->z - origin->z) * sin(angles->x) * cos(angles->y) + origin->y;       // z part
+  double newz = (pt->x - origin->x) * sin(angles->x) * sin(angles->z) -                    //
+                (pt->x - origin->x) * sin(angles->y) * cos(angles->x) * cos(angles->z)     // x part
+                + (pt->y - origin->y) * sin(angles->x) * cos(angles->z) +                  //
+                (pt->y - origin->y) * sin(angles->y) * sin(angles->z) * cos(angles->x)     // y part
+                + (pt->z - origin->z) * cos(angles->x) * cos(angles->y) + origin->z;       // z part
 
   pt->x = newx;
   pt->y = newy;
