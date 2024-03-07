@@ -1,5 +1,6 @@
 #include "my_graph.h"
 #include <cmath>
+#include <cstdint>
 
 struct point
 {
