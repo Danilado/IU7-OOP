@@ -16,18 +16,18 @@ static int model_fread_point(point_t &pt, FILE *f)
   if (f == nullptr)
     return IO_BAD_STREAM;
 
-  double x, y, z;
   int rc = 0;
 
-  if (fscanf(f, "%lf%lf%lf", &x, &y, &z) != 3)
-    rc = FILE_BAD_PT;
+  pt = alloc_point();
+  if (pt == nullptr)
+    rc = NO_MEMORY;
 
   if (!rc)
-  {
-    pt = create_point(x, y, z);
-    if (pt == nullptr)
-      rc = NO_MEMORY;
-  }
+    if (fscanf(f, "%lf%lf%lf", &(pt->x), &(pt->y), &(pt->z)) != 3)
+      rc = FILE_BAD_PT;
+
+  if (rc)
+    destroy_point(pt);
 
   return rc;
 }
