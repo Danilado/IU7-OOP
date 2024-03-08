@@ -1,24 +1,22 @@
 #include "io_handlers.h"
 
-#include "my_graph_file_io.h"
+#include "my_model_file_io.h"
 
-int handle_load(io_data_t data, graph_t &gr)
-{
-    graph_t new_graph = nullptr;
-    int rc = create_graph_from_file(new_graph, data.filename);
+int handle_load(model_t &gr, io_data_t data) {
+  model_t new_model = nullptr;
+  int rc = create_model_from_file(new_model, data.filename);
 
-    if (rc)
-        return rc;
+  if (rc)
+    return rc;
 
-    if (gr != nullptr)
-        destroy_graph(gr);
+  if (gr != nullptr)
+    destroy_model(gr);
 
-    gr = new_graph;
+  gr = new_model;
 
-    return 0;
+  return 0;
 }
 
-int handle_save(io_data_t data, const graph_t gr)
-{
-    return write_graph_to_file(gr, data.filename);
+int handle_save(const model_t gr, io_data_t data) {
+  return write_model_to_file(gr, data.filename);
 }
