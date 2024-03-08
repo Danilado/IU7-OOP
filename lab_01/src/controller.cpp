@@ -1,10 +1,13 @@
 #include "controller.h"
+#include <QDebug>
 
-int handle(request_t req) {
+int handle(request_t req)
+{
   static model_t graph = nullptr;
   int rc = 0;
 
-  switch (req.option) {
+  switch (req.option)
+  {
   case (EXIT):
     destroy_model(graph);
     break;
@@ -37,6 +40,8 @@ int handle(request_t req) {
     rc = UNKNOWN_COMMAND;
     break;
   }
+
+  qDebug() << rc;
 
   return rc;
 }

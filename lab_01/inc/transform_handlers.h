@@ -1,10 +1,11 @@
 #ifndef TRANSFORM_HANDLERS_H
 #define TRANSFORM_HANDLERS_H
 
-#include "my_error.h"
-#include "my_model.h"
+#include "model_error.h"
+#include "model.h"
 
-typedef struct {
+typedef struct
+{
   point_t origin;
   point_t values;
 } transform_data_t;

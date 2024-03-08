@@ -2,7 +2,8 @@
 #include "draw_model.h"
 #include "ui_mainwindow.h"
 
-int handle_draw(const model_t gr, draw_data_t data) {
+int handle_draw(const model_t gr, draw_data_t data)
+{
   if (gr == nullptr)
     return NO_MODEL;
 
@@ -27,7 +28,8 @@ int handle_draw(const model_t gr, draw_data_t data) {
 
   rc = draw_model(gr, &p, params);
 
-  if (!rc) {
+  if (!rc)
+  {
     QPixmap pixmap = QPixmap::fromImage(img);
     data.scene->clear();
     data.scene->addPixmap(pixmap);

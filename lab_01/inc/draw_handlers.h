@@ -1,14 +1,15 @@
 #ifndef DRAW_HANDLERS_H
 #define DRAW_HANDLERS_H
 
-#include "my_error.h"
-#include "my_model.h"
+#include "model_error.h"
+#include "model.h"
 
 #include "mainwindow.h"
 #include <QGraphicsScene>
 #include <QPainter>
 
-typedef struct {
+typedef struct
+{
   Ui::MainWindow *ui;
   QGraphicsScene *scene;
 } draw_data_t;

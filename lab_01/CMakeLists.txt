@@ -9,10 +9,10 @@ set(HEADER_LIST
 "${lab_01_SOURCE_DIR}/inc/draw_handlers.h"
 "${lab_01_SOURCE_DIR}/inc/io_handlers.h"
 "${lab_01_SOURCE_DIR}/inc/mainwindow.h"
-"${lab_01_SOURCE_DIR}/inc/my_error.h"
-"${lab_01_SOURCE_DIR}/inc/my_model_converters.h"
-"${lab_01_SOURCE_DIR}/inc/my_model_file_io.h"
-"${lab_01_SOURCE_DIR}/inc/my_model.h"
+"${lab_01_SOURCE_DIR}/inc/model_error.h"
+"${lab_01_SOURCE_DIR}/inc/model_converters.h"
+"${lab_01_SOURCE_DIR}/inc/model_file_io.h"
+"${lab_01_SOURCE_DIR}/inc/model.h"
 "${lab_01_SOURCE_DIR}/inc/transform_handlers.h"
 )
 
@@ -39,9 +39,9 @@ src/draw_model.cpp
 src/draw_handlers.cpp
 src/io_handlers.cpp
 src/mainwindow.cpp
-src/my_model_converters.cpp
-src/my_model_file_io.cpp
-src/my_model.cpp
+src/model_converters.cpp
+src/model_file_io.cpp
+src/model.cpp
 src/transform_handlers.cpp
 src/main.cpp
 ui/mainwindow.ui
@@ -56,10 +56,10 @@ src/draw_model.cpp
 src/draw_handlers.cpp
 src/io_handlers.cpp
 src/mainwindow.cpp
-src/my_error.cpp
-src/my_model_converters.cpp
-src/my_model_file_io.cpp
-src/my_model.cpp
+src/error.cpp
+src/model_converters.cpp
+src/model_file_io.cpp
+src/model.cpp
 src/transform_handlers.cpp
 ui/mainwindow.ui
 inc/controller.h
@@ -67,10 +67,10 @@ inc/draw_model.h
 inc/draw_handlers.h
 inc/io_handlers.h
 inc/mainwindow.h
-inc/my_error.h
-inc/my_model_converters.h
-inc/my_model_file_io.h
-inc/my_model.h
+inc/model_error.h
+inc/model_converters.h
+inc/model_file_io.h
+inc/model.h
 inc/transform_handlers.h
 )
 

@@ -1,10 +1,11 @@
 #ifndef IO_HANDLERS_H
 #define IO_HANDLERS_H
 
-#include "my_error.h"
-#include "my_model.h"
+#include "model_error.h"
+#include "model.h"
 
-typedef struct {
+typedef struct
+{
   const char *filename;
 } io_data_t;
 

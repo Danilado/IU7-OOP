@@ -1,7 +1,8 @@
-#ifndef MY_ERROR_T
-#define MY_ERROR_T
+#ifndef MODEL_ERROR_T
+#define MODEL_ERROR_T
 
-typedef enum {
+typedef enum
+{
   ALL_OK, // :)
   IO_BAD_FILENAME,
   IO_READ_ERROR,
@@ -14,12 +15,9 @@ typedef enum {
   FILE_BAD_CON_LEN,
   FILE_BAD_CON,
   NO_MEMORY,
-  PT_ARR_NOT_NULL,
-  CON_ARR_NOT_NULL,
-  PT_NOT_NULL,
-  CON_NOT_NULL,
   IO_MODEL_NOT_EMPTY,
   NO_PT_ARR,
+  NO_CON_ARR,
   PRINT_ERROR,
   TRANSFORM_NO_POINT,
   TRANSFORM_NO_ORIGIN,
@@ -31,6 +29,6 @@ typedef enum {
   DRAW_NO_CONTEXT,
   MODEL_BAD_CONNECTION,
   MODEL_BAD_POINT,
-} my_error;
+} error;
 
 #endif

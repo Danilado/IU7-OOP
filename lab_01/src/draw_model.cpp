@@ -1,7 +1,8 @@
 #include "draw_model.h"
-#include "my_model_converters.h"
+#include "model_converters.h"
 
-int draw_model(model_t gr, QPainter *ctx, draw_params_t params) {
+int draw_model(model_t gr, QPainter *ctx, draw_params_t params)
+{
   if (gr == nullptr)
     return DRAW_NO_MODEL;
 
@@ -10,16 +11,17 @@ int draw_model(model_t gr, QPainter *ctx, draw_params_t params) {
 
   int rc = 0;
 
-  rc = draw_connections(gr, ctx, params);
+  rc = draw_connections(gr->con_arr, ctx, params);
   if (!rc)
-    rc = draw_points(gr, ctx, params);
+    rc = draw_points(gr->pt_arr, ctx, params);
 
   return rc;
 }
 
-int draw_connections(model_t gr, QPainter *ctx, draw_params_t params) {
-  if (gr == nullptr)
-    return DRAW_NO_MODEL;
+int draw_connections(con_arr_t con_arr, QPainter *ctx, draw_params_t params)
+{
+  if (con_arr.arr == nullptr)
+    return NO_CON_ARR;
   if (ctx == nullptr)
     return DRAW_NO_CONTEXT;
 
@@ -27,19 +29,20 @@ int draw_connections(model_t gr, QPainter *ctx, draw_params_t params) {
 
   ctx->setPen(params.colors.linecolor);
 
-  size_t len = model_get_con_len(gr);
-
-  for (size_t i = 0; !rc && i < len; ++i) {
-    connection_t tmp = model_get_connection(gr, i);
+  for (size_t i = 0; !rc && i < con_arr.len; ++i)
+  {
+    connection_t tmp = con_arr.arr[i];
     if (tmp == nullptr)
       rc = MODEL_BAD_CONNECTION;
 
-    if (!rc) {
+    if (!rc)
+    {
       QLineF *tmpline = connection_to_QLineF(tmp, params.offset);
       if (tmpline == nullptr)
         rc = MODEL_BAD_CONNECTION;
 
-      if (!rc) {
+      if (!rc)
+      {
         ctx->drawLine(*tmpline);
         delete tmpline;
       }
@@ -49,9 +52,10 @@ int draw_connections(model_t gr, QPainter *ctx, draw_params_t params) {
   return rc;
 }
 
-int draw_points(model_t gr, QPainter *ctx, draw_params_t params) {
-  if (gr == nullptr)
-    return DRAW_NO_MODEL;
+int draw_points(pt_arr_t pt_arr, QPainter *ctx, draw_params_t params)
+{
+  if (pt_arr.arr == nullptr)
+    return NO_PT_ARR;
   if (ctx == nullptr)
     return DRAW_NO_CONTEXT;
 
@@ -59,18 +63,20 @@ int draw_points(model_t gr, QPainter *ctx, draw_params_t params) {
 
   ctx->setBrush(params.colors.pointcolor);
 
-  size_t len = model_get_pt_len(gr);
-  for (size_t i = 0; !rc && i < len; ++i) {
-    point_t tmp = model_get_point(gr, i);
+  for (size_t i = 0; !rc && i < pt_arr.len; ++i)
+  {
+    point_t tmp = pt_arr.arr[i];
     if (tmp == nullptr)
       rc = MODEL_BAD_POINT;
 
-    if (!rc) {
+    if (!rc)
+    {
       QPointF *tmppoint = point_to_QPointF(tmp, params.offset);
       if (tmppoint == nullptr)
         rc = MODEL_BAD_POINT;
 
-      if (!rc) {
+      if (!rc)
+      {
         ctx->drawPoint(*tmppoint);
         delete tmppoint;
       }

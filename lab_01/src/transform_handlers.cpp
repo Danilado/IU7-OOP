@@ -1,6 +1,7 @@
 #include "transform_handlers.h"
 
-int handle_scale(model_t gr, transform_data_t data) {
+int handle_scale(model_t gr, transform_data_t data)
+{
   if (gr == nullptr)
     return NO_MODEL;
 
@@ -15,7 +16,8 @@ int handle_scale(model_t gr, transform_data_t data) {
   return rc;
 }
 
-int handle_rotate(model_t gr, transform_data_t data) {
+int handle_rotate(model_t gr, transform_data_t data)
+{
   if (gr == nullptr)
     return NO_MODEL;
 
@@ -30,7 +32,8 @@ int handle_rotate(model_t gr, transform_data_t data) {
   return rc;
 }
 
-int handle_shift(model_t gr, transform_data_t data) {
+int handle_shift(model_t gr, transform_data_t data)
+{
   if (gr == nullptr)
     return NO_MODEL;
 
