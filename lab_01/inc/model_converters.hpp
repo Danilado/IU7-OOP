@@ -1,8 +1,8 @@
 #ifndef MODEL_CONVERTERS_H
 #define MODEL_CONVERTERS_H
 
-#include "draw_model.h"
-#include "model.h"
+#include "draw_model.hpp"
+#include "model.hpp"
 
 #include <QColor>
 #include <QLineF>

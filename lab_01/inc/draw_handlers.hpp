@@ -1,10 +1,10 @@
 #ifndef DRAW_HANDLERS_H
 #define DRAW_HANDLERS_H
 
-#include "model_error.h"
-#include "model.h"
+#include "model_error.hpp"
+#include "model.hpp"
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 #include <QGraphicsScene>
 #include <QPainter>
 

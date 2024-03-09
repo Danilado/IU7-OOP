@@ -1,8 +1,8 @@
 #ifndef IO_HANDLERS_H
 #define IO_HANDLERS_H
 
-#include "model_error.h"
-#include "model.h"
+#include "model_error.hpp"
+#include "model.hpp"
 
 typedef struct
 {

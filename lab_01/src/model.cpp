@@ -1,4 +1,4 @@
-#include "model.h"
+#include "model.hpp"
 #include <cmath>
 #include <stdint.h>
 
@@ -99,6 +99,20 @@ void destroy_model(model_t &gr)
     gr = nullptr;
 }
 
+static int point_origin_shift(point_t pt, const point_t origin, bool backwards = false)
+{
+    if (pt == nullptr)
+        return TRANSFORM_NO_POINT;
+    if (origin == nullptr)
+        return TRANSFORM_NO_DATA;
+
+    pt->x += origin->x * (-1 * backwards);
+    pt->y += origin->y * (-1 * backwards);
+    pt->z += origin->z * (-1 * backwards);
+
+    return 0;
+}
+
 int transform_point_scale(point_t pt, const point_t origin, const point_t coeffs)
 {
     if (pt == nullptr)
@@ -115,6 +129,79 @@ int transform_point_scale(point_t pt, const point_t origin, const point_t coeffs
     return 0;
 }
 
+static int transform_point_rotate_x(point_t pt, double angle)
+{
+    if (pt == nullptr)
+        return TRANSFORM_NO_POINT;
+
+    double newy, newz;
+    double angle_sin = sin(angle);
+    double angle_cos = cos(angle);
+
+    newy = pt->y * angle_cos - pt->z * angle_sin;
+    newz = pt->y * angle_sin + pt->z * angle_cos;
+
+    pt->y = newy;
+    pt->z = newz;
+
+    return 0;
+}
+
+static int transform_point_rotate_y(point_t pt, double angle)
+{
+    if (pt == nullptr)
+        return TRANSFORM_NO_POINT;
+
+    double newx, newz;
+    double angle_sin = sin(angle);
+    double angle_cos = cos(angle);
+
+    newx = pt->x * angle_cos + pt->z * angle_sin;
+    newz = -pt->x * angle_sin + pt->z * angle_cos;
+
+    pt->x = newx;
+    pt->z = newz;
+
+    return 0;
+}
+
+static int transform_point_rotate_z(point_t pt, double angle)
+{
+    if (pt == nullptr)
+        return TRANSFORM_NO_POINT;
+
+    double newx, newy;
+    double angle_sin = sin(angle);
+    double angle_cos = cos(angle);
+
+    newx = pt->x * angle_cos - pt->y * angle_sin;
+    newy = pt->x * angle_sin + pt->y * angle_cos;
+
+    pt->x = newx;
+    pt->y = newy;
+
+    return 0;
+}
+
+static int point_rotate_all(point_t pt, const point_t angles)
+{
+    if (pt == nullptr)
+        return TRANSFORM_NO_POINT;
+    if (angles == nullptr)
+        return TRANSFORM_NO_DATA;
+
+    // https://ru.wikipedia.org/wiki/Матрица_поворота#Матрица_поворота_в_трёхмерном_пространстве
+    int rc = transform_point_rotate_x(pt, angles->x);
+    if (!rc)
+    {
+        rc = transform_point_rotate_y(pt, angles->y);
+        if (!rc)
+            rc = transform_point_rotate_z(pt, angles->z);
+    }
+
+    return rc;
+}
+
 int transform_point_rotate(point_t pt, const point_t origin, const point_t angles)
 {
     if (pt == nullptr)
@@ -124,41 +211,15 @@ int transform_point_rotate(point_t pt, const point_t origin, const point_t angle
     if (angles == nullptr)
         return TRANSFORM_NO_DATA;
 
-    double cos_ax = cos(angles->x);
-    double cos_ay = cos(angles->y);
-    double cos_az = cos(angles->z);
-    double sin_ax = sin(angles->x);
-    double sin_ay = sin(angles->y);
-    double sin_az = sin(angles->z);
+    int rc = point_origin_shift(pt, origin, true);
+    if (!rc)
+    {
+        rc = point_rotate_all(pt, angles);
+        if (!rc)
+            rc = point_origin_shift(pt, origin, false);
+    }
 
-    double dx = pt->x - origin->x;
-    double dy = pt->y - origin->y;
-    double dz = pt->z - origin->z;
-
-    // https://ru.wikipedia.org/wiki/Матрица_поворота#Матрица_поворота_в_трёхмерном_пространстве
-    double newx = dx * cos_ay * cos_az -   //
-                  dy * sin_az * cos_ay +   //
-                  dz * sin_ay + origin->x; //
-
-    double newy = dx * sin_ax * sin_ay * cos_az + //
-                  dx * sin_az * cos_ax -          //
-                  dy * sin_ax * sin_ay * sin_az + //
-                  dy * cos_ax * cos_az -          //
-                  dz * sin_ax * cos_ay +          //
-                  origin->y;
-
-    double newz = dx * sin_ax * sin_az -          //
-                  dx * sin_ay * cos_ax * cos_az + //
-                  dy * sin_ax * cos_az +          //
-                  dy * sin_ay * sin_az * cos_ax + //
-                  dz * cos_ax * cos_ay +          //
-                  origin->z;
-
-    pt->x = newx;
-    pt->y = newy;
-    pt->z = newz;
-
-    return 0;
+    return rc;
 }
 
 int transform_point_shift(point_t pt, const point_t shifts)
@@ -168,9 +229,7 @@ int transform_point_shift(point_t pt, const point_t shifts)
     if (shifts == nullptr)
         return TRANSFORM_NO_DATA;
 
-    pt->x += shifts->x;
-    pt->y += shifts->y;
-    pt->z += shifts->z;
+    point_origin_shift(pt, shifts);
 
     return 0;
 }

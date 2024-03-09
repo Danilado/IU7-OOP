@@ -5,7 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "model_error.h"
+#include "model_error.hpp"
+
+#define OUT
+#define VAR
 
 struct point
 {

@@ -1,7 +1,7 @@
 #ifndef DRAW_MODEL_H
 #define DRAW_MODEL_H
 
-#include "model.h"
+#include "model.hpp"
 
 #include <QColor>
 #include <QPainter>

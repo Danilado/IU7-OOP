@@ -1,6 +1,13 @@
-#include "model_file_io.h"
+#include "model_file_io.hpp"
 
-static int model_fread_pt_len(size_t &pt_len, FILE *f) {
+typedef struct
+{
+  size_t i1;
+  size_t i2;
+} index_pair_t;
+
+static int model_fread_pt_len(OUT size_t &pt_len, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
@@ -10,7 +17,8 @@ static int model_fread_pt_len(size_t &pt_len, FILE *f) {
   return 0;
 }
 
-static int model_fread_point(point_t &pt, FILE *f) {
+static int model_fread_point(OUT point_t &pt, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
@@ -30,7 +38,8 @@ static int model_fread_point(point_t &pt, FILE *f) {
   return rc;
 }
 
-static int pt_arr_alloc(point_t *&pt_arr, size_t pt_len) {
+static int pt_arr_alloc(OUT point_t *&pt_arr, size_t pt_len)
+{
   pt_arr = (point_t *)calloc(pt_len, sizeof(point_t));
   int rc = 0;
   if (pt_arr == nullptr)
@@ -38,7 +47,8 @@ static int pt_arr_alloc(point_t *&pt_arr, size_t pt_len) {
   return rc;
 }
 
-static int con_arr_alloc(connection_t *&con_arr, size_t con_len) {
+static int con_arr_alloc(OUT connection_t *&con_arr, size_t con_len)
+{
   con_arr = (connection_t *)calloc(con_len, sizeof(connection_t));
   int rc = 0;
   if (con_arr == nullptr)
@@ -46,7 +56,17 @@ static int con_arr_alloc(connection_t *&con_arr, size_t con_len) {
   return rc;
 }
 
-static int model_fread_points(point_t *&pt_arr, size_t pt_len, FILE *f) {
+static int pair_arr_alloc(OUT index_pair_t *&pair_arr, size_t pairs_len)
+{
+  pair_arr = (index_pair_t *)calloc(pairs_len, sizeof(index_pair_t));
+  int rc = 0;
+  if (pair_arr == nullptr)
+    rc = NO_MEMORY;
+  return rc;
+}
+
+static int model_fread_points(VAR point_t *&pt_arr, size_t pt_len, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
   if (pt_arr == nullptr)
@@ -59,7 +79,8 @@ static int model_fread_points(point_t *&pt_arr, size_t pt_len, FILE *f) {
   return rc;
 }
 
-static int model_fread_con_len(size_t &con_len, FILE *f) {
+static int model_fread_con_len(OUT size_t &con_len, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
@@ -69,7 +90,8 @@ static int model_fread_con_len(size_t &con_len, FILE *f) {
   return 0;
 }
 
-static int fread_con_index(size_t &i, size_t max, FILE *f) {
+static int fread_con_index(OUT size_t &i, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
@@ -78,44 +100,32 @@ static int fread_con_index(size_t &i, size_t max, FILE *f) {
   if (fscanf(f, "%zu", &i) != 1)
     rc = FILE_BAD_CON;
 
-  if (!rc)
-    if (i >= max)
-      rc = FILE_BAD_CON;
-
   return rc;
 }
 
-static connection_t wrap_create_connection(const point_t *pt_arr, size_t i1,
-                                           size_t i2) {
-  return create_connection(pt_arr[i1], pt_arr[i2]);
-}
-
-static int model_fread_connection(connection_t &con, const pt_arr_t pt_arr,
-                                  FILE *f) {
+static int model_fread_pair(OUT index_pair_t &conns, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
-  size_t i1, i2;
-  int rc = fread_con_index(i1, pt_arr.len, f);
-  if (!rc) {
-    rc = fread_con_index(i2, pt_arr.len, f);
-    if (!rc) {
-      con = wrap_create_connection(pt_arr.arr, i1, i2);
-      if (con == nullptr)
-        rc = NO_MEMORY;
-    }
-  }
+  int rc = 0;
+
+  rc = fread_con_index(conns.i1, f);
+  if (!rc)
+    rc = fread_con_index(conns.i2, f);
 
   return rc;
 }
 
-static int model_read_points(pt_arr_t &dst, FILE *f) {
+static int model_read_points(OUT pt_arr_t &dst, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
   int rc = 0;
   rc = model_fread_pt_len(dst.len, f);
-  if (!rc) {
+  if (!rc)
+  {
     rc = pt_arr_alloc(dst.arr, dst.len);
     if (!rc)
       rc = model_fread_points(dst.arr, dst.len, f);
@@ -124,39 +134,109 @@ static int model_read_points(pt_arr_t &dst, FILE *f) {
   return rc;
 }
 
-static int read_points(model_t &dst, FILE *f) {
+static int read_points(OUT model_t &dst, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
   return model_read_points(dst->pt_arr, f);
 }
 
-static int model_fread_connections(con_arr_t &con_arr, const pt_arr_t pt_arr,
-                                   FILE *f) {
-  if (f == nullptr)
-    return IO_BAD_STREAM;
-  if (pt_arr.arr == nullptr)
-    return NO_PT_ARR;
+static int wrap_fread_pairs(VAR index_pair_t *pair_arr, size_t len, FILE *f)
+{
+  if (pair_arr == nullptr)
+    return NO_MEMORY;
 
   int rc = 0;
-  rc = model_fread_con_len(con_arr.len, f);
-  if (!rc) {
-    rc = con_arr_alloc(con_arr.arr, con_arr.len);
-    for (size_t i = 0; !rc && i < con_arr.len; ++i)
-      rc = model_fread_connection(con_arr.arr[i], pt_arr, f);
+  for (size_t i = 0; !rc && i < len; ++i)
+    rc = model_fread_pair(pair_arr[i], f);
+
+  return rc;
+}
+
+static int model_fread_pairs(OUT index_pair_t *&pair_arr, VAR size_t &len, FILE *f)
+{
+  if (f == nullptr)
+    return IO_BAD_STREAM;
+
+  int rc = 0;
+  rc = model_fread_con_len(len, f);
+  if (!rc)
+  {
+    rc = pair_arr_alloc(pair_arr, len);
+    if (!rc)
+      rc = wrap_fread_pairs(pair_arr, len, f);
   }
 
   return rc;
 }
 
-static int read_connections(model_t &dst, FILE *f) {
+static int init_connections(OUT con_arr_t &con_arr, const index_pair_t *pairs, size_t pairs_len)
+{
+  if (!pairs)
+    return NO_MEMORY;
+
+  con_arr.len = pairs_len;
+  int rc = 0;
+
+  rc = con_arr_alloc(con_arr.arr, con_arr.len);
+  return rc;
+}
+
+static connection_t form_connection(const point_t *pt_arr, size_t max_index, index_pair_t i_pair)
+{
+  if (pt_arr == nullptr)
+    return nullptr;
+  if (i_pair.i1 >= max_index || i_pair.i2 >= max_index)
+    return nullptr;
+
+  return create_connection(pt_arr[i_pair.i1], pt_arr[i_pair.i2]);
+}
+
+static int model_form_connections(VAR con_arr_t con_arr, const index_pair_t *pairs, const pt_arr_t pt_arr)
+{
+  if (pairs == nullptr)
+    return NO_MEMORY;
+  if (pt_arr.arr == nullptr)
+    return NO_PT_ARR;
+  if (con_arr.arr == nullptr)
+    return NO_CON_ARR;
+
+  int rc = 0;
+
+  for (size_t i = 0; !rc && i < con_arr.len; ++i)
+  {
+    con_arr.arr[i] = form_connection(pt_arr.arr, pt_arr.len, pairs[i]);
+    if (con_arr.arr[i] == nullptr)
+      rc = NO_MEMORY;
+  }
+
+  return rc;
+}
+
+static int read_connections(VAR model_t &dst, FILE *f)
+{
   if (f == nullptr)
     return IO_BAD_STREAM;
 
-  return model_fread_connections(dst->con_arr, dst->pt_arr, f);
+  index_pair_t *pairs = nullptr;
+  size_t pairs_len;
+
+  int rc = model_fread_pairs(pairs, pairs_len, f);
+  if (!rc)
+  {
+    rc = init_connections(dst->con_arr, pairs, pairs_len);
+    if (!rc)
+      rc = model_form_connections(dst->con_arr, pairs, dst->pt_arr);
+  }
+
+  free(pairs);
+
+  return rc;
 }
 
-int create_model_from_file(model_t &dst, const char *filename) {
+int create_model_from_file(OUT model_t &dst, const char *filename)
+{
   if (filename == nullptr)
     return IO_BAD_FILENAME;
 
@@ -166,9 +246,16 @@ int create_model_from_file(model_t &dst, const char *filename) {
 
   int rc = 0;
 
-  rc = read_points(dst, f);
+  dst = alloc_model();
+  if (dst == nullptr)
+    rc = NO_MEMORY;
+
   if (!rc)
-    rc = read_connections(dst, f);
+  {
+    rc = read_points(dst, f);
+    if (!rc)
+      rc = read_connections(dst, f);
+  }
 
   if (rc)
     destroy_model(dst);
@@ -177,7 +264,8 @@ int create_model_from_file(model_t &dst, const char *filename) {
   return rc;
 }
 
-static int model_fprint_points(const pt_arr_t pt_arr, FILE *f) {
+static int model_fprint_points(const pt_arr_t pt_arr, FILE *f)
+{
   if (pt_arr.arr == nullptr)
     return NO_PT_ARR;
   if (f == nullptr)
@@ -189,7 +277,8 @@ static int model_fprint_points(const pt_arr_t pt_arr, FILE *f) {
     rc = PRINT_ERROR;
 
   if (!rc)
-    for (size_t i = 0; !rc && i < pt_arr.len; ++i) {
+    for (size_t i = 0; !rc && i < pt_arr.len; ++i)
+    {
       point_t pt = pt_arr.arr[i];
       if (fprintf(f, "%.6lf %.6lf %.6lf\n", pt->x, pt->y, pt->z) < 0)
         rc = PRINT_ERROR;
@@ -199,7 +288,8 @@ static int model_fprint_points(const pt_arr_t pt_arr, FILE *f) {
 }
 
 static int model_fprint_connections(const con_arr_t con_arr,
-                                    const pt_arr_t pt_arr, FILE *f) {
+                                    const pt_arr_t pt_arr, FILE *f)
+{
   if (con_arr.arr == nullptr)
     return NO_CON_ARR;
   if (pt_arr.arr == nullptr)
@@ -214,7 +304,8 @@ static int model_fprint_connections(const con_arr_t con_arr,
     rc = PRINT_ERROR;
 
   if (!rc)
-    for (size_t i = 0; !rc && i < con_len; ++i) {
+    for (size_t i = 0; !rc && i < con_len; ++i)
+    {
       connection_t con = con_arr.arr[i];
       if (fprintf(f, "%zu %zu\n", model_get_point_index(pt_arr, con->p1),
                   model_get_point_index(pt_arr, con->p2)) < 0)
@@ -224,7 +315,8 @@ static int model_fprint_connections(const con_arr_t con_arr,
   return rc;
 }
 
-int write_model_to_file(const model_t gr, const char *filename) {
+int write_model_to_file(const model_t gr, const char *filename)
+{
   if (gr == nullptr)
     return NO_MODEL;
 

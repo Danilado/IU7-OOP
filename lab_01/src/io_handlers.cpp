@@ -1,24 +1,19 @@
-#include "io_handlers.h"
+#include "io_handlers.hpp"
 
-#include "model_file_io.h"
+#include "model_file_io.hpp"
 
 int handle_load(model_t &gr, io_data_t data)
 {
   int rc = 0;
-  model_t new_model = alloc_model();
-  if (new_model == nullptr)
-    return NO_MEMORY;
+  model_t new_model = nullptr;
 
+  rc = create_model_from_file(new_model, data.filename);
   if (!rc)
   {
-    rc = create_model_from_file(new_model, data.filename);
-    if (!rc)
-    {
-      if (gr != nullptr)
-        destroy_model(gr);
+    if (gr != nullptr)
+      destroy_model(gr);
 
-      gr = new_model;
-    }
+    gr = new_model;
   }
 
   if (rc)

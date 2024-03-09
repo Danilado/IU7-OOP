@@ -1,12 +1,12 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "model_error.h"
-#include "model.h"
+#include "model_error.hpp"
+#include "model.hpp"
 
-#include "draw_handlers.h"
-#include "io_handlers.h"
-#include "transform_handlers.h"
+#include "draw_handlers.hpp"
+#include "io_handlers.hpp"
+#include "transform_handlers.hpp"
 
 typedef enum
 {

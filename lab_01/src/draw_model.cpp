@@ -1,5 +1,5 @@
-#include "draw_model.h"
-#include "model_converters.h"
+#include "draw_model.hpp"
+#include "model_converters.hpp"
 
 int draw_model(model_t gr, QPainter *ctx, draw_params_t params)
 {

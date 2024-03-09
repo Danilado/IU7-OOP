@@ -1,4 +1,4 @@
-#include "model_converters.h"
+#include "model_converters.hpp"
 
 QPointF *point_to_QPointF(point_t pt, offset_t offset)
 {

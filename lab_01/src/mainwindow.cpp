@@ -1,20 +1,23 @@
-#include "mainwindow.h"
-#include "controller.h"
+#include "mainwindow.hpp"
+#include "controller.hpp"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow)
+{
   scene = new QGraphicsScene();
   ui->setupUi(this);
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
   delete ui;
   delete scene;
   handle({EXIT, nullptr});
 }
 
-void MainWindow::on_file_load_clicked() {
+void MainWindow::on_file_load_clicked()
+{
   QString filename =
       QFileDialog::getOpenFileName(this, tr("Выбрать файл"), "", tr("*.txt"));
   if (filename.isNull())
@@ -36,7 +39,8 @@ void MainWindow::on_file_load_clicked() {
     draw_model();
 }
 
-void MainWindow::on_file_save_clicked() {
+void MainWindow::on_file_save_clicked()
+{
   QString filename =
       QFileDialog::getSaveFileName(this, tr("Выбрать файл"), "", tr("*.txt"));
   if (filename.isNull())
@@ -58,7 +62,8 @@ void MainWindow::on_file_save_clicked() {
     draw_model();
 }
 
-void MainWindow::draw_model() {
+void MainWindow::draw_model()
+{
   draw_data_t data = {ui, scene};
   request_t req = {DRAW, nullptr};
   req.d_data = data;
@@ -66,7 +71,8 @@ void MainWindow::draw_model() {
   handle(req);
 }
 
-void MainWindow::on_do_scale_clicked() {
+void MainWindow::on_do_scale_clicked()
+{
   request_t req = {SCALE, nullptr};
 
   point_t origin = create_point(ui->scale_Cx->value(), ui->scale_Cy->value(),
@@ -75,7 +81,8 @@ void MainWindow::on_do_scale_clicked() {
     return;
   point_t coeffs = create_point(ui->scale_Kx->value(), ui->scale_Ky->value(),
                                 ui->scale_Kz->value());
-  if (coeffs == nullptr) {
+  if (coeffs == nullptr)
+  {
     destroy_point(origin);
     return;
   }
@@ -90,7 +97,8 @@ void MainWindow::on_do_scale_clicked() {
     draw_model();
 }
 
-void MainWindow::on_do_shift_clicked() {
+void MainWindow::on_do_shift_clicked()
+{
   request_t req = {SHIFT, nullptr};
 
   point_t shifts = create_point(ui->shift_Dx->value(), ui->shift_Dy->value(),
@@ -107,7 +115,8 @@ void MainWindow::on_do_shift_clicked() {
     draw_model();
 }
 
-void MainWindow::on_do_rotate_clicked() {
+void MainWindow::on_do_rotate_clicked()
+{
   request_t req = {ROTATE, nullptr};
 
   point_t origin = create_point(ui->rotate_Cx->value(), ui->rotate_Cy->value(),
@@ -116,7 +125,8 @@ void MainWindow::on_do_rotate_clicked() {
     return;
   point_t angles = create_point(ui->rotate_Ax->value(), ui->rotate_Ay->value(),
                                 ui->rotate_Az->value());
-  if (angles == nullptr) {
+  if (angles == nullptr)
+  {
     destroy_point(origin);
     return;
   }

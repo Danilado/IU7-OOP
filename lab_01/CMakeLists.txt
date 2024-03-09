@@ -4,16 +4,16 @@ project(lab_01 VERSION 0.1 LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(HEADER_LIST
-"${lab_01_SOURCE_DIR}/inc/controller.h"
-"${lab_01_SOURCE_DIR}/inc/draw_model.h"
-"${lab_01_SOURCE_DIR}/inc/draw_handlers.h"
-"${lab_01_SOURCE_DIR}/inc/io_handlers.h"
-"${lab_01_SOURCE_DIR}/inc/mainwindow.h"
-"${lab_01_SOURCE_DIR}/inc/model_error.h"
-"${lab_01_SOURCE_DIR}/inc/model_converters.h"
-"${lab_01_SOURCE_DIR}/inc/model_file_io.h"
-"${lab_01_SOURCE_DIR}/inc/model.h"
-"${lab_01_SOURCE_DIR}/inc/transform_handlers.h"
+"${lab_01_SOURCE_DIR}/inc/controller.hpp"
+"${lab_01_SOURCE_DIR}/inc/draw_model.hpp"
+"${lab_01_SOURCE_DIR}/inc/draw_handlers.hpp"
+"${lab_01_SOURCE_DIR}/inc/io_handlers.hpp"
+"${lab_01_SOURCE_DIR}/inc/mainwindow.hpp"
+"${lab_01_SOURCE_DIR}/inc/model_error.hpp"
+"${lab_01_SOURCE_DIR}/inc/model_converters.hpp"
+"${lab_01_SOURCE_DIR}/inc/model_file_io.hpp"
+"${lab_01_SOURCE_DIR}/inc/model.hpp"
+"${lab_01_SOURCE_DIR}/inc/transform_handlers.hpp"
 )
 
 set(CMAKE_AUTOUIC ON)

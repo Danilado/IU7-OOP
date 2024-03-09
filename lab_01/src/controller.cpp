@@ -1,4 +1,4 @@
-#include "controller.h"
+#include "controller.hpp"
 #include <QDebug>
 
 int handle(request_t req)
