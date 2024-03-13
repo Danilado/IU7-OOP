@@ -28,13 +28,13 @@ typedef struct connection *connection_t;
 typedef struct
 {
   size_t len;
-  point_t *arr;
+  point_t *data;
 } pt_arr_t;
 void destroy_pt_arr(pt_arr_t arr);
 typedef struct
 {
   size_t len;
-  connection_t *arr;
+  connection_t *data;
 } con_arr_t;
 void destroy_con_arr(con_arr_t arr);
 
@@ -66,6 +66,6 @@ int model_apply_scale(model_t gr, const point_t origin, const point_t coeffs);
 int model_apply_rotate(model_t gr, const point_t origin, const point_t angles);
 int model_apply_shift(model_t gr, const point_t shifts);
 
-size_t model_get_point_index(pt_arr_t pt_arr, point_t pt);
+int model_get_point_index(OUT size_t &dst, const pt_arr_t pt_arr, point_t pt);
 
 #endif // MODEL_H

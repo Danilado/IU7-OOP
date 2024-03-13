@@ -2,22 +2,32 @@
 #include <cmath>
 #include <stdint.h>
 
+static void clear_points_from_arr(point_t *&data, size_t len)
+{
+    for (size_t i = 0; i < len; ++i)
+        destroy_point(data[i]);
+}
+
 void destroy_pt_arr(pt_arr_t arr)
 {
-    if (arr.arr != nullptr)
-        for (size_t i = 0; i < arr.len; ++i)
-            destroy_point(arr.arr[i]);
+    if (arr.data != nullptr)
+        clear_points_from_arr(arr.data, arr.len);
 
-    free(arr.arr);
+    free(arr.data);
+}
+
+static void clear_cons_from_arr(connection_t *&data, size_t len)
+{
+    for (size_t i = 0; i < len; ++i)
+        destroy_connection(data[i]);
 }
 
 void destroy_con_arr(con_arr_t arr)
 {
-    if (arr.arr != nullptr)
-        for (size_t i = 0; i < arr.len; ++i)
-            destroy_connection(arr.arr[i]);
+    if (arr.data != nullptr)
+        clear_cons_from_arr(arr.data, arr.len);
 
-    free(arr.arr);
+    free(arr.data);
 }
 
 point_t alloc_point()
@@ -234,6 +244,26 @@ int transform_point_shift(point_t pt, const point_t shifts)
     return 0;
 }
 
+typedef struct
+{
+    const point_t origin;
+    const point_t coeffs;
+} tr_scale_data_t;
+
+static int wrap_apply_scale(point_t *&data, size_t len, const tr_scale_data_t s_data)
+{
+    if (data == nullptr)
+        return TRANSFORM_NO_POINT;
+    if (s_data.origin == nullptr)
+        return TRANSFORM_NO_ORIGIN;
+    if (s_data.coeffs == nullptr)
+        return TRANSFORM_NO_DATA;
+    int rc = 0;
+    for (size_t i = 0; !rc && i < len; ++i)
+        rc = transform_point_scale(data[i], s_data.origin, s_data.coeffs);
+    return rc;
+}
+
 static int pt_arr_apply_scale(pt_arr_t pt_arr, const point_t origin, const point_t coeffs)
 {
     if (origin == nullptr)
@@ -242,10 +272,7 @@ static int pt_arr_apply_scale(pt_arr_t pt_arr, const point_t origin, const point
         return TRANSFORM_NO_DATA;
 
     int rc = 0;
-
-    for (size_t i = 0; !rc && i < pt_arr.len; ++i)
-        rc = transform_point_scale(pt_arr.arr[i], origin, coeffs);
-
+    rc = wrap_apply_scale(pt_arr.data, pt_arr.len, tr_scale_data_t{origin, coeffs});
     return rc;
 }
 
@@ -261,6 +288,27 @@ int model_apply_scale(model_t gr, const point_t origin, const point_t coeffs)
     return pt_arr_apply_scale(gr->pt_arr, origin, coeffs);
 }
 
+typedef struct
+{
+    const point_t origin;
+    const point_t angles;
+} tr_rot_data_t;
+
+static int wrap_aply_rotate(point_t *&data, size_t len, const tr_rot_data_t r_data)
+{
+    if (data == nullptr)
+        return TRANSFORM_NO_POINT;
+    if (r_data.origin == nullptr)
+        return TRANSFORM_NO_ORIGIN;
+    if (r_data.angles == nullptr)
+        return TRANSFORM_NO_DATA;
+
+    int rc = 0;
+    for (size_t i = 0; !rc && i < len; ++i)
+        rc = transform_point_rotate(data[i], r_data.origin, r_data.angles);
+    return rc;
+}
+
 static int pt_arr_apply_rotate(pt_arr_t pt_arr, const point_t origin, const point_t angles)
 {
     if (origin == nullptr)
@@ -269,10 +317,7 @@ static int pt_arr_apply_rotate(pt_arr_t pt_arr, const point_t origin, const poin
         return TRANSFORM_NO_DATA;
 
     int rc = 0;
-
-    for (size_t i = 0; !rc && i < pt_arr.len; ++i)
-        rc = transform_point_rotate(pt_arr.arr[i], origin, angles);
-
+    rc = wrap_aply_rotate(pt_arr.data, pt_arr.len, tr_rot_data_t{origin, angles});
     return rc;
 }
 
@@ -288,15 +333,24 @@ int model_apply_rotate(model_t gr, const point_t origin, const point_t angles)
     return pt_arr_apply_rotate(gr->pt_arr, origin, angles);
 }
 
+static int wrap_apply_shift(point_t *&data, size_t len, const point_t shifts)
+{
+    if (data == nullptr)
+        return TRANSFORM_NO_POINT;
+    if (shifts == nullptr)
+        return TRANSFORM_NO_DATA;
+    int rc = 0;
+    for (size_t i = 0; !rc && i < len; ++i)
+        rc = transform_point_shift(data[i], shifts);
+    return rc;
+}
+
 static int pt_arr_apply_shift(pt_arr_t pt_arr, const point_t shifts)
 {
     if (shifts == nullptr)
         return TRANSFORM_NO_DATA;
     int rc = 0;
-
-    for (size_t i = 0; !rc && i < pt_arr.len; ++i)
-        rc = transform_point_shift(pt_arr.arr[i], shifts);
-
+    rc = wrap_apply_shift(pt_arr.data, pt_arr.len, shifts);
     return rc;
 }
 
@@ -310,19 +364,29 @@ int model_apply_shift(model_t gr, const point_t shifts)
     return pt_arr_apply_shift(gr->pt_arr, shifts);
 }
 
-size_t model_get_point_index(pt_arr_t pt_arr, point_t pt)
+static size_t wrap_find_index(point_t *data, size_t len, point_t pt)
 {
-    if (pt_arr.arr == nullptr)
-        return SIZE_MAX;
+    if (data == nullptr)
+        return len;
     if (pt == nullptr)
-        return SIZE_MAX;
+        return len;
 
     size_t i = 0;
-    for (i = 0; i < pt_arr.len && pt != pt_arr.arr[i]; ++i)
+    for (i = 0; i < len && pt != data[i]; ++i)
         ;
 
-    if (pt != pt_arr.arr[i])
-        return SIZE_MAX;
-
     return i;
+}
+
+int model_get_point_index(OUT size_t &dst, const pt_arr_t pt_arr, point_t pt)
+{
+    if (pt_arr.data == nullptr)
+        return NO_PT_ARR;
+    if (pt == nullptr)
+        return MODEL_BAD_POINT;
+
+    dst = wrap_find_index(pt_arr.data, pt_arr.len, pt);
+    if (dst >= pt_arr.len)
+        return PT_NOT_FOUND;
+    return 0;
 }

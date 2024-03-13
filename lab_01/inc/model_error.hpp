@@ -29,6 +29,7 @@ typedef enum
   DRAW_NO_CONTEXT,
   MODEL_BAD_CONNECTION,
   MODEL_BAD_POINT,
+  PT_NOT_FOUND,
 } error;
 
 #endif
