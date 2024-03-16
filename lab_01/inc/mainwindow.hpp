@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
+#include <cstring>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

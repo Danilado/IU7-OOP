@@ -4,7 +4,7 @@
 int handle(request_t req)
 {
   static model_t graph = nullptr;
-  int rc = 0;
+  int rc = ALL_OK;
 
   switch (req.option)
   {
