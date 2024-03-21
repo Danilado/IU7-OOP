@@ -2,30 +2,48 @@
 #include "draw_model.hpp"
 #include "ui_mainwindow.h"
 
-static QImage get_context(Ui::MainWindow *ui) {
-  return QImage(ui->canvas->width(), ui->canvas->height(),
-                QImage::Format_RGB32);
-}
+static int clearQtBg(QPainter *painter, Ui::MainWindow *ui) {
+  if (painter == nullptr)
+    return DRAW_NO_UI;
+  if (ui == nullptr)
+    return DRAW_NO_UI;
 
-static void wrap_clear_bg(QPainter *painter, Ui::MainWindow *ui) {
   painter->fillRect(0, 0, ui->canvas->width(), ui->canvas->height(),
                     QColor(255, 255, 255));
+
+  return ALL_OK;
 }
 
-static void clear_bg(canvas_data_t canv_data, Ui::MainWindow *ui) {
-  wrap_clear_bg(canv_data.p, ui);
+static int clear_bg(const canvas_data_t &canv_data,
+                    const draw_data_t &draw_data) {
+  return clearQtBg(canv_data.p, draw_data.ui);
 }
 
-static draw_params_t get_params(Ui::MainWindow *ui) {
-  return draw_params_t{
-      .colors = colors_t{.linecolor = QColor(0, 0, 0),
-                         .pointcolor = QColor(200, 0, 0)},
-      .offset = offset_t{.offset_x = (double)ui->canvas->width() / 2,
-                         .offset_y = (double)ui->canvas->height() / 2},
-  };
+static int getQtColors(OUT colors_t &dst) {
+  dst.linecolor = QColor(0, 0, 0);
+  dst.pointcolor = QColor(200, 0, 0);
+  return ALL_OK;
 }
 
-static int draw_image(QImage &img, QGraphicsScene *scene, Ui::MainWindow *ui) {
+static int getQtOffset(OUT offset_t &dst, Ui::MainWindow *ui) {
+  if (ui == nullptr)
+    return DRAW_NO_UI;
+
+  dst.offset_x = (double)ui->canvas->width() / 2;
+  dst.offset_y = (double)ui->canvas->height() / 2;
+
+  return ALL_OK;
+}
+
+static int get_params(draw_params_t &dst, const draw_data_t &draw_data) {
+  int rc = getQtColors(dst.colors);
+  if (!rc)
+    rc = getQtOffset(dst.offset, draw_data.ui);
+  return rc;
+}
+
+static int drawQtImage(const QImage &img, QGraphicsScene *scene,
+                       Ui::MainWindow *ui) {
   if (ui == nullptr)
     return DRAW_NO_UI;
 
@@ -40,38 +58,73 @@ static int draw_image(QImage &img, QGraphicsScene *scene, Ui::MainWindow *ui) {
   return ALL_OK;
 }
 
-canvas_data_t form_canvas_data(Ui::MainWindow *ui) {
-  canvas_data_t res;
-  res.img = get_context(ui);
-  res.p = new QPainter(&res.img);
-  return res;
-}
-
-void clear_canvas_data(canvas_data_t canv_data) { delete canv_data.p; }
-
-int handle_draw(const model_t gr, draw_data_t data) {
-  if (gr == nullptr)
-    return NO_MODEL;
-
-  if (data.ui == nullptr)
+static int formQtCanvasData(OUT canvas_data_t &dst, Ui::MainWindow *ui) {
+  if (ui == nullptr)
     return DRAW_NO_UI;
 
-  if (data.scene == nullptr)
-    return DRAW_NO_SCENE;
+  dst.img =
+      QImage(ui->canvas->width(), ui->canvas->height(), QImage::Format_RGB32);
+  dst.p = new QPainter(&dst.img);
 
-  canvas_data_t canv_data = form_canvas_data(data.ui);
+  return ALL_OK;
+}
 
-  clear_bg(canv_data, data.ui);
+static int form_canvas_data(OUT canvas_data_t &dst,
+                            const draw_data_t &draw_data) {
+  return formQtCanvasData(dst, draw_data.ui);
+}
 
-  int rc = ALL_OK;
+static void clearQtCanvData(QPainter *&p) { delete p; }
 
-  draw_params_t params = get_params(data.ui);
+static void clear_canvas_data(canvas_data_t &canv_data) {
+  clearQtCanvData(canv_data.p);
+}
 
-  rc = draw_model(gr, canv_data, params);
+static int show_image(const canvas_data_t &canv_data,
+                      const draw_data_t &draw_data) {
+  return drawQtImage(canv_data.img, draw_data.scene, draw_data.ui);
+}
 
-  if (!rc)
-    rc = draw_image(canv_data.img, data.scene, data.ui);
+typedef struct {
+  draw_data_t &d_data;
+  canvas_data_t &canv_data;
+  draw_params_t &params;
+} image_draw_data_t;
 
-  clear_canvas_data(canv_data);
+static image_draw_data_t pack_image_d_data(draw_data_t &d_data,
+                                           canvas_data_t &canv_data,
+                                           draw_params_t &params) {
+  return image_draw_data_t{
+      .d_data = d_data, .canv_data = canv_data, .params = params};
+}
+
+static int draw_image_on_screen(const model_t model,
+                                const image_draw_data_t &img_d_data) {
+  int rc = clear_bg(img_d_data.canv_data, img_d_data.d_data);
+  if (!rc) {
+    rc = draw_model(model, img_d_data.canv_data, img_d_data.params);
+    if (!rc)
+      rc = show_image(img_d_data.canv_data, img_d_data.d_data);
+  }
+  return rc;
+}
+
+int handle_draw(const model_t model, draw_data_t &draw_data) {
+  if (model == nullptr)
+    return NO_MODEL;
+
+  canvas_data_t canv_data;
+  int rc = form_canvas_data(canv_data, draw_data);
+  if (!rc) {
+    draw_params_t params;
+    rc = get_params(params, draw_data);
+    if (!rc) {
+      image_draw_data_t img_d_data =
+          pack_image_d_data(draw_data, canv_data, params);
+
+      rc = draw_image_on_screen(model, img_d_data);
+    }
+    clear_canvas_data(canv_data);
+  }
   return rc;
 }

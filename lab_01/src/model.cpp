@@ -82,15 +82,15 @@ model_t create_model(pt_arr_t pt_arr, con_arr_t con_arr) {
   return res;
 }
 
-void destroy_model(model_t &gr) {
-  if (gr == nullptr)
+void destroy_model(model_t &model) {
+  if (model == nullptr)
     return;
 
-  destroy_pt_arr(gr->pt_arr);
-  destroy_con_arr(gr->con_arr);
+  destroy_pt_arr(model->pt_arr);
+  destroy_con_arr(model->con_arr);
 
-  free(gr);
-  gr = nullptr;
+  free(model);
+  model = nullptr;
 }
 
 static int point_origin_shift(point_t pt, const point_t origin,
@@ -256,15 +256,16 @@ static int pt_arr_apply_scale(pt_arr_t pt_arr, const point_t origin,
   return rc;
 }
 
-int model_apply_scale(model_t gr, const point_t origin, const point_t coeffs) {
-  if (gr == nullptr)
+int model_apply_scale(model_t model, const point_t origin,
+                      const point_t coeffs) {
+  if (model == nullptr)
     return TRANSFORM_NO_MODEL;
   if (origin == nullptr)
     return TRANSFORM_NO_ORIGIN;
   if (coeffs == nullptr)
     return TRANSFORM_NO_DATA;
 
-  return pt_arr_apply_scale(gr->pt_arr, origin, coeffs);
+  return pt_arr_apply_scale(model->pt_arr, origin, coeffs);
 }
 
 typedef struct {
@@ -303,15 +304,16 @@ static int pt_arr_apply_rotate(pt_arr_t pt_arr, const point_t origin,
   return rc;
 }
 
-int model_apply_rotate(model_t gr, const point_t origin, const point_t angles) {
-  if (gr == nullptr)
+int model_apply_rotate(model_t model, const point_t origin,
+                       const point_t angles) {
+  if (model == nullptr)
     return TRANSFORM_NO_MODEL;
   if (origin == nullptr)
     return TRANSFORM_NO_ORIGIN;
   if (angles == nullptr)
     return TRANSFORM_NO_DATA;
 
-  return pt_arr_apply_rotate(gr->pt_arr, origin, angles);
+  return pt_arr_apply_rotate(model->pt_arr, origin, angles);
 }
 
 static int wrap_apply_shift(point_t *&data, size_t len, const point_t shifts) {
@@ -333,13 +335,13 @@ static int pt_arr_apply_shift(pt_arr_t pt_arr, const point_t shifts) {
   return rc;
 }
 
-int model_apply_shift(model_t gr, const point_t shifts) {
-  if (gr == nullptr)
+int model_apply_shift(model_t model, const point_t shifts) {
+  if (model == nullptr)
     return TRANSFORM_NO_MODEL;
   if (shifts == nullptr)
     return TRANSFORM_NO_DATA;
 
-  return pt_arr_apply_shift(gr->pt_arr, shifts);
+  return pt_arr_apply_shift(model->pt_arr, shifts);
 }
 
 static size_t wrap_find_index(point_t *data, size_t len, point_t pt) {

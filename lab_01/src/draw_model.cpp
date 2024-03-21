@@ -10,13 +10,13 @@ draw_loop_data_t get_loop_data(offset_t offset, canvas_data_t canv_data) {
   return draw_loop_data_t{offset, canv_data};
 }
 
-int draw_model(model_t gr, canvas_data_t canv_data, draw_params_t params) {
-  if (gr == nullptr)
+int draw_model(model_t model, canvas_data_t canv_data, draw_params_t params) {
+  if (model == nullptr)
     return DRAW_NO_MODEL;
 
-  int rc = draw_connections(gr->con_arr, canv_data, params);
+  int rc = draw_connections(model->con_arr, canv_data, params);
   if (!rc)
-    rc = draw_points(gr->pt_arr, canv_data, params);
+    rc = draw_points(model->pt_arr, canv_data, params);
 
   return rc;
 }

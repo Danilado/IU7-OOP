@@ -27,7 +27,7 @@ typedef struct {
   QPainter *p;
 } canvas_data_t;
 
-int draw_model(model_t gr, canvas_data_t canv_data, draw_params_t params);
+int draw_model(model_t model, canvas_data_t canv_data, draw_params_t params);
 
 int draw_connections(con_arr_t con_arr, canvas_data_t canv_data,
                      draw_params_t params);

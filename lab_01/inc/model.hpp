@@ -10,36 +10,31 @@
 #define OUT
 #define VAR
 
-struct point
-{
+struct point {
   double x;
   double y;
   double z;
 };
 typedef struct point *point_t;
 
-struct connection
-{
+struct connection {
   point_t p1;
   point_t p2;
 };
 typedef struct connection *connection_t;
 
-typedef struct
-{
+typedef struct {
   size_t len;
   point_t *data;
 } pt_arr_t;
 void destroy_pt_arr(pt_arr_t arr);
-typedef struct
-{
+typedef struct {
   size_t len;
   connection_t *data;
 } con_arr_t;
 void destroy_con_arr(con_arr_t arr);
 
-struct model
-{
+struct model {
   pt_arr_t pt_arr;
   con_arr_t con_arr;
 };
@@ -56,15 +51,19 @@ void destroy_connection(connection_t &con);
 model_t alloc_model();
 model_t create_model(pt_arr_t pt_arr, con_arr_t con_arr);
 
-void destroy_model(model_t &gr);
+void destroy_model(model_t &model);
 
-int transform_point_scale(point_t pt, const point_t origin, const point_t coeffs);
-int transform_point_rotate(point_t pt, const point_t origin, const point_t angles);
+int transform_point_scale(point_t pt, const point_t origin,
+                          const point_t coeffs);
+int transform_point_rotate(point_t pt, const point_t origin,
+                           const point_t angles);
 int transform_point_shift(point_t pt, const point_t shifts);
 
-int model_apply_scale(model_t gr, const point_t origin, const point_t coeffs);
-int model_apply_rotate(model_t gr, const point_t origin, const point_t angles);
-int model_apply_shift(model_t gr, const point_t shifts);
+int model_apply_scale(model_t model, const point_t origin,
+                      const point_t coeffs);
+int model_apply_rotate(model_t model, const point_t origin,
+                       const point_t angles);
+int model_apply_shift(model_t model, const point_t shifts);
 
 int model_get_point_index(OUT size_t &dst, const pt_arr_t pt_arr, point_t pt);
 

@@ -329,8 +329,8 @@ static int model_fprint_connections(const con_arr_t con_arr,
   return rc;
 }
 
-int write_model_to_file(const model_t gr, const char *filename) {
-  if (gr == nullptr)
+int write_model_to_file(const model_t model, const char *filename) {
+  if (model == nullptr)
     return NO_MODEL;
 
   if (filename == nullptr)
@@ -342,9 +342,9 @@ int write_model_to_file(const model_t gr, const char *filename) {
 
   int rc = ALL_OK;
 
-  rc = model_fprint_points(gr->pt_arr, f);
+  rc = model_fprint_points(model->pt_arr, f);
   if (!rc)
-    rc = model_fprint_connections(gr->con_arr, gr->pt_arr, f);
+    rc = model_fprint_connections(model->con_arr, model->pt_arr, f);
 
   return rc;
 }
