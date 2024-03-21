@@ -8,7 +8,7 @@ typedef struct {
   const char *filename;
 } io_data_t;
 
-int handle_load(model_t &model, io_data_t data);
-int handle_save(const model_t model, io_data_t data);
+int handle_load(model_t &model, io_data_t &data);
+int handle_save(const model_t model, io_data_t &data);
 
 #endif

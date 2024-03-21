@@ -10,7 +10,7 @@
 #include <QPointF>
 #include <QString>
 
-QPointF *point_to_QPointF(point_t pt, offset_t offset);
-QLineF *connection_to_QLineF(connection_t con, offset_t offset);
+QPointF *point_to_QPointF(point_t pt, offset_t &offset);
+QLineF *connection_to_QLineF(connection_t con, offset_t &offset);
 
 #endif

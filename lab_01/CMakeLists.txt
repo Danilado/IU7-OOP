@@ -14,6 +14,10 @@ set(HEADER_LIST
 "${lab_01_SOURCE_DIR}/inc/model_file_io.hpp"
 "${lab_01_SOURCE_DIR}/inc/model.hpp"
 "${lab_01_SOURCE_DIR}/inc/transform_handlers.hpp"
+"${lab_01_SOURCE_DIR}/inc/point.hpp"
+"${lab_01_SOURCE_DIR}/inc/point_arr.hpp"
+"${lab_01_SOURCE_DIR}/inc/edge.hpp"
+"${lab_01_SOURCE_DIR}/inc/edge_arr.hpp"
 )
 
 set(CMAKE_AUTOUIC ON)
@@ -44,6 +48,10 @@ src/model_file_io.cpp
 src/model.cpp
 src/transform_handlers.cpp
 src/main.cpp
+src/point.cpp
+src/point_arr.cpp
+src/edge.cpp
+src/edge_arr.cpp
 ui/mainwindow.ui
 ${HEADER_LIST})
 target_include_directories(main PUBLIC ./inc)

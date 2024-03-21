@@ -2,7 +2,7 @@
 
 #include "model_file_io.hpp"
 
-int handle_load(model_t &model, io_data_t data) {
+int handle_load(model_t &model, io_data_t &data) {
   int rc = ALL_OK;
   model_t new_model = nullptr;
 
@@ -17,6 +17,6 @@ int handle_load(model_t &model, io_data_t data) {
   return rc;
 }
 
-int handle_save(const model_t model, io_data_t data) {
+int handle_save(const model_t model, io_data_t &data) {
   return write_model_to_file(model, data.filename);
 }

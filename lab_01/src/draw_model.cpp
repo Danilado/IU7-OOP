@@ -6,11 +6,11 @@ typedef struct {
   canvas_data_t canv_data;
 } draw_loop_data_t;
 
-draw_loop_data_t get_loop_data(offset_t offset, canvas_data_t canv_data) {
+draw_loop_data_t get_loop_data(offset_t &offset, canvas_data_t &canv_data) {
   return draw_loop_data_t{offset, canv_data};
 }
 
-int draw_model(model_t model, canvas_data_t canv_data, draw_params_t params) {
+int draw_model(model_t model, canvas_data_t &canv_data, draw_params_t &params) {
   if (model == nullptr)
     return DRAW_NO_MODEL;
 
@@ -28,11 +28,11 @@ static int setQTPenColor(QPainter *p, QColor color) {
   return ALL_OK;
 }
 
-static int apply_linecolor(canvas_data_t canv_data, colors_t color_params) {
+static int apply_linecolor(canvas_data_t &canv_data, colors_t &color_params) {
   return setQTPenColor(canv_data.p, color_params.linecolor);
 }
 
-static int drawQTLine(connection_t con, offset_t offset, QPainter *p) {
+static int drawQTLine(connection_t con, offset_t &offset, QPainter *p) {
   if (p == nullptr)
     return DRAW_NO_CONTEXT;
   int rc = ALL_OK;
@@ -49,8 +49,8 @@ static int drawQTLine(connection_t con, offset_t offset, QPainter *p) {
   return rc;
 }
 
-static int draw_line(connection_t con, offset_t offset,
-                     canvas_data_t canv_data) {
+static int draw_line(connection_t con, offset_t &offset,
+                     canvas_data_t &canv_data) {
   if (con == nullptr)
     return MODEL_BAD_CONNECTION;
 
@@ -58,7 +58,7 @@ static int draw_line(connection_t con, offset_t offset,
 }
 
 static int draw_con_arr(connection_t *data, size_t len,
-                        draw_loop_data_t dl_data) {
+                        draw_loop_data_t &dl_data) {
   if (data == nullptr)
     return MODEL_BAD_CONNECTION;
 
@@ -69,8 +69,8 @@ static int draw_con_arr(connection_t *data, size_t len,
   return rc;
 }
 
-int draw_connections(con_arr_t con_arr, canvas_data_t canv_data,
-                     draw_params_t params) {
+int draw_connections(con_arr_t con_arr, canvas_data_t &canv_data,
+                     draw_params_t &params) {
   if (con_arr.data == nullptr)
     return NO_CON_ARR;
 
@@ -90,11 +90,11 @@ static int setQTBrushColor(QPainter *p, QColor color) {
   return ALL_OK;
 }
 
-static int apply_pointcolor(canvas_data_t canv_data, colors_t color_params) {
+static int apply_pointcolor(canvas_data_t &canv_data, colors_t &color_params) {
   return setQTBrushColor(canv_data.p, color_params.linecolor);
 }
 
-static int drawQTPoint(point_t pt, offset_t offset, QPainter *p) {
+static int drawQTPoint(point_t pt, offset_t &offset, QPainter *p) {
   if (p == nullptr)
     return DRAW_NO_CONTEXT;
   if (pt == nullptr)
@@ -113,14 +113,14 @@ static int drawQTPoint(point_t pt, offset_t offset, QPainter *p) {
   return rc;
 }
 
-static int draw_point(point_t pt, offset_t offset, canvas_data_t canv_data) {
+static int draw_point(point_t pt, offset_t &offset, canvas_data_t &canv_data) {
   if (pt == nullptr)
     return MODEL_BAD_POINT;
 
   return drawQTPoint(pt, offset, canv_data.p);
 }
 
-static int draw_pt_arr(point_t *data, size_t len, draw_loop_data_t dl_data) {
+static int draw_pt_arr(point_t *data, size_t len, draw_loop_data_t &dl_data) {
   if (data == nullptr)
     return MODEL_BAD_POINT;
 
@@ -131,8 +131,8 @@ static int draw_pt_arr(point_t *data, size_t len, draw_loop_data_t dl_data) {
   return rc;
 }
 
-int draw_points(pt_arr_t pt_arr, canvas_data_t canv_data,
-                draw_params_t params) {
+int draw_points(pt_arr_t pt_arr, canvas_data_t &canv_data,
+                draw_params_t &params) {
   if (pt_arr.data == nullptr)
     return NO_PT_ARR;
 
