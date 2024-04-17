@@ -1,3 +1,6 @@
+#ifndef EXCEPTIONS_HPP
+#define EXCEPTIONS_HPP
+
 #include "base_exception.hpp"
 
 class PointerExpiredException : public BaseException {
@@ -45,3 +48,19 @@ public:
       : BaseException(filename, line, class_name, method_name,
                       info + to_string(size1) + " vs " + to_string(size2)){};
 };
+
+class MemoryException : public BaseException {
+public:
+  MemoryException(const string &filename, const size_t &line,
+                  const string &class_name, const string &method_name,
+                  const string &info =
+#ifdef LANG_RU
+                      "Ошибка выделения памяти. "
+#else
+                      "Memory allocation error. "
+#endif
+                  )
+      : BaseException(filename, line, class_name, method_name, info){};
+};
+
+#endif

@@ -20,8 +20,12 @@ bool Vector<T>::operator==(const Vector<U> &other) const {
   if (size != other.size) {
     res = false;
   } else {
-    for (size_t i = 0; res && (i < size); ++i)
-      res = abs((*this)[i] - other[i]) < EPS;
+    auto &oth_it = other.begin();
+
+    for (auto &el : this) {
+      res = abs((*el) - (*oth_it)) < EPS;
+      ++oth_it;
+    }
   }
 
   return res;
@@ -33,14 +37,14 @@ bool Vector<T>::operator!=(const Vector<U> &other) const {
   return !(this == other);
 }
 
-template <typename T> Vector<T> &Vector<T>::operator=(const Vector<T> &vec) {
-  size = vec.size;
+template <typename T> Vector<T> &Vector<T>::operator=(const Vector<T> &other) {
+  size = other.size;
   alloc(size);
 
-  size_t i = 0;
-  for (auto &el : vec) {
-    (*this)[i] = el;
-    ++i;
+  auto &oth_it = other.begin();
+  for (auto &el : this) {
+    *el = *oth_it;
+    ++oth_it;
   }
 
   return *this;

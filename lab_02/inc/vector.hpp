@@ -73,29 +73,28 @@ public:
   template <typename U> Vector<T> &operator-=(const Vector<U> &val);
   Vector<T> &operator--();
 
-  template <typename U> decltype(auto) mul(const Vector<U> &val);
+  template <typename U> decltype(auto) vecMul(const Vector<U> &val);
   template <typename U> decltype(auto) operator%(const Vector<U> &val);
 
   template <typename U> decltype(auto) div(const U &val);
   template <typename U> decltype(auto) operator/(const U &val);
   template <typename U> Vector<T> &operator/=(const U &val);
 
+  template <typename U> decltype(auto) mul(const U &val);
   template <typename U> decltype(auto) operator*(const U &val);
   template <typename U> Vector<T> &operator*=(const U &val);
-  template <typename U> Vector<T> &operator*=(const Vector<U> &val);
 
   T scalarProduct(const Vector<T> &val);
   template <typename U> decltype(auto) scalarProduct(const Vector<U> &val);
-  T operator^(const Vector<T> &val);
   template <typename U> decltype(auto) operator*(const Vector<U> &val);
 
 #pragma endregion operations
 
 #pragma region iterators
+  Iterator<T> begin() noexcept;
+  Iterator<T> end() noexcept;
 #pragma endregion iterators
 
-#pragma region functions
-#pragma endregion functions
 protected:
   void alloc(size_t amount);
 
@@ -106,7 +105,13 @@ private:
   std::shared_ptr<T> data = nullptr;
 };
 
+#include "vector_functions.inl"
+#include "vector_iterators.inl"
 #include "vector_lifetime.inl"
-#include "vector_operators.inl"
+#include "vector_operators_add.inl"
+#include "vector_operators_diff.inl"
+#include "vector_operators_div.inl"
+#include "vector_operators_logic.inl"
+#include "vector_operators_mul.inl"
 
 #endif

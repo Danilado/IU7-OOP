@@ -15,6 +15,4 @@ protected:
   size_t size;
 };
 
-BaseIterator::~BaseIterator() {}
-
 #endif

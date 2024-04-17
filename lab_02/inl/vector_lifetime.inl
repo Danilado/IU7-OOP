@@ -3,11 +3,14 @@
 template <typename T> Vector<T>::Vector() noexcept : BaseContainer(), data() {}
 
 template <typename T>
-Vector<T>::Vector(const Vector<T> &vec) : BaseContainer(vec.size) {
+Vector<T>::Vector(const Vector<T> &other) : BaseContainer(other.size) {
   alloc(size);
 
-  for (size_t i = 0; i < size; ++i)
-    (*this)[i] = vec[i];
+  size_t i = 0;
+  for (auto &el : *this) {
+    *el = other[i];
+    ++i;
+  }
 };
 
 template <typename T>
@@ -25,16 +28,20 @@ template <typename T>
 Vector<T>::Vector(const size_t size, const T &fill) : BaseContainer(size) {
   alloc(size);
 
-  for (size_t i = 0; i < size; ++i)
-    (*this)[i] = fill;
+  size_t i = 0;
+  for (auto &el : *this)
+    *el = fill;
 }
 
 template <typename T>
 Vector<T>::Vector(const size_t size, const T *src) : BaseContainer(size) {
   alloc(size);
 
-  for (size_t i = 0; i < size; ++i)
-    (*this)[i] = src[i];
+  size_t i = 0;
+  for (auto &el : *this) {
+    *el = src[i];
+    ++i;
+  }
 }
 
 template <typename T>
@@ -58,9 +65,9 @@ Vector<T>::Vector(IterT ibeg, IterT iend) {
 
   alloc(size);
 
-  size_t i = 0;
-  for (auto iter = ibeg; iter < iend; ++iter, ++i)
-    data[i] = *iter;
+  auto &it = begin();
+  for (auto iter = ibeg; iter < iend; ++iter, ++it)
+    *it = *iter;
 }
 
 template <typename T> Vector<T>::~Vector() = default;

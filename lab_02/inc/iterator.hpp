@@ -49,6 +49,8 @@ protected:
   std::weak_ptr<T> ptr;
 };
 
-#include "iterator.inl"
+#include "iterator_functions.inl"
+#include "iterator_lifetime.inl"
+#include "iterator_operators.inl"
 
 #endif

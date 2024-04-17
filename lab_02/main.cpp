@@ -1,10 +1,14 @@
 #include "iterator.hpp"
 #include "vector.hpp"
 
-int main(void) {
+#include <gtest/gtest.h>
+
+int main(int argc, char *argv[]) {
 #ifdef LANG_RU
   setlocale(LC_CTYPE, "Russian");
 #endif
 
-  return 0;
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
 }
