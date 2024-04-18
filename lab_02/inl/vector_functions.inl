@@ -6,9 +6,10 @@
 #define EPS 1e-6
 #endif
 
-template <typename T> void Vector<T>::alloc(size_t amount) {
+template <typename T> void Vector<T>::alloc(const size_t amount) {
   try {
-    data.reset(new T[amount]);
+    data.reset();
+    data = std::make_shared<T[]>(amount);
   } catch (std::bad_alloc &error) {
     throw MemoryException(__FILE__, __LINE__, typeid(*this).name(), "alloc");
   }
