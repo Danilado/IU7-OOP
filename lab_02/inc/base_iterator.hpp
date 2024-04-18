@@ -8,7 +8,7 @@ class BaseIterator {
 public:
   BaseIterator();
   explicit BaseIterator(const BaseIterator &iter);
-  virtual ~BaseIterator() = 0;
+  virtual ~BaseIterator() = default;
 
 protected:
   size_t index;

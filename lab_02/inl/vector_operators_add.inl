@@ -3,15 +3,15 @@
 template <typename T>
 template <typename U>
 decltype(auto) Vector<T>::sum(const Vector<U> &other) {
-  checkSizeMatch(other, __LINE__);
+  checkSizeMatch(other, __LINE__, "sum");
 
   Vector<decltype((*this)[0] + other[0])> res(size);
 
-  auto &this_it = begin();
-  auto &oth_it = other.begin();
+  auto this_it = begin();
+  auto oth_it = other.begin();
 
   for (auto &el : res) {
-    *el = *this_it + *oth_it;
+    el = *this_it + *oth_it;
     ++this_it;
     ++oth_it;
   }
@@ -30,9 +30,10 @@ template <typename U>
 decltype(auto) Vector<T>::operator+(const U &val) {
   Vector<decltype((*this)[0] + val)> res(size);
 
-  auto &this_it = begin();
+  auto this_it = begin();
+
   for (auto &el : res) {
-    *el = *this_it + val;
+    el = *this_it + val;
     ++this_it;
   }
 
@@ -42,8 +43,8 @@ decltype(auto) Vector<T>::operator+(const U &val) {
 template <typename T> Vector<T> Vector<T>::operator++(int) {
   Vector<T> res(*this);
 
-  for (auto &el : this)
-    ++(*el);
+  for (auto &el : (*this))
+    ++el;
 
   return res;
 }
@@ -51,8 +52,8 @@ template <typename T> Vector<T> Vector<T>::operator++(int) {
 template <typename T>
 template <typename U>
 Vector<T> &Vector<T>::operator+=(const U &val) {
-  for (auto &el : this)
-    *el += val;
+  for (auto &el : (*this))
+    el += val;
 
   return *this;
 }
@@ -60,11 +61,11 @@ Vector<T> &Vector<T>::operator+=(const U &val) {
 template <typename T>
 template <typename U>
 Vector<T> &Vector<T>::operator+=(const Vector<U> &other) {
-  checkSizeMatch(other, __LINE__);
+  checkSizeMatch(other, __LINE__, "operator+=");
 
-  auto &oth_it = other.begin();
-  for (auto &el : this) {
-    *el += *oth_it;
+  auto oth_it = other.begin();
+  for (auto &el : (*this)) {
+    el += *oth_it;
     ++oth_it;
   }
 
@@ -72,7 +73,7 @@ Vector<T> &Vector<T>::operator+=(const Vector<U> &other) {
 }
 
 template <typename T> Vector<T> &Vector<T>::operator++() {
-  for (auto &el : this)
+  for (auto el : (*this))
     ++(*el);
 
   return *this;

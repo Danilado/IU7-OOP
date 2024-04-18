@@ -10,16 +10,17 @@ template <typename T> void Vector<T>::alloc(size_t amount) {
   try {
     data.reset(new T[amount]);
   } catch (std::bad_alloc &error) {
-    throw MemoryException(__FILE__, __LINE__, typeid(*this).name, __FUNCTION__);
+    throw MemoryException(__FILE__, __LINE__, typeid(*this).name(), "alloc");
   }
 }
 
 template <typename T>
 template <typename U>
-void Vector<T>::checkSizeMatch(const Vector<U> &other, const size_t line) {
-  if (size != other.size)
-    throw SizeMismatchException(__FILE__, line, typeid(*this).name,
-                                __FUNCTION__, size, other.size);
+void Vector<T>::checkSizeMatch(const Vector<U> &other, const size_t line,
+                               string funcname) const {
+  if (size != other.getSize())
+    throw SizeMismatchException(__FILE__, line, typeid(*this).name(), funcname,
+                                size, other.getSize());
 }
 
 template <typename T> template <typename U> U Vector<T>::length() const {
@@ -66,8 +67,28 @@ Vector<T> &Vector<T>::operator=(std::initializer_list<T> init) {
   alloc(size);
 
   size_t i = 0;
-  for (auto &el : init) {
+  for (auto el : init) {
     (*this)[i] = el;
     ++i;
   }
+}
+
+template <typename T> T &Vector<T>::operator[](const size_t index) {
+  checkBounds(__LINE__, index, "operator[]");
+
+  return data[index];
+}
+
+template <typename T> const T &Vector<T>::operator[](const size_t index) const {
+  checkBounds(__LINE__, index, "operator[]");
+
+  return data[index];
+}
+
+template <typename T>
+void Vector<T>::checkBounds(const size_t line, const size_t index,
+                            string funcname) const {
+  if (index >= size)
+    throw IndexOutOfBoundsException(__FILE__, line, typeid(*this).name(),
+                                    funcname);
 }

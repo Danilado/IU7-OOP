@@ -1,5 +1,4 @@
-#include "iterator.hpp"
-#include "vector.hpp"
+#include "vector_tests.hpp"
 
 #include <gtest/gtest.h>
 

@@ -7,8 +7,9 @@ Vector<T>::Vector(const Vector<T> &other) : BaseContainer(other.size) {
   alloc(size);
 
   size_t i = 0;
+
   for (auto &el : *this) {
-    *el = other[i];
+    el = other[i];
     ++i;
   }
 };
@@ -29,8 +30,9 @@ Vector<T>::Vector(const size_t size, const T &fill) : BaseContainer(size) {
   alloc(size);
 
   size_t i = 0;
+
   for (auto &el : *this)
-    *el = fill;
+    el = fill;
 }
 
 template <typename T>
@@ -38,8 +40,9 @@ Vector<T>::Vector(const size_t size, const T *src) : BaseContainer(size) {
   alloc(size);
 
   size_t i = 0;
+
   for (auto &el : *this) {
-    *el = src[i];
+    el = src[i];
     ++i;
   }
 }
@@ -49,6 +52,7 @@ Vector<T>::Vector(std::initializer_list<T> init) : BaseContainer(init.size()) {
   alloc(size);
 
   size_t i = 0;
+
   for (auto &el : init) {
     (*this)[i] = el;
     ++i;
@@ -65,7 +69,7 @@ Vector<T>::Vector(IterT ibeg, IterT iend) {
 
   alloc(size);
 
-  auto &it = begin();
+  auto it = begin();
   for (auto iter = ibeg; iter < iend; ++iter, ++it)
     *it = *iter;
 }

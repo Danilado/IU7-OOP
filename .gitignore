@@ -3,3 +3,4 @@ out/*
 *.user*
 .vscode
 build/*
+build-*

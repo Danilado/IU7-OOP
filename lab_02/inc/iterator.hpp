@@ -3,6 +3,9 @@
 
 #include <compare>
 #include <memory>
+#include <string>
+
+using std::string;
 
 template <typename T> class Vector;
 
@@ -21,13 +24,8 @@ public:
   operator bool() const;
 
   T &operator*();
-  const T &operator*() const;
-
   T *operator->();
-  const T *operator->() const;
-
   T &operator[](const size_t offset);
-  const T &operator[](const size_t offset) const;
 
   Iterator<T> &operator++();
   Iterator<T> operator++(int);
@@ -42,11 +40,12 @@ public:
 
 private:
   T *getPtr() const;
-  void checkExpired(const size_t line);
-  void checkBounds(const size_t line, const size_t offset = 0);
+  void checkExpired(const size_t line, string funcname) const;
+  void checkBounds(const size_t line, string funcname,
+                   const size_t offset = 0) const;
 
 protected:
-  std::weak_ptr<T> ptr;
+  std::weak_ptr<T[]> ptr;
 };
 
 #include "iterator_functions.inl"
