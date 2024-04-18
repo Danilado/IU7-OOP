@@ -106,7 +106,7 @@ public:
 #pragma endregion iterators
 
 protected:
-  void alloc(size_t amount);
+  void alloc(const size_t amount);
 
   template <typename U>
   void checkSizeMatch(const Vector<U> &other, const size_t line,
