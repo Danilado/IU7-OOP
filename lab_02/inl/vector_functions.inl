@@ -57,8 +57,25 @@ template <typename T> bool Vector<T>::isUnit() const {
 template <typename T>
 Vector<T> &Vector<T>::operator=(Vector<T> &&tmpvec) noexcept {
   size = tmpvec.size;
-  data.reset(tmpvec.data);
+  data = tmpvec.data;
   tmpvec.data.reset();
+  tmpvec.size = 0;
+
+  return *this;
+}
+
+template <typename T> Vector<T> &Vector<T>::operator=(const Vector<T> &vec) {
+  size = vec.size;
+  alloc(size);
+
+  auto oth_it = vec.begin();
+
+  for (auto &el : *this) {
+    el = *oth_it;
+    ++oth_it;
+  }
+
+  return *this;
 }
 
 template <typename T>
@@ -71,6 +88,8 @@ Vector<T> &Vector<T>::operator=(std::initializer_list<T> init) {
     (*this)[i] = el;
     ++i;
   }
+
+  return *this;
 }
 
 template <typename T> T &Vector<T>::operator[](const size_t index) {
@@ -91,4 +110,11 @@ void Vector<T>::checkBounds(const size_t line, const size_t index,
   if (index >= size)
     throw IndexOutOfBoundsException(__FILE__, line, typeid(*this).name(),
                                     funcname);
+}
+
+template <typename T>
+template <typename U>
+void Vector<T>::checkZeroDivision(const size_t line, U value, string funcname) {
+  if (fabs(value) < EPS)
+    throw ZeroDivisionException(__FILE__, line, typeid(*this).name(), funcname);
 }

@@ -3,6 +3,8 @@
 template <typename T>
 template <typename U>
 decltype(auto) Vector<T>::div(const U &val) {
+  checkZeroDivision(__LINE__, val, "div");
+
   Vector<decltype((*this)[0] / val)> res(size);
 
   auto this_it = begin();
@@ -24,6 +26,8 @@ decltype(auto) Vector<T>::operator/(const U &val) {
 template <typename T>
 template <typename U>
 Vector<T> &Vector<T>::operator/=(const U &val) {
+  checkZeroDivision(__LINE__, val, "operator/=");
+
   for (auto &el : (*this))
     el /= val;
 

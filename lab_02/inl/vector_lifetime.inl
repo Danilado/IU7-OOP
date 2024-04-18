@@ -1,4 +1,5 @@
 #include "vector.hpp"
+#include <iostream>
 
 template <typename T> Vector<T>::Vector() noexcept : BaseContainer(), data() {}
 
@@ -18,6 +19,7 @@ template <typename T>
 Vector<T>::Vector(Vector<T> &&tmpvec) noexcept : BaseContainer(tmpvec.size) {
   data = tmpvec.data;
   tmpvec.data.reset();
+  tmpvec.size = 0;
 }
 
 template <typename T>
@@ -28,8 +30,6 @@ Vector<T>::Vector(const size_t size) : BaseContainer(size) {
 template <typename T>
 Vector<T>::Vector(const size_t size, const T &fill) : BaseContainer(size) {
   alloc(size);
-
-  size_t i = 0;
 
   for (auto &el : *this)
     el = fill;
@@ -65,8 +65,8 @@ Vector<T>::Vector(IterT ibeg, IterT iend) {
   size_t size_buf = 0;
   for (auto iter = ibeg; iter < iend; ++iter)
     ++size_buf;
-  size = size_buf;
 
+  size = size_buf;
   alloc(size);
 
   auto it = begin();

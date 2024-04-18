@@ -11,8 +11,10 @@
 
 template <typename T>
 concept IterType = requires(T a) {
-  { a.begin() };
-  { a.end() };
+  { a-- };
+  { --a };
+  { a++ };
+  { ++a };
   { *a };
 };
 
@@ -111,6 +113,8 @@ protected:
                       string funcname) const;
   void checkBounds(const size_t line, const size_t index,
                    string funcname) const;
+  template <typename U>
+  void checkZeroDivision(const size_t line, U value, string funcname);
 
 private:
   std::shared_ptr<T[]> data = nullptr;

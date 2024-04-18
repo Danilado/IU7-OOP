@@ -21,6 +21,8 @@ public:
   ~Iterator();
 
   auto operator<=>(const Iterator<T> &other) const;
+  bool operator==(const Iterator<T> &other) const;
+  bool operator!=(const Iterator<T> &other) const;
   operator bool() const;
 
   T &operator*();

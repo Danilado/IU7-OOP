@@ -6,6 +6,16 @@ auto Iterator<T>::operator<=>(const Iterator<T> &other) const {
   return this->index <=> other.index;
 }
 
+template <typename T>
+bool Iterator<T>::operator==(const Iterator<T> &other) const {
+  return this->index == other.index;
+}
+
+template <typename T>
+bool Iterator<T>::operator!=(const Iterator<T> &other) const {
+  return !(*this == other);
+}
+
 template <typename T> Iterator<T>::operator bool() const {
   checkExpired(__LINE__, "bool()");
   return index < size;

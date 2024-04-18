@@ -63,4 +63,18 @@ public:
       : BaseException(filename, line, class_name, method_name, info){};
 };
 
+class ZeroDivisionException : public BaseException {
+public:
+  ZeroDivisionException(const string &filename, const size_t &line,
+                        const string &class_name, const string &method_name,
+                        const string &info =
+#ifdef LANG_RU
+                            "Попытка деления на 0. "
+#else
+                            "Zero division error. "
+#endif
+                        )
+      : BaseException(filename, line, class_name, method_name, info){};
+};
+
 #endif
