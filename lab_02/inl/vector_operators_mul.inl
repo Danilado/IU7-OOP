@@ -1,7 +1,7 @@
 #include "vector.hpp"
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::vecMul(const Vector<U> &other) {
   checkSizeMatch(other, __LINE__, "vecMul");
 
@@ -17,14 +17,14 @@ decltype(auto) Vector<T>::vecMul(const Vector<U> &other) {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::operator%(const Vector<U> &other) {
   return vecMul(other);
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::mul(const U &val) {
   Vector<decltype((*this)[0] * val)> res(size);
 
@@ -38,14 +38,14 @@ decltype(auto) Vector<T>::mul(const U &val) {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::operator*(const U &val) {
   return mul(val);
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 Vector<T> &Vector<T>::operator*=(const U &val) {
   for (auto &el : (*this))
     el *= val;
@@ -53,8 +53,8 @@ Vector<T> &Vector<T>::operator*=(const U &val) {
   return *this;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::scalarProduct(const Vector<U> &other) {
   checkSizeMatch(other, __LINE__, "scalarProduct");
 
@@ -70,8 +70,8 @@ decltype(auto) Vector<T>::scalarProduct(const Vector<U> &other) {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::operator*(const Vector<U> &other) {
   return scalarProduct(other);
 }

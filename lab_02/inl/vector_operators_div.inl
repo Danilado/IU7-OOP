@@ -1,7 +1,7 @@
 #include "vector.hpp"
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::div(const U &val) {
   checkZeroDivision(__LINE__, val, "div");
 
@@ -17,14 +17,14 @@ decltype(auto) Vector<T>::div(const U &val) {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::operator/(const U &val) {
   return div(val);
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 Vector<T> &Vector<T>::operator/=(const U &val) {
   checkZeroDivision(__LINE__, val, "operator/=");
 

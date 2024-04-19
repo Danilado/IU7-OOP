@@ -1,18 +1,17 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include "base_iterator.hpp"
+#include "my_concepts.hpp"
 #include <compare>
 #include <memory>
 #include <string>
 
 using std::string;
 
-template <typename T> class Vector;
-
-#include "base_iterator.hpp"
+template <NumType T> class Vector;
 
 template <typename T> class Iterator : public BaseIterator {
-  friend class Vector<T>;
 
 public:
   Iterator(const Vector<T> &vec) noexcept;
@@ -21,9 +20,7 @@ public:
   ~Iterator();
 
   auto operator<=>(const Iterator<T> &other) const;
-  bool operator==(const Iterator<T> &other) const;
-  bool operator!=(const Iterator<T> &other) const;
-  operator bool() const;
+  operator bool() const noexcept;
 
   T &operator*();
   T *operator->();
@@ -42,8 +39,8 @@ public:
 
 private:
   T *getPtr() const;
-  void checkExpired(const size_t line, string funcname) const;
-  void checkBounds(const size_t line, string funcname,
+  void checkExpired(const size_t line, const string &funcname) const;
+  void checkBounds(const size_t line, const string &funcname,
                    const size_t offset = 0) const;
 
 protected:

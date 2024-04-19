@@ -3,6 +3,7 @@
 
 #include "vector.hpp"
 #include <gtest/gtest.h>
+#include <vector>
 
 TEST(mul, vec_mul_num) {
   Vector<int> a = {-100, 0, 6};

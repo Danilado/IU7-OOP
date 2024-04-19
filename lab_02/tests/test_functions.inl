@@ -7,13 +7,13 @@
 TEST(funcs, test_vec_length_int) {
   Vector<int> a({1, 2, 3});
 
-  EXPECT_EQ(a.length<double>(), sqrt(14));
+  EXPECT_EQ(a.length(), sqrt(14));
 }
 
 TEST(funcs, test_vec_length_dbl) {
   Vector<double> a({1., -2., 3.});
 
-  EXPECT_EQ(a.length<double>(), sqrt(14.));
+  EXPECT_EQ(a.length(), sqrt(14.));
 }
 
 TEST(funcs, test_unit) {

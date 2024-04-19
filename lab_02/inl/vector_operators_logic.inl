@@ -1,9 +1,12 @@
 #include "vector.hpp"
 
-template <typename T> Vector<T>::operator bool() const { return !isZero(); }
+template <NumType T> //
+Vector<T>::operator bool() const {
+  return !isZero();
+}
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 auto Vector<T>::operator<=>(const Vector<U> &other) const {
   auto res = size <=> other.size;
   if (res == std::strong_ordering::equal)
@@ -12,8 +15,8 @@ auto Vector<T>::operator<=>(const Vector<U> &other) const {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 bool Vector<T>::operator==(const Vector<U> &other) const {
   bool res = true;
 
@@ -22,7 +25,7 @@ bool Vector<T>::operator==(const Vector<U> &other) const {
   } else {
     auto oth_it = other.begin();
 
-    for (auto &el : (*this)) {
+    for (const auto &el : (*this)) {
       if (!res)
         break;
 
@@ -34,8 +37,8 @@ bool Vector<T>::operator==(const Vector<U> &other) const {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 bool Vector<T>::operator!=(const Vector<U> &other) const {
   return !(*this == other);
 }

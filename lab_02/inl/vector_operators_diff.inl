@@ -1,6 +1,7 @@
 #include "vector.hpp"
 
-template <typename T> Vector<T> Vector<T>::neg() const {
+template <NumType T> //
+Vector<T> Vector<T>::neg() const {
   Vector<T> res(*this);
 
   for (auto el : res)
@@ -9,10 +10,13 @@ template <typename T> Vector<T> Vector<T>::neg() const {
   return res;
 }
 
-template <typename T> Vector<T> Vector<T>::operator-() const { return neg(); }
+template <NumType T> //
+Vector<T> Vector<T>::operator-() const {
+  return neg();
+}
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::diff(const Vector<U> &other) {
   checkSizeMatch(other, __LINE__, "diff");
 
@@ -30,14 +34,14 @@ decltype(auto) Vector<T>::diff(const Vector<U> &other) {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::operator-(const Vector<U> &other) {
   return diff(other);
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 decltype(auto) Vector<T>::operator-(const U &val) {
   Vector<decltype((*this)[0] - val)> res(size);
 
@@ -51,7 +55,8 @@ decltype(auto) Vector<T>::operator-(const U &val) {
   return res;
 }
 
-template <typename T> Vector<T> Vector<T>::operator--(int) {
+template <NumType T> //
+Vector<T> Vector<T>::operator--(int) {
   Vector<T> res(*this);
 
   for (auto &el : res)
@@ -60,8 +65,8 @@ template <typename T> Vector<T> Vector<T>::operator--(int) {
   return res;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 Vector<T> &Vector<T>::operator-=(const U &val) {
   for (auto &el : (*this))
     el -= val;
@@ -69,8 +74,8 @@ Vector<T> &Vector<T>::operator-=(const U &val) {
   return *this;
 }
 
-template <typename T>
-template <typename U>
+template <NumType T>
+template <NumType U> //
 Vector<T> &Vector<T>::operator-=(const Vector<U> &other) {
   checkSizeMatch(other, __LINE__, "operator-=");
 
@@ -83,7 +88,8 @@ Vector<T> &Vector<T>::operator-=(const Vector<U> &other) {
   return *this;
 }
 
-template <typename T> Vector<T> &Vector<T>::operator--() {
+template <NumType T> //
+Vector<T> &Vector<T>::operator--() {
   for (auto &el : (*this))
     --el;
 

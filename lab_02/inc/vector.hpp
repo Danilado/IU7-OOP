@@ -8,17 +8,9 @@
 #include "base_container.hpp"
 #include "const_iterator.hpp"
 #include "iterator.hpp"
+#include "my_concepts.hpp"
 
-template <typename T>
-concept IterType = requires(T a) {
-  { a-- };
-  { --a };
-  { a++ };
-  { ++a };
-  { *a };
-};
-
-template <typename T> class Vector : public BaseContainer {
+template <NumType T> class Vector : public BaseContainer {
 
   friend Iterator<T>;
   friend ConstIterator<T>;
@@ -33,7 +25,7 @@ public:
   Vector(const size_t size, const T &fill);
   Vector(const size_t size, const T *src);
 
-  Vector(std::initializer_list<T> init);
+  Vector(const std::initializer_list<T> &init);
   template <IterType IterT> Vector(IterT ibeg, IterT iend);
 
   ~Vector();
@@ -45,51 +37,51 @@ public:
   Vector<T> neg() const;
   Vector<T> operator-() const;
 
-  template <typename U> U length() const;
-  template <typename U> Vector<U> getUnit() const;
+  double length() const;
+  template <NumType U> Vector<U> getUnit() const;
 
   bool isZero() const;
   bool isUnit() const;
 
-  template <typename U> auto operator<=>(const Vector<U> &other) const;
-  template <typename U> bool operator==(const Vector<U> &other) const;
-  template <typename U> bool operator!=(const Vector<U> &other) const;
+  template <NumType U> auto operator<=>(const Vector<U> &other) const;
+  template <NumType U> bool operator==(const Vector<U> &other) const;
+  template <NumType U> bool operator!=(const Vector<U> &other) const;
 
   Vector<T> &operator=(const Vector<T> &vec);
   Vector<T> &operator=(Vector<T> &&tmpvec) noexcept;
-  Vector<T> &operator=(std::initializer_list<T> init);
+  Vector<T> &operator=(const std::initializer_list<T> &init);
 
-  template <typename U> decltype(auto) sum(const Vector<U> &val);
-  template <typename U> decltype(auto) operator+(const Vector<U> &val);
-  template <typename U> decltype(auto) operator+(const U &val);
+  template <NumType U> decltype(auto) sum(const Vector<U> &val);
+  template <NumType U> decltype(auto) operator+(const Vector<U> &val);
+  template <NumType U> decltype(auto) operator+(const U &val);
   Vector<T> operator++(int);
 
-  template <typename U> decltype(auto) diff(const Vector<U> &val);
-  template <typename U> decltype(auto) operator-(const Vector<U> &val);
-  template <typename U> decltype(auto) operator-(const U &val);
+  template <NumType U> decltype(auto) diff(const Vector<U> &val);
+  template <NumType U> decltype(auto) operator-(const Vector<U> &val);
+  template <NumType U> decltype(auto) operator-(const U &val);
   Vector<T> operator--(int);
 
-  template <typename U> Vector<T> &operator+=(const U &val);
-  template <typename U> Vector<T> &operator+=(const Vector<U> &val);
+  template <NumType U> Vector<T> &operator+=(const U &val);
+  template <NumType U> Vector<T> &operator+=(const Vector<U> &val);
   Vector<T> &operator++();
 
-  template <typename U> Vector<T> &operator-=(const U &val);
-  template <typename U> Vector<T> &operator-=(const Vector<U> &val);
+  template <NumType U> Vector<T> &operator-=(const U &val);
+  template <NumType U> Vector<T> &operator-=(const Vector<U> &val);
   Vector<T> &operator--();
 
-  template <typename U> decltype(auto) vecMul(const Vector<U> &val);
-  template <typename U> decltype(auto) operator%(const Vector<U> &val);
+  template <NumType U> decltype(auto) vecMul(const Vector<U> &val);
+  template <NumType U> decltype(auto) operator%(const Vector<U> &val);
 
-  template <typename U> decltype(auto) div(const U &val);
-  template <typename U> decltype(auto) operator/(const U &val);
-  template <typename U> Vector<T> &operator/=(const U &val);
+  template <NumType U> decltype(auto) div(const U &val);
+  template <NumType U> decltype(auto) operator/(const U &val);
+  template <NumType U> Vector<T> &operator/=(const U &val);
 
-  template <typename U> decltype(auto) mul(const U &val);
-  template <typename U> decltype(auto) operator*(const U &val);
-  template <typename U> Vector<T> &operator*=(const U &val);
+  template <NumType U> decltype(auto) mul(const U &val);
+  template <NumType U> decltype(auto) operator*(const U &val);
+  template <NumType U> Vector<T> &operator*=(const U &val);
 
-  template <typename U> decltype(auto) scalarProduct(const Vector<U> &other);
-  template <typename U> decltype(auto) operator*(const Vector<U> &other);
+  template <NumType U> decltype(auto) scalarProduct(const Vector<U> &other);
+  template <NumType U> decltype(auto) operator*(const Vector<U> &other);
 
   T &operator[](const size_t index);
   const T &operator[](const size_t index) const;
@@ -108,13 +100,13 @@ public:
 protected:
   void alloc(const size_t amount);
 
-  template <typename U>
+  template <NumType U>
   void checkSizeMatch(const Vector<U> &other, const size_t line,
-                      string funcname) const;
+                      const string &funcname) const;
   void checkBounds(const size_t line, const size_t index,
-                   string funcname) const;
-  template <typename U>
-  void checkZeroDivision(const size_t line, U value, string funcname);
+                   const string &funcname) const;
+  template <NumType U>
+  void checkZeroDivision(const size_t line, U value, const string &funcname);
 
 private:
   std::shared_ptr<T[]> data = nullptr;
