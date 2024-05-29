@@ -2,6 +2,7 @@ out
 out/*
 *.user*
 .vscode
+build
 build/*
 build-*
 ref

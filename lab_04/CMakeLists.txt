@@ -4,9 +4,15 @@ project(lab_04 VERSION 0.1 LANGUAGES CXX)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(HEADER_LIST
+"${lab_04_SOURCE_DIR}/src/common/constants.hpp"
 
 "${lab_04_SOURCE_DIR}/src/mainwindow.cpp"
 "${lab_04_SOURCE_DIR}/inc/mainwindow.hpp"
+
+"${lab_04_SOURCE_DIR}/src/elevator/elevator.hpp"
+"${lab_04_SOURCE_DIR}/src/elevator/cabin/cabin.hpp"
+"${lab_04_SOURCE_DIR}/src/elevator/doors/doors.hpp"
+"${lab_04_SOURCE_DIR}/src/elevator/controller/controller.hpp"
 )
 
 set(CMAKE_AUTOUIC ON)
@@ -19,7 +25,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package( Boost 1.40 COMPONENTS program_options REQUIRED )
+find_package( Boost 1.40 REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS
@@ -34,7 +40,11 @@ ui/mainwindow.ui
 ${HEADER_LIST})
 target_include_directories(main PUBLIC
     ./inc
-    ./external/boost/thread
+    ./src/common
+    ./src/elevator
+    ./src/elevator/cabin
+    ./src/elevator/doors
+    ./src/elevator/controller
 )
 target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_compile_features(main PUBLIC cxx_std_20)
@@ -45,8 +55,20 @@ inc/mainwindow.hpp
 src/mainwindow.cpp
 
 ui/mainwindow.ui
+src/common/constants.hpp
+src/common/usings.hpp
 
-external/boost/boost/thread/thread.hpp
+src/elevator/elevator.hpp
+src/elevator/elevator.cpp
+
+src/elevator/cabin/cabin.hpp
+src/elevator/cabin/cabin.cpp
+
+src/elevator/doors/doors.hpp
+src/elevator/doors/doors.cpp
+
+src/elevator/controller/controller.hpp
+src/elevator/controller/controller.cpp
 )
 
 add_executable(lab_04 main.cpp ui/mainwindow.ui)
