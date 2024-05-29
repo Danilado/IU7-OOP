@@ -28,7 +28,7 @@ public:
   bool removeObject(ObjectPtr obj);
   bool setCamera(size_t id);
 
-  virtual std::unique_ptr<SceneMemento> createMemento(void) const;
+  std::unique_ptr<SceneMemento> createMemento(void) const;
   void restoreMemento(std::unique_ptr<SceneMemento> memento);
 };
 
@@ -42,16 +42,16 @@ private:
 public:
   SceneMemento(const Scene &s);
   void set(const Scene &s);
-  Scene get();
+  std::unique_ptr<Scene> get(void);
 };
 
 class SceneCaretaker {
-public:
-  std::unique_ptr<SceneMemento> get();
-  void set(std::unique_ptr<SceneMemento> memento);
-
 private:
   std::vector<std::unique_ptr<SceneMemento>> mementos;
+
+public:
+  std::unique_ptr<SceneMemento> get(void);
+  void set(std::unique_ptr<SceneMemento> memento);
 };
 
 #endif

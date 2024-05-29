@@ -19,6 +19,7 @@ class Object {
   friend RotateObjectVisitor;
   friend ScaleObjectVisitor;
   friend TranslateObjectVisitor;
+  friend ObjectMemento;
 
 private:
   size_t id;
@@ -30,17 +31,18 @@ public:
   using iterator = ObjectVector::const_iterator;
   using const_iterator = ObjectVector::const_iterator;
 
-  Object() = default;
-  Object(std::unique_ptr<ObjectMemento> memento);
-  virtual ~Object();
+  Object();
+  explicit Object(std::unique_ptr<ObjectMemento> memento);
+  Object(const Object &origin);
+  virtual ~Object() = default;
 
   size_t getId(void) const noexcept;
-  void setID(size_t id) noexcept;
+  void setId(size_t id) noexcept;
 
   virtual void accept(std::shared_ptr<BaseVisitor> vis);
   virtual bool isVisible(void) const noexcept = 0;
 
-  virtual bool isComposite(void) const noexcept;
+  virtual bool constexpr isComposite(void) const noexcept;
   virtual bool add(ObjectPtr &obj);
   virtual bool add(std::unique_ptr<Object> obj);
   virtual bool remove(const iterator &it);
@@ -50,7 +52,7 @@ public:
   virtual std::unique_ptr<ObjectMemento> createMemento(void) const;
   void restoreMemento(std::unique_ptr<ObjectMemento> memento);
 
-  virtual std::unique_ptr<Object> clone() const = 0;
+  virtual std::unique_ptr<Object> clone() const;
 };
 
 class ObjectMemento {
@@ -60,7 +62,7 @@ private:
   size_t id;
   std::unique_ptr<TransformationMatrix> transform;
   void set(const Object &o);
-  Object get();
+  std::unique_ptr<Object> get();
 
 public:
   ObjectMemento(const Object &o);

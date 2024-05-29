@@ -7,6 +7,9 @@ set(HEADER_LIST
 "${lab_03_SOURCE_DIR}/external/nlohmann_json/single_include/nlohmann/json.hpp"
 
 "${lab_03_SOURCE_DIR}/src/command/BaseCommand.hpp"
+"${lab_03_SOURCE_DIR}/src/scene/Scene.hpp"
+"${lab_03_SOURCE_DIR}/src/object/Object.hpp"
+"${lab_03_SOURCE_DIR}/src/visitor/BaseVisitor.hpp"
 
 "${lab_03_SOURCE_DIR}/inc/mainwindow.hpp"
 "${lab_03_SOURCE_DIR}/inc/app.hpp"
@@ -33,7 +36,15 @@ add_library(main SHARED
 src/mainwindow.cpp
 ui/mainwindow.ui
 ${HEADER_LIST})
-target_include_directories(main PUBLIC ./inc)
+target_include_directories(main PUBLIC
+    ./inc
+    ./src/scene
+    ./src/object
+    ./src/common
+    ./src/visitor
+    ./src/camera
+    ./src/model
+)
 target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_compile_features(main PUBLIC cxx_std_20)
 
@@ -41,12 +52,16 @@ set(PROJECT_SOURCES
 external/nlohmann_json/single_include/nlohmann/json.hpp
 
 src/command/BaseCommand.hpp
+src/scene/Scene.hpp
+src/object/Object.hpp
 
 inc/mainwindow.hpp
 inc/app.hpp
 
 src/app.cpp
 src/mainwindow.cpp
+src/scene/Scene.cpp
+src/object/Object.cpp
 
 ui/mainwindow.ui
 )

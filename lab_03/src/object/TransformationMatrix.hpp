@@ -7,12 +7,12 @@
 
 class TransformationMatrix {
 private:
-  using mat_t = std::shared_ptr<std::shared_ptr<double[]>[]>;
-  mat_t transform;
   static const size_t dim = 3;
+  using mat_t = std::shared_ptr<double[dim + 1][dim + 1]>;
+  mat_t transform;
 
 public:
-  TransformationMatrix() = default;
+  TransformationMatrix();
   TransformationMatrix(const TransformationMatrix &other);
   TransformationMatrix(TransformationMatrix &&tmp);
   ~TransformationMatrix() = default;

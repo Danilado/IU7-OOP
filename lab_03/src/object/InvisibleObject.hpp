@@ -5,7 +5,7 @@
 
 class InvisibleObject : public Object {
 public:
-  bool isVisible(void) const noexcept override;
+  bool isVisible(void) const noexcept override { return false; }
 };
 
 #endif

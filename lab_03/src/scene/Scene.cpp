@@ -25,15 +25,7 @@ Scene::Scene(Scene &&origin) {
 }
 
 Scene::Scene(std::unique_ptr<SceneMemento> memento) {
-  objects = std::make_unique<ObjectComposite>();
-  std::unique_ptr<ObjectMemento> objmemptr;
-
-  for (objmemptr.reset(memento->objectsCaretaker->get().release());
-       objmemptr != nullptr;
-       objmemptr.reset(memento->objectsCaretaker->get().release()))
-    objects->add(std::make_unique<Object>(objmemptr));
-
-  camera_id = memento->camera_id;
+  restoreMemento(std::move(memento));
 }
 
 ObjectComposite &Scene::getObjects(void) { return *objects.get(); }
@@ -46,7 +38,44 @@ ObjectPtr Scene::getObject(size_t id) {
   return it == objects->end() ? nullptr : *it;
 }
 
-SceneMemento::SceneMemento(const Scene &s) {
+bool Scene::addObject(ObjectPtr obj) { return objects->add(obj); }
+
+bool Scene::removeObject(size_t id) {
+  return objects->remove(std::find_if(
+      objects->begin(), objects->end(),
+      [id](const ObjectPtr &objpt) { return id == objpt->getId(); }));
+}
+
+bool Scene::removeObject(ObjectPtr obj) {
+  return objects->remove(std::find(objects->begin(), objects->end(), obj));
+}
+
+bool Scene::setCamera(size_t id) {
+  if (getObject(id) != nullptr)
+    return bool(camera_id = id);
+
+  return false;
+}
+
+std::unique_ptr<SceneMemento> Scene::createMemento(void) const {
+  return std::make_unique<SceneMemento>(*this);
+}
+
+void Scene::restoreMemento(std::unique_ptr<SceneMemento> memento) {
+  objects = std::make_unique<ObjectComposite>();
+  std::unique_ptr<ObjectMemento> objmemptr;
+
+  for (objmemptr.reset(memento->objectsCaretaker->get().release());
+       objmemptr != nullptr;
+       objmemptr.reset(memento->objectsCaretaker->get().release()))
+    objects->add(std::make_unique<Object>(objmemptr));
+
+  camera_id = memento->camera_id;
+}
+
+SceneMemento::SceneMemento(const Scene &s) { set(s); }
+
+void SceneMemento::set(const Scene &s) {
   camera_id = s.camera_id;
 
   objectsCaretaker = std::make_unique<ObjectCaretaker>();
@@ -56,4 +85,22 @@ SceneMemento::SceneMemento(const Scene &s) {
 
   for (auto it = beg; it != end; ++it)
     objectsCaretaker->set((*it)->createMemento());
+}
+
+std::unique_ptr<Scene> SceneMemento::get(void) {
+  return std::make_unique<Scene>(*this);
+}
+
+std::unique_ptr<SceneMemento> SceneCaretaker::get(void) {
+  if (!mementos.size())
+    return nullptr;
+
+  std::unique_ptr<SceneMemento> last = std::move(mementos.back());
+  mementos.pop_back();
+
+  return last;
+}
+
+void SceneCaretaker::set(std::unique_ptr<SceneMemento> memento) {
+  mementos.push_back(std::move(memento));
 }

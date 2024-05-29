@@ -13,7 +13,7 @@ public:
 
   void accept(std::shared_ptr<BaseVisitor> vis) override;
 
-  bool isComposite(void) const noexcept override;
+  bool constexpr isComposite(void) const noexcept override;
   bool add(ObjectPtr &obj) override;
   bool add(std::unique_ptr<Object> obj) override;
   bool remove(const iterator &it) override;

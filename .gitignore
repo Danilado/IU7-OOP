@@ -6,3 +6,5 @@ build/*
 build-*
 ref
 lab_03/external/nlohmann_json/*
+*/build/
+*/build/*
