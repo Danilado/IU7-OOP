@@ -1,15 +1,16 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#include <boost/chrono/chrono.hpp>
+#include <chrono>
 
 #define FLOOR_COUNT 10
 
-#define FLOOR_PASS_TIME boost::chrono::milliseconds(1500)
-#define DOOR_WAIT_TIME boost::chrono::milliseconds(1500)
-#define PEOPLE_WAIT_TIME boost::chrono::milliseconds(1500)
+#define FLOOR_PASS_TIME std::chrono::milliseconds(4000)
+#define DOOR_WAIT_TIME std::chrono::milliseconds(2500)
+#define PEOPLE_WAIT_TIME std::chrono::milliseconds(2500)
+#define NO_DELAY std::chrono::milliseconds(0)
 
-#define START_FLOOR 1
+#define START_FLOOR 1 - 1
 #define NO_TARGET -1
 
 #endif

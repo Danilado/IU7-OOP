@@ -1,21 +1,29 @@
 #include "cabin.hpp"
 
-Cabin::Cabin() {
+Cabin::Cabin() : m_worker(boost::asio::make_work_guard(svc)) {
   state = State::UNLOCKED;
 
-  requestDoorsOpen.connect(doors.opening);
-  doors.closed.connect(boost::bind(&Cabin::unlocking, this));
+  requestDoorsOpen.connect(
+      // doors.opening
+      [this](void) { this->doors.opening(); });
+
+  doors.closed.connect(
+      // unlocking
+      [this](void) { this->unlocking(); });
 }
 
 void Cabin::runFloorPassTimer() {
   floor_pass_timer.expires_from_now(FLOOR_PASS_TIME);
-  floor_pass_timer.async_wait(floor_pass_handler);
+  floor_pass_timer.async_wait(
+      // floor_pass_handler()
+      [this](const boost::system::error_code &error) {
+        this->floor_pass_handler(error);
+      });
   svc.run();
 }
 
 void Cabin::cancelFloorPassTimer() {
-  floor_pass_timer.expires_from_now(boost::chrono::milliseconds(0));
-  floor_pass_timer.async_wait();
+  floor_pass_timer.expires_from_now(NO_DELAY);
 }
 
 void Cabin::floor_pass_handler(const boost::system::error_code &error) {
@@ -25,11 +33,12 @@ void Cabin::floor_pass_handler(const boost::system::error_code &error) {
 }
 
 void Cabin::locking() {
-  if (this->state != State::STOPPED)
+  if (state != State::IDLE)
     return;
 
-  this->state = State::LOCKED;
-  qDebug() << "Движение кабины заблокировано";
+  state = State::LOCKED;
+  // qDebug() << "Движение кабины заблокировано";
+  qDebug() << "Cabin movement locked";
 
   requestDoorsOpen();
 }
@@ -39,7 +48,8 @@ void Cabin::unlocking() {
     return;
 
   this->state = State::UNLOCKED;
-  qDebug() << "Движение кабины разблокировано";
+  // qDebug() << "Движение кабины разблокировано";
+  qDebug() << "Cabin movement unlocked";
 
   unlocked();
 }
@@ -48,9 +58,10 @@ void Cabin::preparing() {
   if (state != State::UNLOCKED)
     return;
 
-  state = State::PREPARING;
+  state = State::CHANGING;
 
-  qDebug() << "Кабина готовится двигаться";
+  // qDebug() << "Кабина готовится двигаться";
+  qDebug() << "Cabin ready to move";
 
   moving();
 }
@@ -70,7 +81,8 @@ void Cabin::stopping() {
     return;
 
   state = State::IDLE;
-  qDebug() << "Кабина остановилась";
+  // qDebug() << "Кабина остановилась";
+  qDebug() << "Cabin stopped";
 
   locking();
 }

@@ -70,10 +70,10 @@ void Controller::floorUpdate(int floor, FloorWaitDirecton floor_dir) {
 }
 
 void Controller::floorUpdateCabin(int floor) {
-  floorUpdate(floor, findDirection(floor));
+  floorUpdate(floor, dirmap.at(findDirection(floor)));
 }
 
-Direction Controller::findDirection(int floor) {
+Controller::Direction Controller::findDirection(int floor) {
   if (floor == cur_floor)
     return Direction::IDLE;
 
@@ -88,53 +88,62 @@ void Controller::updateTargetIdle() {
     return;
   state = State::UPDATING_TARGET;
 
-  qDebug() << "Лифт стоит на этаже " << cur_floor + 1 << std::endl;
-  qDebug() << "Ищем новую цель..." << std::endl;
+  // qDebug() << "Лифт стоит на этаже " << cur_floor + 1;
+  // qDebug() << "Ищем новую цель...";
+  qDebug() << "Lift resting at floor " << cur_floor + 1;
+  qDebug() << "Searching for new target...";
 
   int new_target = findTarget();
   if (new_target == NO_TARGET) {
-    qDebug() << "Новой цели не найдено" << std::endl << std::endl;
+    // qDebug() << "Новой цели не найдено";
+    qDebug() << "New target not found";
+
     handleIdle();
   } else {
     target = new_target;
     prev_dir = dir;
     dir = findDirection(target);
 
-    qDebug() << "Контроллер выбрал новой целью этаж " << target + 1 << std::endl
-             << std::endl;
+    // qDebug() << "Контроллер выбрал новой целью этаж " << target + 1;
+    qDebug() << "Controller determined new target: " << target + 1;
 
     requestCabinPrep();
   }
 }
 
 void Controller::updateTargetMoving() {
-  qDebug() << "Движемся мимо этажа " << cur_floor + 1 << " в направлении "
-           << verbosedirmap.at(dir) << std::endl;
-  qDebug() << "Проверяем ближайшую цель в направлении движения..." << std::endl;
+  // qDebug() << "Движемся мимо этажа " << cur_floor + 1 << " в направлении "
+  //          << verbosedirmap.at(dir);
+  // qDebug() << "Проверяем ближайшую цель в направлении движения...";
+  qDebug() << "Moving through floor " << cur_floor + 1 << " heading "
+           << verbosedirmapen.at(dir);
+  qDebug() << "Checking closest target in direction of movement...";
 
   prev_dir = dir;
 
   int new_target = findTarget();
   if (new_target == target)
-    qDebug() << "Цель не изменилась, продолжаем движение..." //
-             << std::endl
-             << std::endl;
+    // qDebug() << "Цель не изменилась, продолжаем движение...";
+    qDebug() << "Target did not change, continuing to move...";
+
   else {
-    qDebug() << "В качестве новой цели выбран этаж " << new_target + 1
-             << std::endl;
-    if (cur_floor != new_target && state == State::MOVING) {
+    // qDebug() << "В качестве новой цели выбран этаж " << new_target + 1;
+    qDebug() << "New target determined: " << new_target + 1;
+    if (cur_floor != new_target &&
+        (state == State::MOVING || state == State::UPDATING_TARGET)) {
       target = new_target;
-      qDebug() << std::endl;
+      qDebug();
     } else {
-      qDebug() << "...Но лифт уже его проехал, так что цель не изменилась, увы"
-               << std::endl
-               << std::endl;
+      // qDebug() << "...Но лифт уже его проехал, так что цель не изменилась,
+      // увы";
+      qDebug() << "...But has been already passed, so the target did not "
+                  "change. Yikes";
     }
   }
 }
 
 void Controller::updatingTarget() {
-  if (state == State::MOVING)
+  if (state == State::MOVING || state == State::UPDATING_TARGET)
     updateTargetMoving();
   else
     updateTargetIdle();
@@ -146,8 +155,8 @@ void Controller::handleMoving() {
   state = State::MOVING;
 
   cur_floor += int(dir);
-  qDebug() << "Лифт приехал на этаж " << cur_floor + 1 << std::endl
-           << std::endl;
+  // qDebug() << "Лифт приехал на этаж " << cur_floor + 1;
+  qDebug() << "Elevator arrived at floor " << cur_floor + 1;
 
   if (cur_floor == target)
     targetReached();
@@ -160,18 +169,19 @@ void Controller::handleIdle() {
     return;
 
   state = State::IDLE;
-  qDebug() << "Отдыхаем на этаже" << cur_floor + 1 << std::endl << std::endl;
+  // qDebug() << "Отдыхаем на этаже" << cur_floor + 1;
+  qDebug() << "Resting at floor " << cur_floor + 1;
 }
 
 void Controller::arrive() {
-  if (floor_states[floor] == FloorWaitDirecton::NONE)
+  if (floor_states[cur_floor] == FloorWaitDirecton::NONE)
     return;
 
-  if (floor_states[floor] == FloorWaitDirecton::BOTH)
-    floor_states[floor] =
+  if (floor_states[cur_floor] == FloorWaitDirecton::BOTH)
+    floor_states[cur_floor] =
         dir == Direction::UP ? FloorWaitDirecton::DOWN : FloorWaitDirecton::UP;
   else
-    floor_states[floor] = FloorWaitDirecton::NONE;
+    floor_states[cur_floor] = FloorWaitDirecton::NONE;
 }
 
 void Controller::targetReached() {
@@ -179,9 +189,9 @@ void Controller::targetReached() {
     return;
   state = State::TARGET_REACHED;
 
-  arrive(cur_floor);
+  arrive();
 
-  qDebug() << "Контроллер обработал прибытие" << cur_floor + 1 << std::endl
-           << std::endl;
+  // qDebug() << "Контроллер обработал прибытие" << cur_floor + 1;
+  qDebug() << "Controller processed ariival at floor " << cur_floor + 1;
   requestCabinStop();
 }

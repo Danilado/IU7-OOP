@@ -4,6 +4,7 @@
 #include "doors.hpp"
 #include "usings.hpp"
 #include <boost/asio.hpp>
+#include <boost/asio/executor_work_guard.hpp>
 
 class Cabin {
 private:
@@ -13,6 +14,8 @@ private:
 
   boost::asio::io_service svc;
   boost::asio::high_resolution_timer floor_pass_timer{svc};
+  boost::asio::executor_work_guard<boost::asio::io_context::executor_type>
+      m_worker;
 
   void floor_pass_handler(const boost::system::error_code &error);
 

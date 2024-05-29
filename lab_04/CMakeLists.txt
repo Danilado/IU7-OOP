@@ -36,8 +36,13 @@ set( CMAKE_CXX_FLAGS "-Iinc")
 
 add_library(main SHARED
 src/mainwindow.cpp
+src/elevator/elevator.cpp
+src/elevator/cabin/cabin.cpp
+src/elevator/controller/controller.cpp
+src/elevator/doors/doors.cpp
 ui/mainwindow.ui
 ${HEADER_LIST})
+
 target_include_directories(main PUBLIC
     ./inc
     ./src/common
@@ -46,7 +51,13 @@ target_include_directories(main PUBLIC
     ./src/elevator/doors
     ./src/elevator/controller
 )
-target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+set(WIN_SPECIFIC)
+if(WIN32)
+  set(WIN_SPECIFIC Mswsock AdvApi32 Ws2_32 wsock32 boost_thread-mt)
+endif()
+
+target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${WIN_SPECIFIC})
 target_compile_features(main PUBLIC cxx_std_20)
 
 set(PROJECT_SOURCES
@@ -71,9 +82,11 @@ src/elevator/controller/controller.hpp
 src/elevator/controller/controller.cpp
 )
 
+
 add_executable(lab_04 main.cpp ui/mainwindow.ui)
+
 target_compile_features(lab_04 PRIVATE cxx_std_20)
-target_link_libraries(lab_04 PRIVATE main Qt${QT_VERSION_MAJOR}::Widgets ${Boost_LIBRARIES} )
+target_link_libraries(lab_04 PRIVATE main Qt${QT_VERSION_MAJOR}::Widgets ${Boost_LIBRARIES} ${WIN_SPECIFIC})
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(lab_04)

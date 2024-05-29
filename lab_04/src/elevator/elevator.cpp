@@ -1,25 +1,40 @@
 #include "elevator.hpp"
-
-#include "usings.hpp"
-#include <boost/signals2/signal.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/thread/thread_guard.hpp>
 
 Elevator::Elevator() {
-  controller.requestCabinContinue.connect(cabin.moving);
-  controller.requestCabinPrep.connect(cabin.prepare);
-  controller.requestCabinStop.connect(cabin.stopping);
-  controller.requestCabinOpen.connect(cabin.requestDoorsOpen);
+  controller.requestCabinContinue.connect(
+      // cabin.moving
+      [this](void) { this->cabin.moving(); });
 
-  cabin.unlocked.connect(controller.updatingTarget);
+  controller.requestCabinPrep.connect(
+      // cabin.preparing
+      [this](void) { this->cabin.preparing(); });
 
-  cabin.cabinFloorPassSlotCallback.connect(controller.handleMoving);
+  controller.requestCabinStop.connect(
+      // cabin.stopping
+      [this](void) { this->cabin.stopping(); });
+
+  controller.requestCabinOpen.connect(
+      // cabin.requestDoorsOpen
+      [this](void) { this->cabin.requestDoorsOpen(); });
+
+  cabin.unlocked.connect(
+      // controller.updatingTarget
+      [this](void) { this->controller.updatingTarget(); });
+
+  cabin.cabinFloorPassSlotCallback.connect(
+      // controller.handleMoving
+      [this](void) { this->controller.handleMoving(); });
 }
 
 void Elevator::cabin_button_pressed(int floor) {
-  controller.floorUpdateCabin(floor);
+  boost::thread([this, floor]() { this->controller.floorUpdateCabin(floor); });
 }
 
 void Elevator::floor_button_pressed(int floor,
                                     Controller::FloorWaitDirecton floor_dir) {
-  controller.floorUpdate(floor, floor_dir);
+  boost::thread([this, floor, floor_dir]() {
+    this->controller.floorUpdate(floor, floor_dir);
+  });
 }

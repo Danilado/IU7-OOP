@@ -5,6 +5,7 @@
 #include "usings.hpp"
 #include <QDebug>
 #include <boost/asio.hpp>
+#include <boost/asio/executor_work_guard.hpp>
 
 class Doors {
 private:
@@ -12,6 +13,8 @@ private:
   State state;
 
   boost::asio::io_service svc;
+  boost::asio::executor_work_guard<boost::asio::io_context::executor_type>
+      m_worker;
   boost::asio::high_resolution_timer open_timer{svc};
   boost::asio::high_resolution_timer close_timer{svc};
   boost::asio::high_resolution_timer wait_timer{svc};

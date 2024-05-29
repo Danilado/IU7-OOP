@@ -4,8 +4,8 @@
 #include "constants.hpp"
 #include "usings.hpp"
 #include <QDebug>
+#include <QString>
 #include <cmath>
-#include <string>
 #include <vector>
 
 class Controller {
@@ -35,16 +35,21 @@ private:
       {Direction::UP, FloorWaitDirecton::UP},
       {Direction::DOWN, FloorWaitDirecton::DOWN},
   };
-  const std::map<Direction, std::string> verbosedirmap = {
+  const std::map<Direction, QString> verbosedirmap = {
       {Direction::IDLE, "На месте"},
       {Direction::UP, "Вверх"},
       {Direction::DOWN, "Вниз"},
+  };
+  const std::map<Direction, QString> verbosedirmapen = {
+      {Direction::IDLE, "Staying"},
+      {Direction::UP, "Up"},
+      {Direction::DOWN, "Down"},
   };
 
   int findClosest();
   int findAccordingToDirection();
   int findTarget();
-  Direction findDirection();
+  Controller::Direction findDirection(int floor);
   void arrive();
 
   void updateTargetIdle();

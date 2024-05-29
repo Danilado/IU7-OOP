@@ -79,6 +79,10 @@ private slots:
   void on_floor_1_down_clicked();
 
 private:
+  void print_cabin_click(int floor);
+  void print_floor_click_up(int floor);
+  void print_floor_click_down(int floor);
+
   Ui::MainWindow *ui;
   Elevator elevator;
 };
