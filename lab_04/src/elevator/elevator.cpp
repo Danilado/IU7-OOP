@@ -1,6 +1,4 @@
 #include "elevator.hpp"
-#include <boost/thread/thread.hpp>
-#include <boost/thread/thread_guard.hpp>
 
 Elevator::Elevator() {
   controller.requestCabinContinue.connect(

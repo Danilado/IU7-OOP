@@ -4,6 +4,9 @@
 #include "cabin.hpp"
 #include "controller.hpp"
 
+#include <boost/thread/thread.hpp>
+#include <boost/thread/thread_guard.hpp>
+
 class Elevator {
 private:
   Cabin cabin;

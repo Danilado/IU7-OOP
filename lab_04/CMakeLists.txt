@@ -32,7 +32,9 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
     ui
 )
 
-set( CMAKE_CXX_FLAGS "-Iinc")
+if(UNIX)
+    set( CMAKE_CXX_FLAGS "-lboost_thread")
+endif()
 
 add_library(main SHARED
 src/mainwindow.cpp
@@ -57,7 +59,7 @@ if(WIN32)
   set(WIN_SPECIFIC Mswsock AdvApi32 Ws2_32 wsock32 boost_thread-mt)
 endif()
 
-target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${WIN_SPECIFIC})
+target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${Boost_LIBRARIES} ${WIN_SPECIFIC})
 target_compile_features(main PUBLIC cxx_std_20)
 
 set(PROJECT_SOURCES
