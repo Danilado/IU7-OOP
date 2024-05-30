@@ -37,6 +37,8 @@ void Cabin::locking() {
     return;
 
   state = State::LOCKED;
+  qDebug() << "Cabin IDLE -> LOCKED";
+
   // qDebug() << "Движение кабины заблокировано";
   qDebug() << "Cabin movement locked";
 
@@ -48,6 +50,8 @@ void Cabin::unlocking() {
     return;
 
   this->state = State::UNLOCKED;
+  qDebug() << "Cabin LOCKED -> UNLOCKED";
+
   // qDebug() << "Движение кабины разблокировано";
   qDebug() << "Cabin movement unlocked";
 
@@ -59,6 +63,7 @@ void Cabin::preparing() {
     return;
 
   state = State::CHANGING;
+  qDebug() << "Cabin UNLOCKED -> CHANGING";
 
   // qDebug() << "Кабина готовится двигаться";
   qDebug() << "Cabin ready to move";
@@ -71,7 +76,9 @@ void Cabin::moving() {
     return;
 
   if (state == State::CHANGING)
-    state = State::MOVING;
+    qDebug() << "Cabin CHANGING -> MOVING";
+
+  state = State::MOVING;
 
   runFloorPassTimer();
 }
@@ -79,6 +86,8 @@ void Cabin::moving() {
 void Cabin::stopping() {
   if (state != State::MOVING)
     return;
+
+  qDebug() << "Cabin MOVING -> IDLE";
 
   state = State::IDLE;
   // qDebug() << "Кабина остановилась";

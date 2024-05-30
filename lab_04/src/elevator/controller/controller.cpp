@@ -86,6 +86,12 @@ Controller::Direction Controller::findDirection(int floor) {
 void Controller::updateTargetIdle() {
   if (state != State::IDLE and state != State::TARGET_REACHED)
     return;
+
+  if (state == State::IDLE)
+    qDebug() << "Controller IDLE -> UPDATING_TARGET";
+  else
+    qDebug() << "Controller TARGET_REACHED -> UPDATING_TARGET";
+
   state = State::UPDATING_TARGET;
 
   // qDebug() << "Лифт стоит на этаже " << cur_floor + 1;
@@ -106,9 +112,19 @@ void Controller::updateTargetIdle() {
 
     // qDebug() << "Контроллер выбрал новой целью этаж " << target + 1;
     qDebug() << "Controller determined new target: " << target + 1;
-
-    requestCabinPrep();
+    handleTargetFound();
   }
+}
+
+void Controller::handleTargetFound() {
+  if (state != State::UPDATING_TARGET)
+    return;
+
+  if (state != State::TARGET_FOUND)
+    qDebug() << "Controller UPDATING_TARGET -> TARGET_FOUND";
+  state = State::TARGET_FOUND;
+
+  requestCabinPrep();
 }
 
 void Controller::updateTargetMoving() {
@@ -143,16 +159,23 @@ void Controller::updateTargetMoving() {
 }
 
 void Controller::updatingTarget() {
-  if (state == State::MOVING || state == State::UPDATING_TARGET)
+  if (state == State::TARGET_FOUND)
+    handleTargetFound();
+  else if (state == State::MOVING)
     updateTargetMoving();
   else
     updateTargetIdle();
 }
 
 void Controller::handleMoving() {
-  if (state != State::UPDATING_TARGET and state != State::MOVING)
+  if (state != State::TARGET_FOUND and state != State::MOVING)
     return;
+
+  if (state == State::TARGET_FOUND)
+    qDebug() << "Controller TARGET_FOUND -> MOVING";
+
   state = State::MOVING;
+  updateTargetMoving();
 
   cur_floor += int(dir);
   // qDebug() << "Лифт приехал на этаж " << cur_floor + 1;
@@ -169,6 +192,8 @@ void Controller::handleIdle() {
     return;
 
   state = State::IDLE;
+
+  qDebug() << "Controller UPDATING_TARGET -> IDLE";
   // qDebug() << "Отдыхаем на этаже" << cur_floor + 1;
   qDebug() << "Resting at floor " << cur_floor + 1;
 }
@@ -188,6 +213,8 @@ void Controller::targetReached() {
   if (state != State::MOVING)
     return;
   state = State::TARGET_REACHED;
+
+  qDebug() << "Controller MOVING -> TARGET_REACHED";
 
   arrive();
 

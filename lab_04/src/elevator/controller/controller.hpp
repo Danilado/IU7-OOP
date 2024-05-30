@@ -19,6 +19,7 @@ private:
     MOVING,
     UPDATING_TARGET,
     TARGET_REACHED,
+    TARGET_FOUND
   };
   State state;
 
@@ -54,6 +55,7 @@ private:
 
   void updateTargetIdle();
   void updateTargetMoving();
+  void handleTargetFound();
 
 public:
   Controller();

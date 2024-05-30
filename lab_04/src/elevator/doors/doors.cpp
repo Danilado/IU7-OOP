@@ -85,9 +85,11 @@ void Doors::opening() {
     return;
 
   if (state == State::CLOSED) {
+    qDebug() << "Doors CLOSED -> OPENING";
     state = State::OPENING;
     runOpenTimer();
   } else {
+    qDebug() << "Doors CLOSING -> OPENING";
     state = State::OPENING;
 
     cancelCloseTimer();
@@ -99,6 +101,7 @@ void Doors::closing() {
   if (state != State::OPEN)
     return;
 
+  qDebug() << "Doors OPEN -> CLOSING";
   state = State::CLOSING;
 
   runCloseTimer();
@@ -108,6 +111,7 @@ void Doors::open() {
   if (state != State::OPENING)
     return;
 
+  qDebug() << "Doors OPENING -> OPEN";
   state = State::OPEN;
   // qDebug() << "Двери открыты";
   qDebug() << "Doors open";
@@ -119,6 +123,7 @@ void Doors::close() {
   if (state != State::CLOSING)
     return;
 
+  qDebug() << "Doors CLOSING -> CLOSED";
   state = State::CLOSED;
   // qDebug() << "Двери закрыты";
   qDebug() << "Doors closed";
