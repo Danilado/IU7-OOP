@@ -74,7 +74,7 @@ void Controller::floorUpdateCabin(int floor) {
   floorUpdate(floor, dirmap.at(findDirection(floor)));
 }
 
-Controller::Direction Controller::findDirection(int floor) {
+Direction Controller::findDirection(int floor) {
   if (floor == cur_floor)
     return Direction::IDLE;
 
@@ -223,4 +223,13 @@ void Controller::targetReached() {
   // qDebug() << "Контроллер обработал прибытие" << cur_floor + 1;
   qDebug() << "Controller processed ariival at floor " << cur_floor + 1;
   requestCabinStop();
+}
+
+void Controller::handleCabinReady() {
+  if (state != State::TARGET_FOUND)
+    return;
+
+  qDebug() << "Controller TARGET_FOUND -> MOVING";
+
+  tellCabinToMove(dir);
 }

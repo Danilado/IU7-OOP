@@ -1,11 +1,15 @@
 #include "doors.hpp"
 
+#include <boost/bind/bind.hpp>
+#include <boost/bind/placeholders.hpp>
+using namespace boost::placeholders;
+
 Doors::Doors() : m_worker(boost::asio::make_work_guard(svc)) {
   state = State::CLOSED;
 
   opened.connect(
       // closing()
-      [this](void) { this->runWaitTimer(); });
+      boost::bind(&Doors::runWaitTimer, this));
 }
 
 void Doors::open_handler(const boost::system::error_code &error) {
@@ -32,9 +36,10 @@ void Doors::runOpenTimer() {
   open_timer.expires_from_now(DOOR_WAIT_TIME);
   open_timer.async_wait(
       // open_handler()
-      [this](const boost::system::error_code &error) {
-        this->open_handler(error);
-      });
+      // [this](const boost::system::error_code &error) {
+      //   this->open_handler(error);
+      // }
+      boost::bind(&Doors::open_handler, this, _1));
   svc.run();
 }
 
@@ -44,9 +49,10 @@ void Doors::runCloseTimer() {
   close_timer.expires_from_now(DOOR_WAIT_TIME);
   close_timer.async_wait(
       // close_handler()
-      [this](const boost::system::error_code &error) {
-        this->close_handler(error);
-      });
+      // [this](const boost::system::error_code &error) {
+      //   this->close_handler(error);
+      // }
+      boost::bind(&Doors::close_handler, this, _1));
   svc.run();
 }
 
@@ -56,9 +62,10 @@ void Doors::runWaitTimer() {
   wait_timer.expires_from_now(PEOPLE_WAIT_TIME);
   wait_timer.async_wait(
       // wait_handler()
-      [this](const boost::system::error_code &error) {
-        this->wait_handler(error);
-      });
+      // [this](const boost::system::error_code &error) {
+      //   this->wait_handler(error);
+      // }
+      boost::bind(&Doors::wait_handler, this, _1));
   svc.run();
 }
 

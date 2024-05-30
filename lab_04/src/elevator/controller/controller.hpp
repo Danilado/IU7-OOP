@@ -10,9 +10,6 @@
 
 class Controller {
 public:
-  enum class Direction { DOWN = -1, IDLE = 0, UP = 1 };
-  enum class FloorWaitDirecton { NONE, DOWN, UP, BOTH };
-
 private:
   enum class State {
     IDLE,
@@ -50,7 +47,7 @@ private:
   int findClosest();
   int findAccordingToDirection();
   int findTarget();
-  Controller::Direction findDirection(int floor);
+  Direction findDirection(int floor);
   void arrive();
 
   void updateTargetIdle();
@@ -68,11 +65,14 @@ public:
   void_signal requestCabinStop;
   void_signal requestCabinOpen;
   void_signal requestCabinPrep;
+  void_dir_signal tellCabinToMove;
   void_signal requestCabinContinue;
 
   // slots
 
   void updatingTarget();
+
+  void handleCabinReady();
 
   void handleMoving();
 

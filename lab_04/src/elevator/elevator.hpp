@@ -17,7 +17,7 @@ public:
   ~Elevator() = default;
 
   void cabin_button_pressed(int floor);
-  void floor_button_pressed(int floor, Controller::FloorWaitDirecton floor_dir);
+  void floor_button_pressed(int floor, FloorWaitDirecton floor_dir);
 };
 
 #endif

@@ -56,7 +56,7 @@ target_include_directories(main PUBLIC
 
 set(WIN_SPECIFIC)
 if(WIN32)
-  set(WIN_SPECIFIC Mswsock AdvApi32 Ws2_32 wsock32 boost_thread-mt)
+  set(WIN_SPECIFIC Mswsock AdvApi32 Ws2_32 wsock32)
 endif()
 
 target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${Boost_LIBRARIES} ${WIN_SPECIFIC})

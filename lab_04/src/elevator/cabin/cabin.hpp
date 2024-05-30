@@ -30,6 +30,7 @@ public:
   void_signal unlocked;
   void_signal requestDoorsOpen;
   void_signal cabinFloorPassSlotCallback;
+  void_signal readyToMove;
 
   // slots
   void locking();
@@ -38,9 +39,11 @@ public:
 
   void preparing();
 
-  void moving();
+  void continueMoving();
 
   void stopping();
+
+  void startMoving(Direction dir);
 };
 
 #endif

@@ -1,24 +1,29 @@
 #include "cabin.hpp"
 
+using namespace boost::placeholders;
+
 Cabin::Cabin() : m_worker(boost::asio::make_work_guard(svc)) {
   state = State::UNLOCKED;
 
   requestDoorsOpen.connect(
       // doors.opening
-      [this](void) { this->doors.opening(); });
+      // [this](void) { this->doors.opening(); }
+      boost::bind(&Doors::opening, &doors));
 
   doors.closed.connect(
       // unlocking
-      [this](void) { this->unlocking(); });
+      // [this](void) { this->unlocking(); }
+      boost::bind(&Cabin::unlocking, this));
 }
 
 void Cabin::runFloorPassTimer() {
   floor_pass_timer.expires_from_now(FLOOR_PASS_TIME);
   floor_pass_timer.async_wait(
       // floor_pass_handler()
-      [this](const boost::system::error_code &error) {
-        this->floor_pass_handler(error);
-      });
+      // [this](const boost::system::error_code &error) {
+      //   this->floor_pass_handler(error);
+      // }
+      boost::bind(&Cabin::floor_pass_handler, this, _1));
   svc.run();
 }
 
@@ -68,10 +73,10 @@ void Cabin::preparing() {
   // qDebug() << "Кабина готовится двигаться";
   qDebug() << "Cabin ready to move";
 
-  moving();
+  readyToMove();
 }
 
-void Cabin::moving() {
+void Cabin::continueMoving() {
   if (state != State::CHANGING && state != State::MOVING)
     return;
 
@@ -94,4 +99,16 @@ void Cabin::stopping() {
   qDebug() << "Cabin stopped";
 
   locking();
+}
+
+void Cabin::startMoving(Direction dir) {
+  if (state != State::CHANGING)
+    return;
+
+  state = State::MOVING;
+  qDebug() << "Cabin CHANGING -> MOVING";
+  qDebug() << "Cabing moving in direction" << int(dir)
+           << "<--------------------";
+
+  continueMoving();
 }

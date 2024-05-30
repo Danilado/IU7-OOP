@@ -84,100 +84,100 @@ void MainWindow::on_elevator_btn_1_clicked() {
 
 void MainWindow::on_floor_10_up_clicked() {
   print_floor_click_up(10);
-  elevator.floor_button_pressed(9, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(9, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_9_up_clicked() {
   print_floor_click_up(9);
-  elevator.floor_button_pressed(8, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(8, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_8_up_clicked() {
   print_floor_click_up(8);
-  elevator.floor_button_pressed(7, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(7, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_7_up_clicked() {
   print_floor_click_up(7);
-  elevator.floor_button_pressed(6, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(6, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_6_up_clicked() {
   print_floor_click_up(6);
-  elevator.floor_button_pressed(5, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(5, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_5_up_clicked() {
   print_floor_click_up(5);
-  elevator.floor_button_pressed(4, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(4, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_4_up_clicked() {
   print_floor_click_up(4);
-  elevator.floor_button_pressed(3, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(3, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_3_up_clicked() {
   print_floor_click_up(3);
-  elevator.floor_button_pressed(2, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(2, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_2_up_clicked() {
   print_floor_click_up(2);
-  elevator.floor_button_pressed(1, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(1, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_1_up_clicked() {
   print_floor_click_up(1);
-  elevator.floor_button_pressed(0, Controller::FloorWaitDirecton::UP);
+  elevator.floor_button_pressed(0, FloorWaitDirecton::UP);
 }
 
 void MainWindow::on_floor_10_down_clicked() {
   print_floor_click_down(10);
-  elevator.floor_button_pressed(9, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(9, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_9_down_clicked() {
   print_floor_click_down(9);
-  elevator.floor_button_pressed(8, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(8, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_8_down_clicked() {
   print_floor_click_down(8);
-  elevator.floor_button_pressed(7, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(7, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_7_down_clicked() {
   print_floor_click_down(7);
-  elevator.floor_button_pressed(6, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(6, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_6_down_clicked() {
   print_floor_click_down(6);
-  elevator.floor_button_pressed(5, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(5, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_5_down_clicked() {
   print_floor_click_down(5);
-  elevator.floor_button_pressed(4, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(4, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_4_down_clicked() {
   print_floor_click_down(4);
-  elevator.floor_button_pressed(3, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(3, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_3_down_clicked() {
   print_floor_click_down(3);
-  elevator.floor_button_pressed(2, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(2, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_2_down_clicked() {
   print_floor_click_down(2);
-  elevator.floor_button_pressed(1, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(1, FloorWaitDirecton::DOWN);
 }
 
 void MainWindow::on_floor_1_down_clicked() {
   print_floor_click_down(1);
-  elevator.floor_button_pressed(0, Controller::FloorWaitDirecton::DOWN);
+  elevator.floor_button_pressed(0, FloorWaitDirecton::DOWN);
 }
