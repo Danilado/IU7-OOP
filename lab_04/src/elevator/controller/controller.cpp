@@ -61,7 +61,8 @@ void Controller::floorUpdate(int floor, FloorWaitDirecton floor_dir) {
   else if (floor_states[floor] != floor_dir)
     floor_states[floor] = FloorWaitDirecton::BOTH;
 
-  if (state == State::TARGET_REACHED && floor == cur_floor) {
+  if ((state == State::TARGET_REACHED || state == State::IDLE) &&
+      floor == cur_floor) {
     floor_states[floor] = FloorWaitDirecton::NONE;
     requestCabinOpen();
   } else {
@@ -96,7 +97,7 @@ void Controller::updateTargetIdle() {
 
   // qDebug() << "Лифт стоит на этаже " << cur_floor + 1;
   // qDebug() << "Ищем новую цель...";
-  qDebug() << "Lift resting at floor " << cur_floor + 1;
+  qDebug() << "Elevator resting at floor " << cur_floor + 1;
   qDebug() << "Searching for new target...";
 
   int new_target = findTarget();
@@ -117,12 +118,15 @@ void Controller::updateTargetIdle() {
 }
 
 void Controller::handleTargetFound() {
-  if (state != State::UPDATING_TARGET)
-    return;
+  if (state != State::TARGET_FOUND) {
+    if (state != State::UPDATING_TARGET)
+      return;
 
-  if (state != State::TARGET_FOUND)
-    qDebug() << "Controller UPDATING_TARGET -> TARGET_FOUND";
-  state = State::TARGET_FOUND;
+    if (state != State::TARGET_FOUND)
+      qDebug() << "Controller UPDATING_TARGET -> TARGET_FOUND";
+
+    state = State::TARGET_FOUND;
+  }
 
   requestCabinPrep();
 }
@@ -145,10 +149,9 @@ void Controller::updateTargetMoving() {
   else {
     // qDebug() << "В качестве новой цели выбран этаж " << new_target + 1;
     qDebug() << "New target determined: " << new_target + 1;
-    if (cur_floor != new_target &&
-        (state == State::MOVING || state == State::UPDATING_TARGET)) {
+    if (cur_floor != new_target) {
       target = new_target;
-      qDebug();
+      handleTargetFound();
     } else {
       // qDebug() << "...Но лифт уже его проехал, так что цель не изменилась,
       // увы";
@@ -161,10 +164,10 @@ void Controller::updateTargetMoving() {
 void Controller::updatingTarget() {
   if (state == State::TARGET_FOUND)
     handleTargetFound();
-  else if (state == State::MOVING)
-    updateTargetMoving();
-  else
+  else if (state == State::IDLE || state == State::TARGET_REACHED)
     updateTargetIdle();
+  else
+    updateTargetMoving();
 }
 
 void Controller::handleMoving() {
@@ -175,7 +178,6 @@ void Controller::handleMoving() {
     qDebug() << "Controller TARGET_FOUND -> MOVING";
 
   state = State::MOVING;
-  updateTargetMoving();
 
   cur_floor += int(dir);
   // qDebug() << "Лифт приехал на этаж " << cur_floor + 1;
