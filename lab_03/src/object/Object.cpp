@@ -1,26 +1,18 @@
 #include "Object.hpp"
 
-Object::Object() {
-  id = 0;
-  transform = std::make_unique<TransformationMatrix>();
-}
+Object::Object() { transform = std::make_unique<TransformationMatrix>(); }
 
 Object::Object(std::unique_ptr<ObjectMemento> memento) {
   restoreMemento(std::move(memento));
 }
 
 Object::Object(const Object &origin) {
-  id = origin.id;
   transform = std::make_unique<TransformationMatrix>(*origin.transform);
 }
 
-size_t Object::getId(void) const noexcept { return id; }
+void Object::accept(BaseVisitor &vis) {}
 
-void Object::setId(size_t id) noexcept { this->id = id; };
-
-void Object::accept(std::shared_ptr<BaseVisitor> vis) { vis->visit(*this); }
-
-bool Object::isComposite(void) const noexcept { return false; }
+bool Object::isComposite() const noexcept { return false; }
 
 bool Object::add(ObjectPtr &obj) { return false; }
 
@@ -37,35 +29,49 @@ std::unique_ptr<ObjectMemento> Object::createMemento(void) const {
 }
 
 void Object::restoreMemento(std::unique_ptr<ObjectMemento> memento) {
-  transform.reset(memento->transform.release());
-  id = memento->id;
+  transform = std::move(memento->get());
 }
 
-std::unique_ptr<Object> Object::clone() const {
-  return std::make_unique<Object>(*this);
+std::shared_ptr<TransformationMatrix> Object::getTransformation() {
+  return transform;
 }
 
 ObjectMemento::ObjectMemento(const Object &o) { set(o); }
 
 void ObjectMemento::set(const Object &o) {
-  id = o.id;
-  transform = std::make_unique<TransformationMatrix>(o.transform);
+  transform = std::make_unique<TransformationMatrix>(*o.transform);
 }
 
-std::unique_ptr<Object> ObjectMemento::get() {
-  return std::make_unique<Object>(*this);
+std::unique_ptr<TransformationMatrix> ObjectMemento::get() {
+  return std::move(transform);
 }
 
-std::unique_ptr<ObjectMemento> ObjectCaretaker::get() {
-  if (!mementos.size())
-    return nullptr;
+ObjectCaretaker::MemPtr ObjectCaretaker::get(size_t id) {
+  auto &saves = saveData[id].second;
+  MemPtr res = nullptr;
 
-  std::unique_ptr<ObjectMemento> last = std::move(mementos.back());
-  mementos.pop_back();
+  if (saves.size()) {
+    res = saves.back();
+    saves.pop_back();
+  }
 
-  return last;
+  clear_expired();
+
+  return res;
 }
 
-void ObjectCaretaker::set(std::unique_ptr<ObjectMemento> memento) {
-  mementos.push_back(std::move(memento));
+void ObjectCaretaker::clear_expired() {
+  auto tmp = saveData;
+
+  for (auto [id, data] : tmp)
+    if (data.first.expired())
+      saveData.erase(id);
+}
+
+void ObjectCaretaker::set(size_t id, std::weak_ptr<Object> origin,
+                          ObjectCaretaker::MemPtr memento) {
+  saveData[id].first = origin;
+  saveData[id].second.push_back(std::move(memento));
+
+  clear_expired();
 }

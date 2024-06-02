@@ -5,7 +5,7 @@ ObjectComposite::ObjectComposite(ObjectPtr first, ...) {
     vec.push_back(*ptr);
 }
 
-void ObjectComposite::accept(std::shared_ptr<BaseVisitor> vis) {
+void ObjectComposite::accept(BaseVisitor &vis) {
   for (auto &obj : vec)
     obj->accept(vis);
 }

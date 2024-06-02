@@ -9,4 +9,6 @@ class Object;
 using ObjectPtr = std::shared_ptr<Object>;
 using ObjectVector = std::vector<ObjectPtr>;
 
+#include "Object.hpp"
+
 #endif

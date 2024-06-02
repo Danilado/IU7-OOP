@@ -11,7 +11,7 @@ public:
   ObjectComposite() = default;
   ObjectComposite(ObjectPtr first, ...);
 
-  void accept(std::shared_ptr<BaseVisitor> vis) override;
+  void accept(BaseVisitor &vis) override;
 
   bool constexpr isComposite(void) const noexcept override;
   bool add(ObjectPtr &obj) override;

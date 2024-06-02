@@ -11,47 +11,26 @@ class Scene {
   friend SceneMemento;
 
 private:
-  std::unique_ptr<ObjectComposite> objects;
+  std::map<size_t, ObjectPtr> objects;
+  size_t object_id_counter = 1;
   size_t camera_id;
 
 public:
-  Scene();
-  Scene(const Scene &origin);
-  Scene(Scene &&origin);
-  Scene(std::unique_ptr<SceneMemento> memento);
+  Scene() = default;
   ~Scene() = default;
 
-  ObjectComposite &getObjects(void);
+  using SceneIterator = std::map<size_t, ObjectPtr>::const_iterator;
+  // Scene(const Scene &origin);
+  // Scene(Scene &&origin);
+  // Scene(std::unique_ptr<SceneMemento> memento);
+
   ObjectPtr getObject(size_t id);
-  bool addObject(ObjectPtr obj);
+  size_t addObject(ObjectPtr obj);
   bool removeObject(size_t id);
-  bool removeObject(ObjectPtr obj);
   bool setCamera(size_t id);
 
-  std::unique_ptr<SceneMemento> createMemento(void) const;
-  void restoreMemento(std::unique_ptr<SceneMemento> memento);
-};
-
-class SceneMemento {
-  friend Scene;
-
-private:
-  size_t camera_id;
-  std::unique_ptr<ObjectCaretaker> objectsCaretaker;
-
-public:
-  SceneMemento(const Scene &s);
-  void set(const Scene &s);
-  std::unique_ptr<Scene> get(void);
-};
-
-class SceneCaretaker {
-private:
-  std::vector<std::unique_ptr<SceneMemento>> mementos;
-
-public:
-  std::unique_ptr<SceneMemento> get(void);
-  void set(std::unique_ptr<SceneMemento> memento);
+  SceneIterator begin();
+  SceneIterator end();
 };
 
 #endif

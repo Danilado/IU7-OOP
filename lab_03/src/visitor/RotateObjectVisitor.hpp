@@ -3,10 +3,17 @@
 
 #include "BaseVisitor.hpp"
 #include "Point3D.hpp"
+#include <memory>
+
+class TransformationMatrix;
+class Object;
 
 class RotateObjectVisitor : public BaseVisitor {
 private:
-  std::unique_ptr<TransformationMatrix> transf;
+  std::unique_ptr<TransformationMatrix> rotation;
+  std::unique_ptr<TransformationMatrix> origin;
+
+  void rotate_object_around_origin(Object &ref);
 
 public:
   RotateObjectVisitor() = delete;
@@ -17,10 +24,10 @@ public:
   RotateObjectVisitor(const Point3D &origin, const Point3D &angles,
                       bool deg = false);
 
-  void visit(Object &ref) override;
   void visit(WireframeModel &ref) override;
   void visit(OrthogonalCamera &ref) override;
   void visit(ProjectionCamera &ref) override;
+  void visit(Scene &ref) override;
 };
 
 #endif

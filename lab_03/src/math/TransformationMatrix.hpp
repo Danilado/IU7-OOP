@@ -6,7 +6,11 @@
 #include <cmath>
 #include <memory>
 
+class NlohmannJsonAdapter;
+
 class TransformationMatrix {
+  friend NlohmannJsonAdapter;
+
 private:
   static const size_t dim = 3;
   using mat_t = std::shared_ptr<double[dim + 1][dim + 1]>;
@@ -30,9 +34,6 @@ private:
   TransformationMatrix get_rotated_around_x(double angle);
   TransformationMatrix get_rotated_around_y(double angle);
   TransformationMatrix get_rotated_around_z(double angle);
-
-  static double rad(double deg) noexcept;
-  static const double constexpr PI = 3.14159265359;
 
 public:
   TransformationMatrix();

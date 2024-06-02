@@ -2,13 +2,23 @@
 #define WIREFRAME_MODEL_HPP
 
 #include "BaseModel.hpp"
-#include "BaseVisitor.hpp"
+#include "JSONStringifyVisitor.hpp"
+#include "RenderVisitor.hpp"
+#include "RotateObjectVisitor.hpp"
+#include "ScaleObjectVisitor.hpp"
+#include "TransformObjectVisitor.hpp"
+#include "TranslateObjectVisitor.hpp"
 
 class WireframeModel : public BaseModel {
-  friend BaseVisitor;
+  friend JsonStringifyVisitor;
+  friend RenderVisitor;
+  friend RotateObjectVisitor;
+  friend ScaleObjectVisitor;
+  friend TransformObjectVisitor;
+  friend TranslateObjectVisitor;
 
 public:
-  void accept(std::shared_ptr<BaseVisitor> vis) override;
+  void accept(BaseVisitor &vis) override;
 };
 
 #endif

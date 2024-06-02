@@ -15,8 +15,8 @@ private:
   std::vector<Node> nodes;
 
 public:
-  std::vector<Node>::const_iterator getNodes(void) const noexcept;
-  virtual std::vector<Edge>::const_iterator getEdges(void) const = 0;
+  std::vector<Node> &getNodes(void) const noexcept;
+  virtual std::vector<Edge> &getEdges(void) const = 0;
 
   bool addNode(const Point3D &pt);
   bool addNode(Point3D &&pt);

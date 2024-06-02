@@ -1,4 +1,5 @@
 #include "TransformationMatrix.hpp"
+#include "MyMath.hpp"
 
 TransformationMatrix::TransformationMatrix() { reset(); }
 
@@ -140,10 +141,6 @@ TransformationMatrix TransformationMatrix::get_rotated_around_z(double angle) {
   return res;
 }
 
-double TransformationMatrix::rad(double deg) noexcept {
-  return deg * PI / 180.;
-}
-
 void TransformationMatrix::rotate(const double ax, const double ay,
                                   const double az) {
   (*this) *= get_rotated_around_x(ax) * get_rotated_around_y(ay) *
@@ -156,7 +153,7 @@ void TransformationMatrix::rotate(const Point3D &pt) {
 
 void TransformationMatrix::rotate_deg(const double ax, const double ay,
                                       const double az) {
-  rotate(rad(ax), rad(ay), rad(az));
+  rotate(MyMath::rad(ax), MyMath::rad(ay), MyMath::rad(az));
 }
 
 void TransformationMatrix::rotate_deg(const Point3D &pt) {

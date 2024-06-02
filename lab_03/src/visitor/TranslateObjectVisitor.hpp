@@ -14,10 +14,10 @@ public:
   TranslateObjectVisitor(double dx, double dy, double dz);
   TranslateObjectVisitor(const Point3D &offset);
 
-  void visit(Object &ref) override;
   void visit(WireframeModel &ref) override;
   void visit(OrthogonalCamera &ref) override;
   void visit(ProjectionCamera &ref) override;
+  void visit(Scene &ref) override;
 };
 
 #endif

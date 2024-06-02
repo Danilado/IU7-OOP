@@ -1,29 +1,29 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
+#include "BaseVisitor.hpp"
 #include "CommonUsings.hpp"
 #include "TransformationMatrix.hpp"
 
-#include "JSONStringifyVisitor.hpp"
-#include "RotateObjectVisitor.hpp"
-#include "ScaleObjectVisitor.hpp"
-#include "TranslateObjectVisitor.hpp"
-
+#include <map>
 #include <memory>
 #include <vector>
 
 class ObjectMemento;
+class JsonStringifyVisitor;
+class RotateObjectVisitor;
+class ScaleObjectVisitor;
+class TranslateObjectVisitor;
 
 class Object {
-  friend JSONStringifyVisitor;
+  friend JsonStringifyVisitor;
   friend RotateObjectVisitor;
   friend ScaleObjectVisitor;
   friend TranslateObjectVisitor;
   friend ObjectMemento;
 
 protected:
-  size_t id;
-  std::unique_ptr<TransformationMatrix> transform;
+  std::shared_ptr<TransformationMatrix> transform;
 
 public:
   using value_type = Object;
@@ -35,46 +35,47 @@ public:
   explicit Object(std::unique_ptr<ObjectMemento> memento);
   Object(const Object &origin);
   virtual ~Object() = default;
+  std::shared_ptr<TransformationMatrix> getTransformation();
 
-  size_t getId(void) const noexcept;
-  void setId(size_t id) noexcept;
+  virtual void accept(BaseVisitor &vis);
+  virtual bool isVisible() const noexcept = 0;
 
-  virtual void accept(std::shared_ptr<BaseVisitor> vis);
-  virtual bool isVisible(void) const noexcept = 0;
-
-  virtual bool constexpr isComposite(void) const noexcept;
+  virtual bool isComposite() const noexcept;
   virtual bool add(ObjectPtr &obj);
   virtual bool add(std::unique_ptr<Object> obj);
   virtual bool remove(const iterator &it);
   virtual iterator begin() const noexcept;
   virtual iterator end() const noexcept;
 
-  virtual std::unique_ptr<ObjectMemento> createMemento(void) const;
+  virtual std::unique_ptr<ObjectMemento> createMemento() const;
   void restoreMemento(std::unique_ptr<ObjectMemento> memento);
 
-  virtual std::unique_ptr<Object> clone() const;
+  virtual std::unique_ptr<Object> clone() const = 0;
 };
 
 class ObjectMemento {
-  friend class Object;
-
 private:
-  size_t id;
   std::unique_ptr<TransformationMatrix> transform;
-  void set(const Object &o);
-  std::unique_ptr<Object> get();
 
 public:
   ObjectMemento(const Object &o);
+
+  void set(const Object &o);
+  std::unique_ptr<TransformationMatrix> get();
 };
 
 class ObjectCaretaker {
+public:
+  using MemPtr = std::shared_ptr<ObjectMemento>;
+  using Save = std::pair<std::weak_ptr<Object>, std::vector<MemPtr>>;
+
 private:
-  std::vector<std::unique_ptr<ObjectMemento>> mementos;
+  std::map<size_t, Save> saveData;
+  void clear_expired();
 
 public:
-  std::unique_ptr<ObjectMemento> get();
-  void set(std::unique_ptr<ObjectMemento> memento);
+  std::shared_ptr<ObjectMemento> get(size_t id);
+  void set(size_t id, std::weak_ptr<Object> origin, MemPtr memento);
 };
 
 #endif

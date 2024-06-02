@@ -4,7 +4,6 @@
 #include "BaseCommand.hpp"
 #include <memory>
 
-
 class App {
 private:
 public:

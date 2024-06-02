@@ -16,10 +16,10 @@ public:
       : PTSCAdapter(PTSCAdapter), ctx(ctx) {}
   ~RenderVisitor() = default;
 
-  void visit(Object &ref) override;
   void visit(WireframeModel &ref) override;
   void visit(OrthogonalCamera &ref) override;
   void visit(ProjectionCamera &ref) override;
+  void visit(Scene &ref) override;
 };
 
 #endif

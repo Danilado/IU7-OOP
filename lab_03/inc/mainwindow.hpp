@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "Scene.hpp"
+#include "app.hpp"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -19,5 +20,6 @@ public:
 
 private:
   Ui::MainWindow *ui;
+  App application;
 };
 #endif // MAINWINDOW_H

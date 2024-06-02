@@ -17,10 +17,10 @@ public:
   ScaleObjectVisitor(const Point3D &scale);
   ScaleObjectVisitor(const Point3D &offset, const Point3D &scale);
 
-  void visit(Object &ref) override;
   void visit(WireframeModel &ref) override;
   void visit(OrthogonalCamera &ref) override;
   void visit(ProjectionCamera &ref) override;
+  void visit(Scene &ref) override;
 };
 
 #endif
