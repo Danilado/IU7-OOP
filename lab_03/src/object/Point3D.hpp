@@ -15,7 +15,7 @@ public:
   ~Point3D() = default;
 
   double get_z() const noexcept;
-  void set_z(double n) const noexcept;
+  void set_z(double n) noexcept;
 };
 
 #endif

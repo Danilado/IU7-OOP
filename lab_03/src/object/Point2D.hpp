@@ -12,10 +12,10 @@ public:
   ~Point2D() = default;
 
   double get_x() const noexcept;
-  void set_x(double n) const noexcept;
+  void set_x(double n) noexcept;
 
   double get_y() const noexcept;
-  void set_y(double n) const noexcept;
+  void set_y(double n) noexcept;
 };
 
 #endif
