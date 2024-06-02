@@ -3,6 +3,10 @@
 
 #include "Object.hpp"
 
-class BaseCamera : public Object {};
+class BasePTSCAdapter;
+
+class BaseCamera : public Object {
+  friend BasePTSCAdapter;
+};
 
 #endif

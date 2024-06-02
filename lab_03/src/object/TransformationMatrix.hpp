@@ -40,10 +40,10 @@ public:
   TransformationMatrix(TransformationMatrix &&tmp);
   ~TransformationMatrix() = default;
 
-  std::unique_ptr<Point2D> apply(const Point2D &pt) const noexcept;
+  Point2D apply(const Point2D &pt) const noexcept;
   void apply_in_place(Point2D &pt) const noexcept;
 
-  std::unique_ptr<Point3D> apply(const Point3D &pt) const noexcept;
+  Point3D apply(const Point3D &pt) const noexcept;
   void apply_in_place(Point3D &pt) const noexcept;
 
   void translate(const double dx, const double dy, const double dz) noexcept;
@@ -68,6 +68,8 @@ public:
 
   TransformationMatrix operator-(const TransformationMatrix &other) const;
   TransformationMatrix &operator-=(const TransformationMatrix &other);
+
+  TransformationMatrix operator-() const;
 };
 
 class TranslationMatrix : public TransformationMatrix {

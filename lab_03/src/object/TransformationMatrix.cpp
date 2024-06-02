@@ -81,9 +81,8 @@ double TransformationMatrix::get_3d_z(const Point3D &pt) const noexcept {
   return get_3d_z(pt.get_x(), pt.get_y(), pt.get_z());
 }
 
-std::unique_ptr<Point2D>
-TransformationMatrix::apply(const Point2D &pt) const noexcept {
-  return std::make_unique<Point2D>(get_2d_x(pt), get_2d_y(pt));
+Point2D TransformationMatrix::apply(const Point2D &pt) const noexcept {
+  return Point2D(get_2d_x(pt), get_2d_y(pt));
 }
 
 void TransformationMatrix::apply_in_place(Point2D &pt) const noexcept {
@@ -94,9 +93,8 @@ void TransformationMatrix::apply_in_place(Point2D &pt) const noexcept {
   pt.set_y(newy);
 }
 
-std::unique_ptr<Point3D>
-TransformationMatrix::apply(const Point3D &pt) const noexcept {
-  return std::make_unique<Point3D>(get_3d_x(pt), get_3d_y(pt), get_3d_z(pt));
+Point3D TransformationMatrix::apply(const Point3D &pt) const noexcept {
+  return Point3D(get_3d_x(pt), get_3d_y(pt), get_3d_z(pt));
 }
 
 void TransformationMatrix::apply_in_place(Point3D &pt) const noexcept {
@@ -238,4 +236,14 @@ TransformationMatrix::operator-=(const TransformationMatrix &other) {
       transform[i][j] -= other.transform[i][j];
 
   return *this;
+}
+
+TransformationMatrix TransformationMatrix::operator-() const {
+  TransformationMatrix res;
+
+  for (size_t i = 0; i < dim; ++i)
+    for (size_t j = 0; j < dim; ++j)
+      res.transform[i][j] = -transform[i][j];
+
+  return res;
 }

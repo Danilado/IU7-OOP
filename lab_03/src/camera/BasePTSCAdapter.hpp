@@ -9,8 +9,10 @@
 class BasePTSCAdapter {
   friend BaseCamera;
 
-private:
+protected:
   std::shared_ptr<BaseCamera> cam;
+
+  Point3D transformPoint(const Point3D &pt) const;
 
 public:
   virtual std::shared_ptr<Point2D> convert(const Point3D &pt) = 0;

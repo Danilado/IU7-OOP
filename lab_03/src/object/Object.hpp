@@ -21,7 +21,7 @@ class Object {
   friend TranslateObjectVisitor;
   friend ObjectMemento;
 
-private:
+protected:
   size_t id;
   std::unique_ptr<TransformationMatrix> transform;
 
