@@ -244,3 +244,21 @@ TransformationMatrix TransformationMatrix::operator-() const {
 
   return res;
 }
+
+TranslationMatrix::TranslationMatrix(const double dx, const double dy,
+                                     const double dz) {
+  this->translate(dx, dy, dz);
+}
+
+ScalingMatrix::ScalingMatrix(const double kx, const double ky,
+                             const double kz) {
+  this->scale(kx, ky, kz);
+}
+
+RotationMatrix::RotationMatrix(const double ax, const double ay,
+                               const double az, bool deg) {
+  if (deg)
+    this->rotate_deg(ax, ay, az);
+  else
+    this->rotate(ax, ay, az);
+}

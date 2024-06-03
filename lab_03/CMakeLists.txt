@@ -40,6 +40,10 @@ src/camera/ProjectionCamera.cpp
 src/command/DrawCommand/CleanCommand.cpp
 src/command/DrawCommand/RenderCommand.cpp
 
+src/command/SceneEditCommand/RotateObjectCommand.cpp
+src/command/SceneEditCommand/ScaleObjectCommand.cpp
+src/command/SceneEditCommand/TranslateObjectCommand.cpp
+
 src/drawer/QtDrawer.cpp
 src/drawer/QtDrawerFactory.cpp
 

@@ -8,6 +8,7 @@
 
 void ScaleObjectVisitor::scale_object_around_origin(Object &ref) {
   std::shared_ptr<TransformationMatrix> transf = ref.getTransformation();
+  origin->scale(0, 0, 0);
   *transf -= *origin;
   *transf *= *scales;
   *transf += *origin;

@@ -3,6 +3,8 @@
 
 #include "IoCommand.hpp"
 
-class SaveCameraCommand : public SaveCommand {};
+class SaveCameraCommand : public SaveCommand {
+  void exec() override;
+};
 
 #endif

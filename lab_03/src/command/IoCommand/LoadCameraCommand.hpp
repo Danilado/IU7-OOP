@@ -3,6 +3,8 @@
 
 #include "IoCommand.hpp"
 
-class LoadCameraCommand : public LoadCommand {};
+class LoadCameraCommand : public LoadCommand {
+  void exec() override;
+};
 
 #endif

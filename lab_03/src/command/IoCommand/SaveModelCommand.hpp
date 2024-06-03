@@ -3,6 +3,8 @@
 
 #include "IoCommand.hpp"
 
-class SaveModelCommand : public SaveCommand {};
+class SaveModelCommand : public SaveCommand {
+  void exec() override;
+};
 
 #endif

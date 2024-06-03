@@ -6,9 +6,9 @@
 #include "TransformationMatrix.hpp"
 #include "WireframeModel.hpp"
 
-
 void TranslateObjectVisitor::translate(Object &ref) {
   std::shared_ptr<TransformationMatrix> transf = ref.getTransformation();
+  translation->scale(0, 0, 0);
   *transf += *translation;
 }
 

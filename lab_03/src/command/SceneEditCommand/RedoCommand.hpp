@@ -3,6 +3,8 @@
 
 #include "SceneEditCommand.hpp"
 
-class RedoCommand : public SceneEditCommand {};
+class RedoCommand : public SceneEditCommand {
+  void exec() override;
+};
 
 #endif
