@@ -40,6 +40,8 @@ src/camera/ProjectionCamera.cpp
 src/command/DrawCommand/CleanCommand.cpp
 src/command/DrawCommand/RenderCommand.cpp
 
+src/command/SceneEditCommand/UndoCommand.cpp
+src/command/SceneEditCommand/RedoCommand.cpp
 src/command/SceneEditCommand/RotateObjectCommand.cpp
 src/command/SceneEditCommand/ScaleObjectCommand.cpp
 src/command/SceneEditCommand/TranslateObjectCommand.cpp

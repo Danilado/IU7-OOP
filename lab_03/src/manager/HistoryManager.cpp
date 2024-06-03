@@ -2,6 +2,11 @@
 #include "SceneManager.hpp"
 #include "SingletonTemplate.hpp"
 
+HistoryManager::HistoryManager() {
+  std::unique_ptr<ObjectCaretaker> past = std::make_unique<ObjectCaretaker>();
+  std::unique_ptr<ObjectCaretaker> future = std::make_unique<ObjectCaretaker>();
+}
+
 void HistoryManager::save(size_t object_id) {
   if (future->contains(object_id))
     future->clear_id(object_id);

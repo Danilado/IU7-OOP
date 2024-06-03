@@ -10,6 +10,9 @@ private:
   std::unique_ptr<ObjectCaretaker> future;
 
 public:
+  HistoryManager();
+  ~HistoryManager() = default;
+
   void save(size_t object_id);
   void undo(size_t object_id);
   void redo(size_t object_id);
