@@ -1,20 +1,21 @@
 #ifndef JSON_STRINGIFY_VISITOR_HPP
 #define JSON_STRINGIFY_VISITOR_HPP
 
-#include "BaseJSONAdapter.hpp"
 #include "BaseVisitor.hpp"
 #include <string>
 
+class BaseJsonAdapter;
+class BaseDestination;
+
 class JsonStringifyVisitor : public BaseVisitor {
 private:
-  std::shared_ptr<std::string> dst;
-  std::shared_ptr<BaseJsonAdapter> json_adapt;
+  BaseDestination &dst;
+  BaseJsonAdapter &json_adapt;
   size_t visit_count;
 
 public:
   JsonStringifyVisitor() = delete;
-  JsonStringifyVisitor(std::shared_ptr<std::string> dst,
-                       std::shared_ptr<BaseJsonAdapter> json_adapt)
+  JsonStringifyVisitor(BaseDestination &dst, BaseJsonAdapter &json_adapt)
       : dst(dst), json_adapt(json_adapt), visit_count(0) {}
 
   void visit(WireframeModel &ref) override;

@@ -9,9 +9,10 @@ class WireframeModel;
 class OrthogonalCamera;
 class ProjectionCamera;
 
-#include <string>
+class BaseModelData;
 
-using std::string;
+#include <memory>
+#include <string>
 
 class JsonObjDirectorSolution {
 public:
@@ -20,23 +21,36 @@ public:
 
 class BaseJsonAdapter {
 protected:
-  virtual string
+  virtual std::string
   JsonStringifyTransformMatrix(TransformationMatrix &transform) = 0;
 
-public:
-  virtual JsonObjDirectorSolution::TYPES JsonParseType(BaseSource src) = 0;
-  virtual std::unique_ptr<WireframeModel>
-  JsonParseWireframe(BaseSource src) = 0;
-  virtual std::unique_ptr<OrthogonalCamera>
-  JsonParseOrthoCam(BaseSource src) = 0;
-  virtual std::unique_ptr<ProjectionCamera>
-  JsonParseProjCam(BaseSource src) = 0;
-  virtual std::unique_ptr<Scene> JsonParseScene(BaseSource src) = 0;
+  virtual JsonObjDirectorSolution::TYPES get_type(std::string key);
 
-  virtual string JsonStringifyScene(Scene &scene) = 0;
-  virtual string JsonStringifyWireframe(WireframeModel &src) = 0;
-  virtual string JsonStringifyOrthoCam(OrthogonalCamera &src) = 0;
-  virtual string JsonStringifyProjCam(ProjectionCamera &src) = 0;
+  std::map<std::string, JsonObjDirectorSolution::TYPES> stmap{
+      {"WireframeModel", JsonObjDirectorSolution::TYPES::WIREFRAME},
+      {"OrthogonalCamera", JsonObjDirectorSolution::TYPES::ORTHOCAM},
+      {"ProjectionCamera", JsonObjDirectorSolution::TYPES::PROJCAM}};
+
+  virtual std::unique_ptr<BaseModelData>
+  JsonParseNodeEdgeListData(BaseSource &src) = 0;
+
+  virtual std::unique_ptr<BaseModelData>
+  JsonParseAdjacencyListData(BaseSource &src) = 0;
+
+  virtual std::string JsonStringifyObjData(BaseModelData &data) = 0;
+
+public:
+  virtual JsonObjDirectorSolution::TYPES JsonParseType(BaseSource &src) = 0;
+  virtual std::unique_ptr<Scene> JsonParseScene(BaseSource &src) = 0;
+
+  virtual std::unique_ptr<BaseModelData> JsonParseObjData(BaseSource &src) = 0;
+  virtual std::unique_ptr<TransformationMatrix>
+  JsonParseTransformMatrix(BaseSource &src) = 0;
+
+  virtual std::string JsonStringifyScene(Scene &scene) = 0;
+  virtual std::string JsonStringifyWireframe(WireframeModel &src) = 0;
+  virtual std::string JsonStringifyOrthoCam(OrthogonalCamera &src) = 0;
+  virtual std::string JsonStringifyProjCam(ProjectionCamera &src) = 0;
 };
 
 #endif

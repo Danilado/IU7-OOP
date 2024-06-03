@@ -5,9 +5,8 @@
 
 class BaseDestination {
 public:
-  BaseDestination() = default;
-  virtual ~BaseDestination() = default;
-  virtual int write(std::string &data) = 0;
+  virtual void write(const std::string &data) = 0;
+  virtual void write(const char *data) = 0;
 };
 
 #endif

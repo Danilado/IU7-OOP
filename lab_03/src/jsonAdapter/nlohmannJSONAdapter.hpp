@@ -7,19 +7,29 @@
 class NlohmannJsonAdapter : public BaseJsonAdapter {
 private:
   using json = nlohmann::json;
-  string JsonStringifyTransformMatrix(TransformationMatrix &transform) override;
+
+  void validateJTransMat(std::vector<std::vector<double>> &transmat);
+
+protected:
+  std::string JsonStringifyObjData(BaseModelData &data) override;
+  std::string
+  JsonStringifyTransformMatrix(TransformationMatrix &transform) override;
+  std::unique_ptr<BaseModelData>
+  JsonParseNodeEdgeListData(BaseSource &src) override;
+  std::unique_ptr<BaseModelData>
+  JsonParseAdjacencyListData(BaseSource &src) override;
 
 public:
-  JsonObjDirectorSolution::TYPES JsonParseType(BaseSource src) override;
-  std::unique_ptr<WireframeModel> JsonParseWireframe(BaseSource src) override;
-  std::unique_ptr<OrthogonalCamera> JsonParseOrthoCam(BaseSource src) override;
-  std::unique_ptr<ProjectionCamera> JsonParseProjCam(BaseSource src) override;
-  std::unique_ptr<Scene> JsonParseScene(BaseSource src) override;
+  JsonObjDirectorSolution::TYPES JsonParseType(BaseSource &src) override;
+  std::unique_ptr<Scene> JsonParseScene(BaseSource &src) override;
+  std::unique_ptr<TransformationMatrix>
+  JsonParseTransformMatrix(BaseSource &src) override;
+  std::unique_ptr<BaseModelData> JsonParseObjData(BaseSource &src) override;
 
-  string JsonStringifyScene(Scene &scene) override;
-  string JsonStringifyWireframe(WireframeModel &src) override;
-  string JsonStringifyOrthoCam(OrthogonalCamera &src) override;
-  string JsonStringifyProjCam(ProjectionCamera &src) override;
+  std::string JsonStringifyScene(Scene &scene) override;
+  std::string JsonStringifyWireframe(WireframeModel &src) override;
+  std::string JsonStringifyOrthoCam(OrthogonalCamera &src) override;
+  std::string JsonStringifyProjCam(ProjectionCamera &src) override;
 };
 
 #endif

@@ -2,15 +2,14 @@
 #define WIREFRAME_MODEL_HPP
 
 #include "BaseModel.hpp"
-#include "JSONStringifyVisitor.hpp"
-#include "RenderVisitor.hpp"
-#include "RotateObjectVisitor.hpp"
-#include "ScaleObjectVisitor.hpp"
-#include "TransformObjectVisitor.hpp"
-#include "TranslateObjectVisitor.hpp"
+
+class RenderVisitor;
+class RotateObjectVisitor;
+class ScaleObjectVisitor;
+class TransformObjectVisitor;
+class TranslateObjectVisitor;
 
 class WireframeModel : public BaseModel {
-  friend JsonStringifyVisitor;
   friend RenderVisitor;
   friend RotateObjectVisitor;
   friend ScaleObjectVisitor;

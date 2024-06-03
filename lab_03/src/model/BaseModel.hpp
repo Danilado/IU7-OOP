@@ -8,12 +8,14 @@
 #include "Object.hpp"
 
 class RenderVisitor;
+class NlohmannJsonAdapter;
 
 class BaseModel : public Object {
   friend JsonStringifyVisitor;
   friend RenderVisitor;
+  friend NlohmannJsonAdapter;
 
-private:
+protected:
   std::unique_ptr<BaseModelData> data;
 
 public:

@@ -5,10 +5,8 @@ project(lab_03 VERSION 0.1 LANGUAGES CXX)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(HEADER_LIST
 "${lab_03_SOURCE_DIR}/external/nlohmann_json/single_include/nlohmann/json.hpp"
-
-"${lab_03_SOURCE_DIR}/src/object/Object.hpp"
-
 "${lab_03_SOURCE_DIR}/inc/app.hpp"
+"${lab_03_SOURCE_DIR}/inc/mainwindow.hpp"
 )
 
 set(CMAKE_AUTOUIC ON)
@@ -42,6 +40,8 @@ src/camera/ProjectionCamera.cpp
 src/drawer/QtDrawer.cpp
 src/drawer/QtDrawerFactory.cpp
 
+src/io/StringDestination.cpp
+
 src/jsonAdapter/nlohmannJSONAdapter.cpp
 
 src/object/Object.cpp
@@ -62,24 +62,27 @@ src/visitor/ScaleObjectVisitor.cpp
 src/visitor/TranslateObjectVisitor.cpp
 src/visitor/TransformObjectVisitor.cpp
 
+src/jsonAdapter/BaseJSONAdapter.cpp
+src/jsonAdapter/nlohmannJSONAdapter.cpp
+
 src/mainwindow.cpp
 ui/mainwindow.ui
 ${HEADER_LIST})
 target_include_directories(main PUBLIC
-./inc
-./src/camera
-./src/command
-./src/common
-./src/drawer
-./src/io
-./src/jsonAdapter
-./src/manager
-./src/model
-./src/object
-./src/scene
-./src/visitor
-./src/math
-./external/nlohmann_json/single_include/nlohmann/
+inc
+src/camera
+src/command
+src/common
+src/drawer
+src/io
+src/jsonAdapter
+src/manager
+src/model
+src/object
+src/scene
+src/visitor
+src/math
+external/nlohmann_json/single_include/nlohmann/
 )
 target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_compile_features(main PUBLIC cxx_std_20)
