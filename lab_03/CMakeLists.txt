@@ -52,6 +52,11 @@ src/command/SceneEditCommand/SetCameraCommand.cpp
 src/drawer/QtDrawer.cpp
 src/drawer/QtDrawerFactory.cpp
 
+src/interact/KeyHandlers.cpp
+
+src/io/FileSource.cpp
+src/io/StringSource.cpp
+src/io/FileDestination.cpp
 src/io/StringDestination.cpp
 
 src/jsonAdapter/nlohmannJSONAdapter.cpp
@@ -91,6 +96,7 @@ src/camera
 src/command
 src/common
 src/drawer
+src/interact
 src/io
 src/jsonAdapter
 src/manager

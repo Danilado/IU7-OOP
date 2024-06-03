@@ -6,7 +6,6 @@
 #include <QGraphicsScene>
 #include <QMainWindow>
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -26,5 +25,7 @@ private:
   std::shared_ptr<QGraphicsScene> scene;
 
   void setupScene();
+  void keyPressEvent(QKeyEvent *e) override;
+  void handleKey(Qt::Key key);
 };
 #endif // MAINWINDOW_H

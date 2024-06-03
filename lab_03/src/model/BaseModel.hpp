@@ -5,12 +5,12 @@
 #include "JSONStringifyVisitor.hpp"
 
 #include "BaseModelData.hpp"
-#include "Object.hpp"
+#include "VisibleObject.hpp"
 
 class RenderVisitor;
 class NlohmannJsonAdapter;
 
-class BaseModel : public Object {
+class BaseModel : public VisibleObject {
   friend JsonStringifyVisitor;
   friend RenderVisitor;
   friend NlohmannJsonAdapter;

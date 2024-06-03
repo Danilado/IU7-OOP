@@ -8,6 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
+  this->setFocusPolicy(Qt::StrongFocus);
   ui->setupUi(this);
   setupScene();
 }
@@ -22,7 +23,7 @@ void MainWindow::setupScene() {
   scene =
       std::make_shared<QGraphicsScene>(0, 0, screenWidth, screenHeight, this);
 
-  scene->addRect(scene->sceneRect());
+  // scene->addRect(scene->sceneRect());
 
   ui->graphicsView->setScene(scene.get());
   ui->graphicsView->setStyleSheet("QGraphicsView {background-color: white}");
