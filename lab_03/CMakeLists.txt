@@ -37,6 +37,9 @@ src/camera/OrthoPTSCAdapter.cpp
 src/camera/OrthogonalCamera.cpp
 src/camera/ProjectionCamera.cpp
 
+src/command/DrawCommand/CleanCommand.cpp
+src/command/DrawCommand/RenderCommand.cpp
+
 src/drawer/QtDrawer.cpp
 src/drawer/QtDrawerFactory.cpp
 
