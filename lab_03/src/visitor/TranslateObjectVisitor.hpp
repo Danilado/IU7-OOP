@@ -3,11 +3,15 @@
 
 #include "BaseVisitor.hpp"
 #include "Point3D.hpp"
-#include "TransformationMatrix.hpp"
+#include <memory>
+
+class TransformationMatrix;
+class Object;
 
 class TranslateObjectVisitor : public BaseVisitor {
 private:
-  std::unique_ptr<TransformationMatrix> transf;
+  std::unique_ptr<TransformationMatrix> translation;
+  void translate(Object &ref);
 
 public:
   TranslateObjectVisitor() = delete;

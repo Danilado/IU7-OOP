@@ -58,6 +58,9 @@ src/visitor/JSONStringifyVisitor.cpp
 src/visitor/PTSCSolutionVisitor.cpp
 src/visitor/RenderVisitor.cpp
 src/visitor/RotateObjectVisitor.cpp
+src/visitor/ScaleObjectVisitor.cpp
+src/visitor/TranslateObjectVisitor.cpp
+src/visitor/TransformObjectVisitor.cpp
 
 src/mainwindow.cpp
 ui/mainwindow.ui

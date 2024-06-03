@@ -3,11 +3,16 @@
 
 #include "BaseVisitor.hpp"
 #include "Point3D.hpp"
-#include "TransformationMatrix.hpp"
+#include <memory>
+
+class TransformationMatrix;
+class Object;
 
 class TransformObjectVisitor : public BaseVisitor {
 private:
   std::shared_ptr<TransformationMatrix> transf;
+
+  void transform(Object &ref);
 
 public:
   TransformObjectVisitor() = delete;
