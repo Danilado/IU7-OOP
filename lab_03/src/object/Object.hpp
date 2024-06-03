@@ -48,7 +48,7 @@ public:
   virtual iterator end() const noexcept;
 
   virtual std::unique_ptr<ObjectMemento> createMemento() const;
-  void restoreMemento(std::unique_ptr<ObjectMemento> memento);
+  void restoreMemento(std::shared_ptr<ObjectMemento> memento);
 
   virtual std::unique_ptr<Object> clone() const = 0;
 };
@@ -76,6 +76,9 @@ private:
 public:
   std::shared_ptr<ObjectMemento> get(size_t id);
   void set(size_t id, std::weak_ptr<Object> origin, MemPtr memento);
+  void clear_id(size_t id);
+  bool contains(size_t id);
+  void clear();
 };
 
 #endif

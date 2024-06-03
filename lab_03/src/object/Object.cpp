@@ -28,7 +28,7 @@ std::unique_ptr<ObjectMemento> Object::createMemento(void) const {
   return std::make_unique<ObjectMemento>(*this);
 }
 
-void Object::restoreMemento(std::unique_ptr<ObjectMemento> memento) {
+void Object::restoreMemento(std::shared_ptr<ObjectMemento> memento) {
   transform = std::move(memento->get());
 }
 
@@ -75,3 +75,11 @@ void ObjectCaretaker::set(size_t id, std::weak_ptr<Object> origin,
 
   clear_expired();
 }
+
+void ObjectCaretaker::clear_id(size_t id) { saveData.erase(id); }
+
+bool ObjectCaretaker::contains(size_t id) {
+  return saveData.find(id) != saveData.end();
+}
+
+void ObjectCaretaker::clear() { saveData.clear(); }

@@ -57,6 +57,7 @@ src/object/ObjectComposite.cpp
 src/manager/CameraManager.cpp
 src/manager/DrawManager.cpp
 src/manager/SceneManager.cpp
+src/manager/HistoryManager.cpp
 
 src/math/Point2D.cpp
 src/math/Point3D.cpp

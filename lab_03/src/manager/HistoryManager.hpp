@@ -1,20 +1,18 @@
 #ifndef HISTORY_MANAGER_HPP
 #define HISTORY_MANAGER_HPP
 
-#include "Scene.hpp"
+#include "Object.hpp"
 #include <memory>
 
 class HistoryManager {
 private:
-  std::unique_ptr<SceneCaretaker> past;
-  std::unique_ptr<SceneCaretaker> future;
-
-  void clear_future(void);
+  std::unique_ptr<ObjectCaretaker> past;
+  std::unique_ptr<ObjectCaretaker> future;
 
 public:
-  void save(std::unique_ptr<Scene> scene);
-  bool undo(std::unique_ptr<Scene> scene);
-  bool redo(std::unique_ptr<Scene> scene);
+  void save(size_t object_id);
+  void undo(size_t object_id);
+  void redo(size_t object_id);
   void clear(void);
 
   HistoryManager(const HistoryManager &) = delete;
