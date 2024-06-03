@@ -13,7 +13,6 @@ class Scene {
 private:
   std::map<size_t, ObjectPtr> objects;
   size_t object_id_counter = 1;
-  size_t camera_id;
 
 public:
   Scene() = default;
@@ -27,7 +26,6 @@ public:
   ObjectPtr getObject(size_t id);
   size_t addObject(ObjectPtr obj);
   bool removeObject(size_t id);
-  bool setCamera(size_t id);
 
   SceneIterator begin();
   SceneIterator end();

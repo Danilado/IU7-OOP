@@ -6,18 +6,19 @@
 
 class SceneManager {
 private:
-  std::unique_ptr<Scene> scene;
+  std::shared_ptr<Scene> scene;
 
 public:
   SceneManager() = default;
   ~SceneManager() = default;
 
   std::shared_ptr<Scene> getScene(void) const;
-  void setScene(const std::unique_ptr<Scene> &src);
-  bool addObject(ObjectPtr obj);
+  void setScene(const std::shared_ptr<Scene> &src);
+  size_t addObject(ObjectPtr obj);
   bool removeObject(size_t id);
-  bool removeObject(ObjectPtr obj);
-  bool setCamera(size_t id);
+
+  SceneManager(const SceneManager &) = delete;
+  SceneManager &operator=(const SceneManager &) = delete;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef SINGLETON_TEMPLATE_HPP
 #define SINGLETON_TEMPLATE_HPP
 
-#include "my_concepts.hpp"
+#include "MyConcepts.hpp"
 #include <memory>
 
 template <OnlyObject Type> class Singleton {
@@ -15,7 +15,7 @@ public:
     };
 
     if (!inst)
-      inst = make_unique<Proxy>(forward<Args>(args)...);
+      inst = std::make_unique<Proxy>(forward<Args>(args)...);
 
     return *inst;
   }

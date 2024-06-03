@@ -3,11 +3,11 @@
 void PTSCSolutionVisitor::visit(WireframeModel &ref) {}
 
 void PTSCSolutionVisitor::visit(OrthogonalCamera &ref) {
-  dst.reset(new OrthoPTSCAdapter());
+  dst = std::make_shared<OrthoPTSCAdapter>();
 }
 
 void PTSCSolutionVisitor::visit(ProjectionCamera &ref) {
-  dst.reset(new ProjPTSCAdapter());
+  dst = std::make_shared<ProjPTSCAdapter>();
 }
 
 void PTSCSolutionVisitor::visit(Scene &ref) {}

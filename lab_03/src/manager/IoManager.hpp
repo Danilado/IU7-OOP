@@ -16,6 +16,9 @@ public:
 
   void saveObject(const Object &obj, BaseDestination &dst);
   std::unique_ptr<Object> loadObject(BaseSource &src);
+
+  IoManager(const IoManager &) = delete;
+  IoManager &operator=(const IoManager &) = delete;
 };
 
 #endif

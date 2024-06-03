@@ -3,7 +3,9 @@
 
 #include "Scene.hpp"
 #include "app.hpp"
+#include <QGraphicsScene>
 #include <QMainWindow>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,5 +23,8 @@ public:
 private:
   Ui::MainWindow *ui;
   App application;
+  std::shared_ptr<QGraphicsScene> scene;
+
+  void setupScene();
 };
 #endif // MAINWINDOW_H

@@ -7,11 +7,12 @@
 
 class QtDrawer : public BaseDrawer {
 private:
-  std::weak_ptr<QGraphicsScene> scene;
+  std::shared_ptr<QGraphicsScene> scene{};
 
 public:
   QtDrawer() = delete;
-  explicit QtDrawer(std::weak_ptr<QGraphicsScene> &scene) : scene(scene){};
+  explicit QtDrawer(std::shared_ptr<QGraphicsScene> &scene) : scene(scene) {}
+  ~QtDrawer() override = default;
 
   void drawLine(Point2D &pt1, Point2D &pt2) override;
   void drawLine(double x1, double y1, double x2, double y2) override;

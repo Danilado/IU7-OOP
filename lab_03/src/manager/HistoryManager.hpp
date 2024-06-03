@@ -16,6 +16,9 @@ public:
   bool undo(std::unique_ptr<Scene> scene);
   bool redo(std::unique_ptr<Scene> scene);
   void clear(void);
+
+  HistoryManager(const HistoryManager &) = delete;
+  HistoryManager &operator=(const HistoryManager &) = delete;
 };
 
 #endif

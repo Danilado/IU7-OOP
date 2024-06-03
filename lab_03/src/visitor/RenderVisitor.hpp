@@ -11,6 +11,7 @@ private:
   std::shared_ptr<BaseDrawer> ctx;
 
 public:
+  RenderVisitor() = delete;
   RenderVisitor(std::shared_ptr<BasePTSCAdapter> PTSCAdapter,
                 std::shared_ptr<BaseDrawer> ctx)
       : PTSCAdapter(PTSCAdapter), ctx(ctx) {}

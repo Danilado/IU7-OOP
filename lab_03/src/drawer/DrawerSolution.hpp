@@ -10,7 +10,7 @@ public:
   static std::unique_ptr<BaseDrawer> create(Args &&...args) {
     static_assert(std::is_base_of<BaseDrawerFactory, Tfactory>::value,
                   "Tfactory must be derived from AbstractFactory");
-    std::shared_ptr<AbstractFactory> factory =
+    std::shared_ptr<BaseDrawerFactory> factory =
         std::make_shared<Tfactory>(std::forward<Args>(args)...);
     return factory->create();
   }

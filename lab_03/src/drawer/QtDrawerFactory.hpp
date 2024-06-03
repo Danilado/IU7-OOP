@@ -6,7 +6,7 @@
 
 class QtDrawerFactory : public BaseDrawerFactory {
 private:
-  std::weak_ptr<QGraphicsScene> scene{};
+  std::shared_ptr<QGraphicsScene> scene{};
 
 public:
   explicit QtDrawerFactory(std::shared_ptr<QGraphicsScene> scene);

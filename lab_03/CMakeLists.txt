@@ -47,6 +47,10 @@ src/jsonAdapter/nlohmannJSONAdapter.cpp
 src/object/Object.cpp
 src/object/ObjectComposite.cpp
 
+src/manager/CameraManager.cpp
+src/manager/DrawManager.cpp
+src/manager/SceneManager.cpp
+
 src/math/Point2D.cpp
 src/math/Point3D.cpp
 src/math/TransformationMatrix.cpp

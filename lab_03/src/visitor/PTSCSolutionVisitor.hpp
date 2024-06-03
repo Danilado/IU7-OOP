@@ -9,10 +9,10 @@
 
 class PTSCSolutionVisitor : public BaseVisitor {
 private:
-  std::shared_ptr<BasePTSCAdapter> dst;
+  std::shared_ptr<BasePTSCAdapter> &dst;
 
 public:
-  PTSCSolutionVisitor(std::shared_ptr<BasePTSCAdapter> dst) : dst(dst) {}
+  PTSCSolutionVisitor(std::shared_ptr<BasePTSCAdapter> &dst) : dst(dst) {}
   ~PTSCSolutionVisitor() = default;
 
   void visit(WireframeModel &ref) override;
