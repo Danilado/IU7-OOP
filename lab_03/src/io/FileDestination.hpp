@@ -9,7 +9,8 @@ private:
   std::fstream stream;
 
 public:
-  FileDestination(std::string filename);
+  FileDestination() = delete;
+  explicit FileDestination(std::string &filename);
   ~FileDestination() = default;
 
   void write(const std::string &data) override;

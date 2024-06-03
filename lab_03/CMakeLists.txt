@@ -58,6 +58,8 @@ src/io/FileSource.cpp
 src/io/StringSource.cpp
 src/io/FileDestination.cpp
 src/io/StringDestination.cpp
+src/io/SourceSolution.cpp
+src/io/DestinationSolution.cpp
 
 src/jsonAdapter/nlohmannJSONAdapter.cpp
 

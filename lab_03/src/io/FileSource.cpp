@@ -1,7 +1,7 @@
 #include "FileSource.hpp"
 #include <sstream>
 
-FileSource::FileSource(std::string filename) {
+FileSource::FileSource(std::string &filename) {
   stream = std::fstream(filename, std::fstream::in);
 }
 

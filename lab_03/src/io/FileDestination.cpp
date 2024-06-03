@@ -1,6 +1,6 @@
 #include "FileDestination.hpp"
 
-FileDestination::FileDestination(std::string filename) {
+FileDestination::FileDestination(std::string &filename) {
   stream = std::fstream(filename, std::fstream::out);
 }
 

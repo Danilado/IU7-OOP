@@ -11,7 +11,8 @@ private:
   std::fstream stream;
 
 public:
-  FileSource(std::string filename);
+  FileSource() = delete;
+  explicit FileSource(std::string &filename);
   ~FileSource() = default;
 
   std::string read(size_t bytes = 0) override;

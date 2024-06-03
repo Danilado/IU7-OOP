@@ -10,7 +10,7 @@ protected:
 
 public:
   StringDestination() = delete;
-  StringDestination(std::string &dst) : dst(dst) {}
+  explicit StringDestination(std::string &dst) : dst(dst) {}
   ~StringDestination() = default;
 
   void write(const std::string &data) override;

@@ -13,7 +13,8 @@ private:
   void validate_offset();
 
 public:
-  StringSource(std::shared_ptr<std::string> src) : src(src) {}
+  StringSource() = delete;
+  explicit StringSource(std::shared_ptr<std::string> src) : src(src) {}
   ~StringSource() = default;
 
   std::string read(size_t bytes = 0) override;
