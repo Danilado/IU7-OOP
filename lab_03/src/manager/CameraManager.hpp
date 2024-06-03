@@ -11,7 +11,7 @@ private:
   std::shared_ptr<BaseCamera> cam;
 
 public:
-  CameraManager() = default;
+  CameraManager();
   ~CameraManager() = default;
 
   void setCamera(size_t id);

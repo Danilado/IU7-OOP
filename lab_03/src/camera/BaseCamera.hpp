@@ -1,11 +1,11 @@
 #ifndef BASE_CAMERA_HPP
 #define BASE_CAMERA_HPP
 
-#include "Object.hpp"
+#include "InvisibleObject.hpp"
 
 class BasePTSCAdapter;
 
-class BaseCamera : public Object {
+class BaseCamera : public InvisibleObject {
   friend BasePTSCAdapter;
 };
 

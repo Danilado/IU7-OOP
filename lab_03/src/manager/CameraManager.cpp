@@ -1,7 +1,17 @@
 #include "CameraManager.hpp"
 #include "PTSCSolutionVisitor.hpp"
+#include "ProjectionCamera.hpp"
 #include "SceneManager.hpp"
 #include "SingletonTemplate.hpp"
+
+CameraManager::CameraManager() {
+  SceneManager &sm = Singleton<SceneManager>::instance();
+
+  std::shared_ptr<ProjectionCamera> defaultcam =
+      std::make_shared<ProjectionCamera>();
+  cam = defaultcam;
+  id = sm.addObject(defaultcam);
+}
 
 void CameraManager::setCamera(size_t id) {
   SceneManager &sm = Singleton<SceneManager>::instance();

@@ -6,7 +6,10 @@
 
 class ProjectionCamera : public BaseCamera {
 public:
+  ProjectionCamera() = default;
+  ~ProjectionCamera() = default;
   void accept(BaseVisitor &vis) override;
+  std::unique_ptr<Object> clone() const override;
 };
 
 #endif

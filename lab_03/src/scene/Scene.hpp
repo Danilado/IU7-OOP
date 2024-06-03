@@ -11,7 +11,7 @@ class Scene {
   friend SceneMemento;
 
 private:
-  std::map<size_t, ObjectPtr> objects;
+  std::map<size_t, ObjectPtr> objects{};
   size_t object_id_counter = 1;
 
 public:

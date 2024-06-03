@@ -9,7 +9,7 @@ private:
   std::shared_ptr<Scene> scene;
 
 public:
-  SceneManager() = default;
+  SceneManager();
   ~SceneManager() = default;
 
   std::shared_ptr<Scene> getScene(void) const;
