@@ -14,20 +14,16 @@ private:
     AdjacencyList() = default;
     ~AdjacencyList() = default;
 
-    std::vector<size_t>::const_iterator
-    getAdjacencies(size_t from) const noexcept;
-    bool addAdjacency(size_t from, size_t to);
+    std::vector<size_t> getAdjacencies(size_t from) const noexcept;
+    void addAdjacency(size_t from, size_t to);
   };
   std::unique_ptr<AdjacencyList> adjlist;
 
 public:
-  std::string JSONstringify(void) const;
+  std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>>
+  getIdEdges() const override;
 
-  std::vector<Edge>::const_iterator getEdges(void) const;
-
-  bool addEdge(const Edge &edge);
-  bool addEdge(Edge &&edge);
-  bool addEdge(size_t id1, size_t id2);
+  void addEdge(size_t id1, size_t id2) override;
 };
 
 #endif

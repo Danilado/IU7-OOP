@@ -76,6 +76,10 @@ src/math/Point3D.cpp
 src/math/TransformationMatrix.cpp
 src/math/MyMath.cpp
 
+src/model/BaseModelData.cpp
+src/model/NodeEdgeListData.cpp
+src/model/AdjacencyListData.cpp
+
 src/scene/Scene.cpp
 
 src/visitor/JSONStringifyVisitor.cpp

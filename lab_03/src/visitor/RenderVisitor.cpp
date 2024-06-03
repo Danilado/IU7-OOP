@@ -6,7 +6,7 @@ void RenderVisitor::visit(WireframeModel &ref) {
   std::shared_ptr<TransformationMatrix> transf = ref.getTransformation();
   BaseModelData &modelData = *ref.data;
 
-  for (const auto &edge : modelData.getEdges()) {
+  for (const auto &edge : *modelData.getEdges()) {
     std::shared_ptr<Point2D> pt1 =
         PTSCAdapter->convert(transf->apply(*(edge->first)));
     std::shared_ptr<Point2D> pt2 =
