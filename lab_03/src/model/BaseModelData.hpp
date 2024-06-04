@@ -26,14 +26,15 @@ public:
     void setSecondId(size_t n) noexcept;
   };
 
+  using IdEdgeVector = std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>>;
+
 protected:
   std::vector<Node> nodes;
 
 public:
   const std::vector<Node> &getNodes() const noexcept;
   virtual std::shared_ptr<std::vector<Edge>> getEdges() const;
-  virtual std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>>
-  getIdEdges() const = 0;
+  virtual IdEdgeVector getIdEdges() const = 0;
 
   void addNode(const Point3D &pt);
   void addNode(Point3D &&pt);

@@ -3,12 +3,20 @@
 
 #include "../external/nlohmann_json/single_include/nlohmann/json.hpp"
 #include "BaseJSONAdapter.hpp"
+#include "BaseModelData.hpp"
 
 class NlohmannJsonAdapter : public BaseJsonAdapter {
 private:
   using json = nlohmann::json;
 
   void validateJTransMat(std::vector<std::vector<double>> &transmat);
+
+  std::unique_ptr<std::vector<std::shared_ptr<BaseModelData::IdEdge>>>
+  jsonParseIdEdges(std::string data);
+  std::unique_ptr<std::vector<BaseModelData::Node>>
+  JsonParseNodes(std::string data);
+  std::string JsonStringifyNodes(const std::vector<BaseModelData::Node> &nodes);
+  std::string JsonStringifyIdEdges(const BaseModelData::IdEdgeVector &idEdges);
 
 protected:
   std::string JsonStringifyObjData(BaseModelData &data) override;

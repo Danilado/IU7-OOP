@@ -3,7 +3,11 @@
 
 #include "BaseModelData.hpp"
 
+class NlohmannJsonAdapter;
+
 class NodeEdgeListData : public BaseModelData {
+  friend NlohmannJsonAdapter;
+
 private:
   std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>> idedges;
 
