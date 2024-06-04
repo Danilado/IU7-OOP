@@ -29,6 +29,9 @@ void TransformationMatrix::translate(const Point3D &pt) noexcept {
 
 void TransformationMatrix::scale(const double kx, const double ky,
                                  const double kz) noexcept {
+  transform[0][0] *= kx;
+  transform[1][1] *= ky;
+  transform[2][2] *= kz;
   transform[0][dim] *= kx;
   transform[1][dim] *= ky;
   transform[2][dim] *= kz;
@@ -95,7 +98,8 @@ void TransformationMatrix::apply_in_place(Point2D &pt) const noexcept {
 }
 
 Point3D TransformationMatrix::apply(const Point3D &pt) const noexcept {
-  return Point3D(get_3d_x(pt), get_3d_y(pt), get_3d_z(pt));
+  auto res = Point3D(get_3d_x(pt), get_3d_y(pt), get_3d_z(pt));
+  return res;
 }
 
 void TransformationMatrix::apply_in_place(Point3D &pt) const noexcept {
@@ -109,7 +113,7 @@ void TransformationMatrix::apply_in_place(Point3D &pt) const noexcept {
 }
 
 TransformationMatrix TransformationMatrix::get_rotated_around_x(double angle) {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   res.transform[1][1] = cos(angle);
   res.transform[1][2] = -sin(angle);
@@ -120,7 +124,7 @@ TransformationMatrix TransformationMatrix::get_rotated_around_x(double angle) {
 }
 
 TransformationMatrix TransformationMatrix::get_rotated_around_y(double angle) {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   res.transform[0][0] = cos(angle);
   res.transform[0][2] = sin(angle);
@@ -131,7 +135,7 @@ TransformationMatrix TransformationMatrix::get_rotated_around_y(double angle) {
 }
 
 TransformationMatrix TransformationMatrix::get_rotated_around_z(double angle) {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   res.transform[0][0] = cos(angle);
   res.transform[0][1] = -sin(angle);
@@ -143,8 +147,8 @@ TransformationMatrix TransformationMatrix::get_rotated_around_z(double angle) {
 
 void TransformationMatrix::rotate(const double ax, const double ay,
                                   const double az) {
-  (*this) *= get_rotated_around_x(ax) * get_rotated_around_y(ay) *
-             get_rotated_around_z(az);
+  (*this) *= (get_rotated_around_x(ax) * get_rotated_around_y(ay) *
+              get_rotated_around_z(az));
 }
 
 void TransformationMatrix::rotate(const Point3D &pt) {
@@ -178,7 +182,7 @@ double TransformationMatrix::get_mul_cell(const TransformationMatrix &other,
 
 TransformationMatrix
 TransformationMatrix::operator*(const TransformationMatrix &other) const {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   for (size_t i = 0; i < dim; ++i)
     for (size_t j = 0; j < dim; ++j)
@@ -190,14 +194,13 @@ TransformationMatrix::operator*(const TransformationMatrix &other) const {
 TransformationMatrix &
 TransformationMatrix::operator*=(const TransformationMatrix &other) {
   TransformationMatrix tmpmat = (*this) * other;
-  this->transform = std::move(tmpmat.transform);
-  tmpmat.transform = nullptr;
+  this->transform = tmpmat.transform;
   return *this;
 }
 
 TransformationMatrix
 TransformationMatrix::operator+(const TransformationMatrix &other) const {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   for (size_t i = 0; i < dim; ++i)
     for (size_t j = 0; j < dim; ++j)
@@ -217,7 +220,7 @@ TransformationMatrix::operator+=(const TransformationMatrix &other) {
 
 TransformationMatrix
 TransformationMatrix::operator-(const TransformationMatrix &other) const {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   for (size_t i = 0; i < dim; ++i)
     for (size_t j = 0; j < dim; ++j)
@@ -236,7 +239,7 @@ TransformationMatrix::operator-=(const TransformationMatrix &other) {
 }
 
 TransformationMatrix TransformationMatrix::operator-() const {
-  TransformationMatrix res;
+  TransformationMatrix res{};
 
   for (size_t i = 0; i < dim; ++i)
     for (size_t j = 0; j < dim; ++j)

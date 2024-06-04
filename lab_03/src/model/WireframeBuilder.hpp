@@ -6,7 +6,7 @@
 
 class WireframeModelDirector : public BaseObjectDirector {
 public:
-  ObjectPtr create(BaseSource &src) override;
+  std::unique_ptr<Object> create(BaseSource &src) override;
 };
 
 class WireframeModelBuilder : public BaseObjectBuilder {

@@ -7,28 +7,23 @@
 
 class ScaleObjectCommand : public SceneEditCommand {
 private:
-  std::shared_ptr<ScaleObjectVisitor> vis;
+  Point3D origin;
+  Point3D scale;
   size_t target;
-
-  void transform_target();
-  void transform_all();
 
 public:
   ScaleObjectCommand(double ox, double oy, double oz, double kx, double ky,
                      double kz, size_t target_id = 0)
-      : vis(std::make_shared<ScaleObjectVisitor>(ox, oy, oz, kx, ky, kz)),
-        target(target_id) {}
+      : origin(ox, oy, oz), scale(kx, ky, kz), target(target_id) {}
 
   ScaleObjectCommand(double kx, double ky, double kz, size_t target_id = 0)
-      : vis(std::make_shared<ScaleObjectVisitor>(kx, ky, kz)),
-        target(target_id) {}
-
-  ScaleObjectCommand(Point3D &scales, size_t target_id = 0)
-      : vis(std::make_shared<ScaleObjectVisitor>(scales)), target(target_id) {}
+      : ScaleObjectCommand(0., 0., 0., kx, ky, kz, target) {}
 
   ScaleObjectCommand(Point3D &origin, Point3D &scales, size_t target_id = 0)
-      : vis(std::make_shared<ScaleObjectVisitor>(origin, scales)),
-        target(target_id) {}
+      : origin(origin), scale(scales), target(target_id) {}
+
+  ScaleObjectCommand(Point3D &scales, size_t target_id = 0)
+      : scale(scales), target(target_id) {}
 
   void exec() override;
 };

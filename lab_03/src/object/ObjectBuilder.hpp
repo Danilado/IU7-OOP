@@ -6,7 +6,7 @@
 
 class BaseObjectDirector {
 public:
-  virtual ObjectPtr create(BaseSource &src) = 0;
+  virtual std::unique_ptr<Object> create(BaseSource &src) = 0;
 };
 
 class BaseObjectBuilder {

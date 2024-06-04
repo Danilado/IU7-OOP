@@ -18,6 +18,7 @@ public:
   std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>>
   getIdEdges() const override;
   void addEdge(size_t id1, size_t id2) override;
+  std::unique_ptr<BaseModelData> clone() const override;
 };
 
 #endif

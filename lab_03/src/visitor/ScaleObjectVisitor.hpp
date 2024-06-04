@@ -10,8 +10,8 @@ class Object;
 
 class ScaleObjectVisitor : public BaseVisitor {
 private:
-  std::unique_ptr<TransformationMatrix> scales;
-  std::unique_ptr<TransformationMatrix> origin;
+  Point3D scale;
+  Point3D origin;
 
   void scale_object_around_origin(Object &ref);
 

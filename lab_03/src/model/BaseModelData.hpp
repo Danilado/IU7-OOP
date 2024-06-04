@@ -40,6 +40,7 @@ public:
   void addNode(Point3D &&pt);
 
   virtual void addEdge(size_t id1, size_t id2) = 0;
+  virtual std::unique_ptr<BaseModelData> clone() const = 0;
 };
 
 #endif

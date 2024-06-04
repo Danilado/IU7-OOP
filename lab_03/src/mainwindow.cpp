@@ -1,10 +1,15 @@
 #include "mainwindow.hpp"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include "DrawManager.hpp"
 #include "DrawerSolution.hpp"
+#include "Point3D.hpp"
 #include "QtDrawerFactory.hpp"
+#include "RenderCommand.hpp"
 #include "SingletonTemplate.hpp"
+
+
+#include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -34,4 +39,25 @@ void MainWindow::setupScene() {
   DrawManager &drawManager = Singleton<DrawManager>::instance();
   drawManager.setDrawer(drawer);
   drawManager.renderScene();
+}
+
+void MainWindow::updateScene() {
+  auto cmd = std::make_shared<RenderCommand>();
+  application.exec(cmd);
+}
+
+Point3D MainWindow::getOrigin() {
+  return Point3D(ui->ox->value(), ui->oy->value(), ui->oz->value());
+}
+
+Point3D MainWindow::getRotation() {
+  return Point3D(ui->ax->value(), ui->ay->value(), ui->az->value());
+}
+
+Point3D MainWindow::getScale() {
+  return Point3D(ui->kx->value(), ui->ky->value(), ui->kz->value());
+}
+
+Point3D MainWindow::getTranslation() {
+  return Point3D(ui->dx->value(), ui->dy->value(), ui->dz->value());
 }

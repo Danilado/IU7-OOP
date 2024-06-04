@@ -20,6 +20,7 @@ class WireframeModel : public BaseModel {
 
 public:
   void accept(BaseVisitor &vis) override;
+  std::unique_ptr<Object> clone() const override;
 };
 
 #endif

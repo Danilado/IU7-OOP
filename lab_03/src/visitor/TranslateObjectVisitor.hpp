@@ -10,7 +10,7 @@ class Object;
 
 class TranslateObjectVisitor : public BaseVisitor {
 private:
-  std::unique_ptr<TransformationMatrix> translation;
+  Point3D offset;
   void translate(Object &ref);
 
 public:

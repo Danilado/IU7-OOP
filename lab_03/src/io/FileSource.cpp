@@ -1,7 +1,7 @@
 #include "FileSource.hpp"
 #include <sstream>
 
-FileSource::FileSource(std::string &filename) {
+FileSource::FileSource(const std::string &filename) {
   stream = std::fstream(filename, std::fstream::in);
 }
 
@@ -23,7 +23,12 @@ std::string FileSource::readall() {
   while (std::getline(stream, line))
     buf << line;
 
+  reset();
+
   return buf.str();
 }
 
-void FileSource::reset() { stream.seekg(0, stream.beg); }
+void FileSource::reset() {
+  stream.clear();
+  stream.seekg(0, stream.beg);
+}

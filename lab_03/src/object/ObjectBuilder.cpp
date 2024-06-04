@@ -1,9 +1,10 @@
 #include "ObjectBuilder.hpp"
-#include "BaseJsonAdapter"
+#include "BaseJSONAdapter.hpp"
 #include "JsonAdapterSolution.hpp"
 #include <memory>
 
-std::unique_ptr<TransformationMatrix> buildTransformMatrix(BaseSource &src) {
+std::unique_ptr<TransformationMatrix>
+BaseObjectBuilder::buildTransformMatrix(BaseSource &src) {
   std::shared_ptr<BaseJsonAdapter> jsonAdapter =
       JsonAdapterSolution::createNlohmannJsonAdapter();
 

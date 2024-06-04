@@ -40,6 +40,8 @@ src/camera/ProjectionCamera.cpp
 src/command/DrawCommand/CleanCommand.cpp
 src/command/DrawCommand/RenderCommand.cpp
 
+src/command/IoCommand/LoadModelCommand.cpp
+
 src/command/SceneEditCommand/UndoCommand.cpp
 src/command/SceneEditCommand/RedoCommand.cpp
 src/command/SceneEditCommand/AddObjectCommand.cpp
@@ -53,6 +55,7 @@ src/drawer/QtDrawer.cpp
 src/drawer/QtDrawerFactory.cpp
 
 src/interact/KeyHandlers.cpp
+src/interact/Slots.cpp
 
 src/io/FileSource.cpp
 src/io/StringSource.cpp
@@ -66,11 +69,15 @@ src/jsonAdapter/nlohmannJSONAdapter.cpp
 
 src/object/Object.cpp
 src/object/ObjectComposite.cpp
+src/object/ObjectBuilder.cpp
+src/object/ObjectDirectorSolution.cpp
 
 src/manager/CameraManager.cpp
 src/manager/DrawManager.cpp
 src/manager/SceneManager.cpp
 src/manager/HistoryManager.cpp
+src/manager/IoManager.cpp
+src/manager/TransformManager.cpp
 
 src/math/Point2D.cpp
 src/math/Point3D.cpp
@@ -80,6 +87,8 @@ src/math/MyMath.cpp
 src/model/BaseModelData.cpp
 src/model/NodeEdgeListData.cpp
 src/model/AdjacencyListData.cpp
+src/model/WireframeModel.cpp
+src/model/WireframeBuilder.cpp
 
 src/scene/Scene.cpp
 
@@ -102,6 +111,9 @@ target_include_directories(main PUBLIC
 inc
 src/camera
 src/command
+src/command/DrawCommand
+src/command/IoCommand
+src/command/SceneEditCommand
 src/common
 src/drawer
 src/interact

@@ -3,7 +3,7 @@
 #include "StringSource.hpp"
 
 std::shared_ptr<BaseSource>
-SourceSolution::createFileSrc(std::string &filename) {
+SourceSolution::createFileSrc(const std::string &filename) {
   return std::make_shared<FileSource>(filename);
 }
 

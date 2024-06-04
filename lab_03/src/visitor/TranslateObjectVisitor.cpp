@@ -8,14 +8,11 @@
 
 void TranslateObjectVisitor::translate(Object &ref) {
   std::shared_ptr<TransformationMatrix> transf = ref.getTransformation();
-  translation->scale(0, 0, 0);
-  *transf += *translation;
+  transf->translate(offset);
 }
 
-TranslateObjectVisitor::TranslateObjectVisitor(double dx, double dy,
-                                               double dz) {
-  this->translation->translate(dx, dy, dz);
-}
+TranslateObjectVisitor::TranslateObjectVisitor(double dx, double dy, double dz)
+    : offset(dx, dy, dz) {}
 
 TranslateObjectVisitor::TranslateObjectVisitor(const Point3D &scale)
     : TranslateObjectVisitor(scale.get_x(), scale.get_y(), scale.get_z()) {}

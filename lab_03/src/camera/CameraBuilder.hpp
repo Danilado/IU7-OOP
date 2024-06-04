@@ -5,7 +5,7 @@
 
 class CameraDirector : public BaseObjectDirector {
 public:
-  ObjectPtr create(BaseSource &src) override;
+  std::unique_ptr<Object> create(BaseSource &src) override;
 };
 
 class CameraBuilder : public BaseObjectBuilder {};

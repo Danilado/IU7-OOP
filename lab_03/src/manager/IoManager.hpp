@@ -11,6 +11,9 @@
 class IoManager {
 private:
 public:
+  IoManager() = default;
+  ~IoManager() = default;
+
   void saveScene(const Scene &scene, BaseDestination &dst);
   std::unique_ptr<Scene> loadScene(BaseSource &src);
 

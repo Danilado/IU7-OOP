@@ -4,8 +4,6 @@
 #include "BaseDrawer.hpp"
 #include "BasePTSCAdapter.hpp"
 #include "BaseVisitor.hpp"
-#include "OrthoPTSCAdapter.hpp"
-#include "ProjPTSCAdapter.hpp"
 
 class PTSCSolutionVisitor : public BaseVisitor {
 private:

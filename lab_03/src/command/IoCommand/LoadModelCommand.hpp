@@ -4,6 +4,8 @@
 #include "IoCommand.hpp"
 
 class LoadModelCommand : public LoadCommand {
+public:
+  explicit LoadModelCommand(std::string source) : LoadCommand(source) {}
   void exec() override;
 };
 

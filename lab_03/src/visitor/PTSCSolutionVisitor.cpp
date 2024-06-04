@@ -1,4 +1,6 @@
 #include "PTSCSolutionVisitor.hpp"
+#include "OrthoPTSCAdapter.hpp"
+#include "ProjPTSCAdapter.hpp"
 
 void PTSCSolutionVisitor::visit(WireframeModel &ref) {}
 

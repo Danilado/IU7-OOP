@@ -1,4 +1,5 @@
 #include "CameraManager.hpp"
+#include "OrthogonalCamera.hpp"
 #include "PTSCSolutionVisitor.hpp"
 #include "ProjectionCamera.hpp"
 #include "SceneManager.hpp"
@@ -7,8 +8,8 @@
 CameraManager::CameraManager() {
   SceneManager &sm = Singleton<SceneManager>::instance();
 
-  std::shared_ptr<ProjectionCamera> defaultcam =
-      std::make_shared<ProjectionCamera>();
+  std::shared_ptr<OrthogonalCamera> defaultcam =
+      std::make_shared<OrthogonalCamera>();
   cam = defaultcam;
   id = sm.addObject(defaultcam);
 }

@@ -26,4 +26,7 @@ void JsonStringifyVisitor::visit(ProjectionCamera &ref) {
   ++visit_count;
 }
 
-void JsonStringifyVisitor::visit(Scene &ref) {}
+void JsonStringifyVisitor::visit(Scene &ref) {
+  for (auto &obj : ref)
+    obj.second->accept(*this);
+}

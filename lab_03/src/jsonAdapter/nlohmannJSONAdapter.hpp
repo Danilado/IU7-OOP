@@ -28,7 +28,7 @@ protected:
   JsonParseAdjacencyListData(BaseSource &src) override;
 
 public:
-  JsonObjDirectorSolution::TYPES JsonParseType(BaseSource &src) override;
+  ObjectDirectorSolution::types JsonParseType(BaseSource &src) override;
   std::unique_ptr<Scene> JsonParseScene(BaseSource &src) override;
   std::unique_ptr<TransformationMatrix>
   JsonParseTransformMatrix(BaseSource &src) override;

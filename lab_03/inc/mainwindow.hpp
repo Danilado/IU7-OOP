@@ -1,8 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "Point3D.hpp"
 #include "Scene.hpp"
 #include "app.hpp"
+#include <QErrorMessage>
+#include <QFileDialog>
 #include <QGraphicsScene>
 #include <QMainWindow>
 
@@ -25,7 +28,23 @@ private:
   std::shared_ptr<QGraphicsScene> scene;
 
   void setupScene();
+  void updateScene();
   void keyPressEvent(QKeyEvent *e) override;
   void handleKey(Qt::Key key);
+
+  Point3D getOrigin();
+  Point3D getRotation();
+  Point3D getScale();
+  Point3D getTranslation();
+
+private slots:
+  void on_load_model_clicked();
+  void on_translate_clicked();
+  void on_translate_all_clicked();
+  void on_scale_clicked();
+  void on_scale_all_clicked();
+  void on_rotate_clicked();
+  void on_rotate_all_clicked();
+  void on_save_model_clicked();
 };
 #endif // MAINWINDOW_H

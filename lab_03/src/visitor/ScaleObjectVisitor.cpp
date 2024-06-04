@@ -8,31 +8,23 @@
 
 void ScaleObjectVisitor::scale_object_around_origin(Object &ref) {
   std::shared_ptr<TransformationMatrix> transf = ref.getTransformation();
-  origin->scale(0, 0, 0);
-  *transf -= *origin;
-  *transf *= *scales;
-  *transf += *origin;
+  transf->translate(-origin);
+  transf->scale(scale);
+  transf->translate(origin);
 }
 
-ScaleObjectVisitor::ScaleObjectVisitor(double kx, double ky, double kz) {
-  this->scales->scale(kx, ky, kz);
-}
+ScaleObjectVisitor::ScaleObjectVisitor(double kx, double ky, double kz)
+    : scale(kz, ky, kz) {}
 
 ScaleObjectVisitor::ScaleObjectVisitor(double ox, double oy, double oz,
                                        double kx, double ky, double kz)
-    : ScaleObjectVisitor(kx, ky, kz) {
-  origin->translate(ox, oy, oz);
-}
+    : scale(kx, ky, kz), origin(ox, oy, oz) {}
 
-ScaleObjectVisitor::ScaleObjectVisitor(const Point3D &scale) {
-  this->scales->scale(scale.get_x(), scale.get_y(), scale.get_z());
-}
+ScaleObjectVisitor::ScaleObjectVisitor(const Point3D &scale) : scale(scale) {}
 
 ScaleObjectVisitor::ScaleObjectVisitor(const Point3D &offset,
                                        const Point3D &scale)
-    : ScaleObjectVisitor(scale) {
-  origin->translate(offset);
-}
+    : origin(offset), scale(scale) {}
 
 void ScaleObjectVisitor::visit(WireframeModel &ref) {
   scale_object_around_origin(ref);

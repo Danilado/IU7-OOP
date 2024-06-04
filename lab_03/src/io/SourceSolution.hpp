@@ -6,7 +6,7 @@
 
 class SourceSolution {
 public:
-  static std::shared_ptr<BaseSource> createFileSrc(std::string &filename);
+  static std::shared_ptr<BaseSource> createFileSrc(const std::string &filename);
   static std::shared_ptr<BaseSource>
   createStringSrc(std::shared_ptr<std::string> src);
 };

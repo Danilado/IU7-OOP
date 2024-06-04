@@ -9,39 +9,29 @@
 
 void RotateObjectVisitor::rotate_object_around_origin(Object &ref) {
   std::shared_ptr<TransformationMatrix> transf = ref.getTransformation();
-  origin->scale(0, 0, 0);
-  *transf -= *origin;
-  *transf *= *rotation;
-  *transf += *origin;
+  transf->translate(-origin);
+  if (deg)
+    transf->rotate_deg(rotation);
+  else
+    transf->rotate(rotation);
+  transf->translate(origin);
 }
 
 RotateObjectVisitor::RotateObjectVisitor(double ax, double ay, double az,
-                                         bool deg) {
-  if (deg)
-    rotation->rotate_deg(ax, ay, az);
-  else
-    rotation->rotate(ax, ay, az);
-}
+                                         bool deg)
+    : rotation(ax, ay, az), deg(deg) {}
 
 RotateObjectVisitor::RotateObjectVisitor(double ox, double oy, double oz,
                                          double ax, double ay, double az,
                                          bool deg)
-    : RotateObjectVisitor(ax, ay, az, deg) {
-  origin->translate(ox, oy, oz);
-}
+    : rotation(ax, ay, az), origin(ox, oy, oz), deg(deg) {}
 
-RotateObjectVisitor::RotateObjectVisitor(const Point3D &angles, bool deg) {
-  if (deg)
-    rotation->rotate_deg(angles);
-  else
-    rotation->rotate(angles);
-}
+RotateObjectVisitor::RotateObjectVisitor(const Point3D &angles, bool deg)
+    : rotation(angles), deg(deg) {}
 
 RotateObjectVisitor::RotateObjectVisitor(const Point3D &origin,
                                          const Point3D &angles, bool deg)
-    : RotateObjectVisitor(angles, deg) {
-  this->origin->translate(origin);
-}
+    : origin(origin), rotation(angles), deg(deg) {}
 
 void RotateObjectVisitor::visit(WireframeModel &ref) {
   rotate_object_around_origin(ref);

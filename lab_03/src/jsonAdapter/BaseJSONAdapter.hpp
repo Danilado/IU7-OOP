@@ -14,22 +14,19 @@ class BaseModelData;
 #include <memory>
 #include <string>
 
-class JsonObjDirectorSolution {
-public:
-  enum class TYPES { WIREFRAME, ORTHOCAM, PROJCAM };
-};
+#include "ObjectDirectorSolution.hpp"
 
 class BaseJsonAdapter {
 protected:
   virtual std::string
   JsonStringifyTransformMatrix(TransformationMatrix &transform) = 0;
 
-  virtual JsonObjDirectorSolution::TYPES get_type(std::string key);
+  virtual ObjectDirectorSolution::types get_type(std::string key);
 
-  std::map<std::string, JsonObjDirectorSolution::TYPES> stmap{
-      {"WireframeModel", JsonObjDirectorSolution::TYPES::WIREFRAME},
-      {"OrthogonalCamera", JsonObjDirectorSolution::TYPES::ORTHOCAM},
-      {"ProjectionCamera", JsonObjDirectorSolution::TYPES::PROJCAM}};
+  std::map<std::string, ObjectDirectorSolution::types> stmap{
+      {"WireframeModel", ObjectDirectorSolution::types::WIREFRAME},
+      {"OrthogonalCamera", ObjectDirectorSolution::types::ORTHOCAM},
+      {"ProjectionCamera", ObjectDirectorSolution::types::PROJCAM}};
 
   virtual std::unique_ptr<BaseModelData>
   JsonParseNodeEdgeListData(BaseSource &src) = 0;
@@ -40,7 +37,7 @@ protected:
   virtual std::string JsonStringifyObjData(BaseModelData &data) = 0;
 
 public:
-  virtual JsonObjDirectorSolution::TYPES JsonParseType(BaseSource &src) = 0;
+  virtual ObjectDirectorSolution::types JsonParseType(BaseSource &src) = 0;
   virtual std::unique_ptr<Scene> JsonParseScene(BaseSource &src) = 0;
 
   virtual std::unique_ptr<BaseModelData> JsonParseObjData(BaseSource &src) = 0;

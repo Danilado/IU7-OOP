@@ -6,6 +6,7 @@
 #include "Scene.hpp"
 #include "StringDestination.hpp"
 #include "WireframeModel.hpp"
+#include <QDebug>
 #include <array>
 #include <tuple>
 #include <vector>
@@ -28,9 +29,10 @@ std::string NlohmannJsonAdapter::JsonStringifyTransformMatrix(
   return transmatjson.dump();
 }
 
-JsonObjDirectorSolution::TYPES
+ObjectDirectorSolution::types
 NlohmannJsonAdapter::JsonParseType(BaseSource &src) {
   src.reset();
+
   auto data = json::parse(src.readall());
 
   std::string key;
@@ -62,6 +64,7 @@ void NlohmannJsonAdapter::validateJTransMat(
 std::unique_ptr<TransformationMatrix>
 NlohmannJsonAdapter::JsonParseTransformMatrix(BaseSource &src) {
   src.reset();
+
   std::unique_ptr<TransformationMatrix> res =
       std::make_unique<TransformationMatrix>();
 
@@ -109,6 +112,23 @@ std::unique_ptr<Scene> NlohmannJsonAdapter::JsonParseScene(BaseSource &src) {
 std::unique_ptr<BaseModelData>
 NlohmannJsonAdapter::JsonParseObjData(BaseSource &src) {
   src.reset();
+  auto data = json::parse(src.readall());
+  data = data.at("data");
+  std::string type;
+  try {
+    type = data.at("type").get<std::string>();
+  } catch (const json::out_of_range &e) {
+    // TODO: add handlers
+  } catch (const json::type_error &e) {
+    // TODO: add handlers
+  }
+
+  if (type == "NodeEdgeListData") {
+    return std::move(JsonParseNodeEdgeListData(src));
+  } else if (type == "AdjacencyListData") {
+  } else
+    throw std::exception(); // add custom exceptions
+
   return nullptr;
 }
 

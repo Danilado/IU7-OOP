@@ -16,6 +16,8 @@ public:
 
   double get_z() const noexcept;
   void set_z(double n) noexcept;
+
+  Point3D operator-() const;
 };
 
 #endif

@@ -10,8 +10,9 @@ class Object;
 
 class RotateObjectVisitor : public BaseVisitor {
 private:
-  std::unique_ptr<TransformationMatrix> rotation;
-  std::unique_ptr<TransformationMatrix> origin;
+  Point3D rotation;
+  Point3D origin;
+  bool deg;
 
   void rotate_object_around_origin(Object &ref);
 

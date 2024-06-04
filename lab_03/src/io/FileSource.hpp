@@ -12,7 +12,7 @@ private:
 
 public:
   FileSource() = delete;
-  explicit FileSource(std::string &filename);
+  explicit FileSource(const std::string &filename);
   ~FileSource() = default;
 
   std::string read(size_t bytes = 0) override;

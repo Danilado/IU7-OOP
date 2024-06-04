@@ -7,6 +7,7 @@
 class OrthogonalCamera : public BaseCamera {
 public:
   void accept(BaseVisitor &vis) override;
+  std::unique_ptr<Object> clone() const override;
 };
 
 #endif

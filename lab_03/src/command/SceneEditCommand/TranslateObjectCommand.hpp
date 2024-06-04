@@ -7,20 +7,15 @@
 
 class TranslateObjectCommand : public SceneEditCommand {
 private:
-  std::shared_ptr<TranslateObjectVisitor> vis;
+  Point3D offset;
   size_t target;
-
-  void transform_target();
-  void transform_all();
 
 public:
   TranslateObjectCommand(double dx, double dy, double dz, size_t target_id = 0)
-      : vis(std::make_shared<TranslateObjectVisitor>(dx, dy, dz)),
-        target(target_id) {}
+      : offset(dx, dy, dz), target(target_id) {}
 
   TranslateObjectCommand(Point3D &offset, size_t target_id = 0)
-      : vis(std::make_shared<TranslateObjectVisitor>(offset)),
-        target(target_id) {}
+      : offset(offset), target(target_id) {}
 
   void exec() override;
 };

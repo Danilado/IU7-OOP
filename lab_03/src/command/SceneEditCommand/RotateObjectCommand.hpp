@@ -7,31 +7,27 @@
 
 class RotateObjectCommand : public SceneEditCommand {
 private:
-  std::shared_ptr<RotateObjectVisitor> vis;
-  size_t target;
+  Point3D origin;
+  Point3D rotation;
+  bool deg;
 
-  void transform_target();
-  void transform_all();
+  size_t target;
 
 public:
   RotateObjectCommand(double ox, double oy, double oz, double ax, double ay,
                       double az, size_t target_id = 0, bool deg = false)
-      : vis(std::make_shared<RotateObjectVisitor>(ox, oy, oz, ax, ay, az, deg)),
-        target(target_id) {}
+      : origin(oz, oy, oz), rotation(ax, ay, az), target(target_id), deg(deg) {}
 
   RotateObjectCommand(double ax, double ay, double az, size_t target_id = 0,
                       bool deg = false)
-      : vis(std::make_shared<RotateObjectVisitor>(ax, ay, az, deg)),
-        target(target_id) {}
+      : rotation(ax, ay, az), target(target_id), deg(deg) {}
 
   RotateObjectCommand(Point3D &angles, size_t target_id = 0, bool deg = false)
-      : vis(std::make_shared<RotateObjectVisitor>(angles, deg)),
-        target(target_id) {}
+      : rotation(angles), target(target_id), deg(deg) {}
 
   RotateObjectCommand(Point3D &origin, Point3D &angles, size_t target_id = 0,
                       bool deg = false)
-      : vis(std::make_shared<RotateObjectVisitor>(origin, angles, deg)),
-        target(target_id) {}
+      : origin(origin), rotation(angles), target(target_id), deg(deg) {}
 
   void exec() override;
 };
