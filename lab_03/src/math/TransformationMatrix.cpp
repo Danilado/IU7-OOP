@@ -1,5 +1,6 @@
 #include "TransformationMatrix.hpp"
 #include "MyMath.hpp"
+#include <QDebug>
 
 TransformationMatrix::TransformationMatrix() { reset(); }
 
@@ -29,12 +30,11 @@ void TransformationMatrix::translate(const Point3D &pt) noexcept {
 
 void TransformationMatrix::scale(const double kx, const double ky,
                                  const double kz) noexcept {
-  transform[0][0] *= kx;
-  transform[1][1] *= ky;
-  transform[2][2] *= kz;
-  transform[0][dim] *= kx;
-  transform[1][dim] *= ky;
-  transform[2][dim] *= kz;
+  TransformationMatrix tmp{};
+  tmp.transform[0][0] = kx;
+  tmp.transform[1][1] = ky;
+  tmp.transform[2][2] = kz;
+  this->transform = (tmp * (*this)).transform;
 }
 
 void TransformationMatrix::scale(const Point3D &pt) noexcept {
@@ -147,8 +147,10 @@ TransformationMatrix TransformationMatrix::get_rotated_around_z(double angle) {
 
 void TransformationMatrix::rotate(const double ax, const double ay,
                                   const double az) {
-  (*this) *= (get_rotated_around_x(ax) * get_rotated_around_y(ay) *
-              get_rotated_around_z(az));
+  this->transform = ((get_rotated_around_x(ax) * get_rotated_around_y(ay) *
+                      get_rotated_around_z(az)) *
+                     (*this))
+                        .transform;
 }
 
 void TransformationMatrix::rotate(const Point3D &pt) {
@@ -184,8 +186,8 @@ TransformationMatrix
 TransformationMatrix::operator*(const TransformationMatrix &other) const {
   TransformationMatrix res{};
 
-  for (size_t i = 0; i < dim; ++i)
-    for (size_t j = 0; j < dim; ++j)
+  for (size_t i = 0; i <= dim; ++i)
+    for (size_t j = 0; j <= dim; ++j)
       res.transform[i][j] = get_mul_cell(other, i, j);
 
   return res;
