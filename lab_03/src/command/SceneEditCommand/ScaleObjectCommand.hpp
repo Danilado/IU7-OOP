@@ -17,7 +17,7 @@ public:
       : origin(ox, oy, oz), scale(kx, ky, kz), target(target_id) {}
 
   ScaleObjectCommand(double kx, double ky, double kz, size_t target_id = 0)
-      : ScaleObjectCommand(0., 0., 0., kx, ky, kz, target) {}
+      : ScaleObjectCommand(0., 0., 0., kx, ky, kz, target_id) {}
 
   ScaleObjectCommand(Point3D &origin, Point3D &scales, size_t target_id = 0)
       : origin(origin), scale(scales), target(target_id) {}

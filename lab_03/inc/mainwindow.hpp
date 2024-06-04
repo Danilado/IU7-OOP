@@ -37,6 +37,10 @@ private:
   Point3D getScale();
   Point3D getTranslation();
 
+  void zoomCamera(double coeff);
+  void moveCamera(double dx, double dy, double dz);
+  void rotateCamera(double ax, double ay, double az);
+
 private slots:
   void on_load_model_clicked();
   void on_translate_clicked();

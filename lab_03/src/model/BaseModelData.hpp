@@ -18,7 +18,7 @@ public:
   public:
     IdEdge() = default;
     IdEdge(size_t id1, size_t id2) : id1(id1), id2(id2) {}
-    ~IdEdge() = default;
+    virtual ~IdEdge() = default;
 
     size_t getFirstId(void) const noexcept;
     size_t getSecondId(void) const noexcept;

@@ -71,6 +71,8 @@ public:
   TransformationMatrix &operator-=(const TransformationMatrix &other);
 
   TransformationMatrix operator-() const;
+
+  TransformationMatrix getOffset() const;
 };
 
 class TranslationMatrix : public TransformationMatrix {

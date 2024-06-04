@@ -33,7 +33,7 @@ void MainWindow::on_load_model_clicked() {
 void MainWindow::on_translate_clicked() {
   Point3D translation = getTranslation();
   std::shared_ptr<TranslateObjectCommand> cmd =
-      std::make_shared<TranslateObjectCommand>(translation);
+      std::make_shared<TranslateObjectCommand>(translation, 2);
   application.exec(cmd);
   updateScene();
 }
@@ -41,7 +41,7 @@ void MainWindow::on_translate_clicked() {
 void MainWindow::on_translate_all_clicked() {
   Point3D translation = getTranslation();
   std::shared_ptr<TranslateObjectCommand> cmd =
-      std::make_shared<TranslateObjectCommand>(translation);
+      std::make_shared<TranslateObjectCommand>(translation, 0);
   application.exec(cmd);
   updateScene();
 }
@@ -50,7 +50,7 @@ void MainWindow::on_scale_clicked() {
   Point3D origin = getOrigin();
   Point3D scale = getScale();
   std::shared_ptr<ScaleObjectCommand> cmd =
-      std::make_shared<ScaleObjectCommand>(origin, scale);
+      std::make_shared<ScaleObjectCommand>(origin, scale, 2);
   application.exec(cmd);
   updateScene();
 }
@@ -59,7 +59,7 @@ void MainWindow::on_scale_all_clicked() {
   Point3D origin = getOrigin();
   Point3D scale = getScale();
   std::shared_ptr<ScaleObjectCommand> cmd =
-      std::make_shared<ScaleObjectCommand>(origin, scale);
+      std::make_shared<ScaleObjectCommand>(origin, scale, 0);
   application.exec(cmd);
   updateScene();
 }
@@ -68,7 +68,7 @@ void MainWindow::on_rotate_clicked() {
   Point3D origin = getOrigin();
   Point3D rotation = getRotation();
   std::shared_ptr<RotateObjectCommand> cmd =
-      std::make_shared<RotateObjectCommand>(origin, rotation, 0, true);
+      std::make_shared<RotateObjectCommand>(origin, rotation, 2, true);
   application.exec(cmd);
   updateScene();
 }

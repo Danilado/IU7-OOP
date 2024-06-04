@@ -1,6 +1,5 @@
 #include "TransformationMatrix.hpp"
 #include "MyMath.hpp"
-#include <QDebug>
 
 TransformationMatrix::TransformationMatrix() { reset(); }
 
@@ -252,18 +251,29 @@ TransformationMatrix TransformationMatrix::operator-() const {
 
 TranslationMatrix::TranslationMatrix(const double dx, const double dy,
                                      const double dz) {
+  reset();
   this->translate(dx, dy, dz);
 }
 
 ScalingMatrix::ScalingMatrix(const double kx, const double ky,
                              const double kz) {
+  reset();
   this->scale(kx, ky, kz);
 }
 
 RotationMatrix::RotationMatrix(const double ax, const double ay,
                                const double az, bool deg) {
+  reset();
   if (deg)
     this->rotate_deg(ax, ay, az);
   else
     this->rotate(ax, ay, az);
+}
+
+TransformationMatrix TransformationMatrix::getOffset() const {
+  TransformationMatrix res{};
+
+  res.translate(transform[0][dim], transform[1][dim], transform[2][dim]);
+
+  return res;
 }
