@@ -19,6 +19,8 @@ public:
 
   IoManager(const IoManager &) = delete;
   IoManager &operator=(const IoManager &) = delete;
+
+  std::unique_ptr<Object> loadObject(const std::string &filename);
 };
 
 #endif

@@ -61,6 +61,7 @@ src/io/StringDestination.cpp
 src/io/SourceSolution.cpp
 src/io/DestinationSolution.cpp
 
+src/jsonAdapter/JsonAdapterSolution.cpp
 src/jsonAdapter/nlohmannJSONAdapter.cpp
 
 src/object/Object.cpp
@@ -96,6 +97,7 @@ src/jsonAdapter/nlohmannJSONAdapter.cpp
 src/mainwindow.cpp
 ui/mainwindow.ui
 ${HEADER_LIST})
+
 target_include_directories(main PUBLIC
 inc
 src/camera
@@ -113,14 +115,12 @@ src/visitor
 src/math
 external/nlohmann_json/single_include/nlohmann/
 )
+
 target_link_libraries(main PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_compile_features(main PUBLIC cxx_std_20)
 
 set(PROJECT_SOURCES
-
-
 src/mainwindow.cpp
-
 ui/mainwindow.ui
 )
 

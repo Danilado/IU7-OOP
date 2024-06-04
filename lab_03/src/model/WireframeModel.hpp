@@ -8,6 +8,7 @@ class RotateObjectVisitor;
 class ScaleObjectVisitor;
 class TransformObjectVisitor;
 class TranslateObjectVisitor;
+class WireframeModelDirector;
 
 class WireframeModel : public BaseModel {
   friend RenderVisitor;
@@ -15,6 +16,7 @@ class WireframeModel : public BaseModel {
   friend ScaleObjectVisitor;
   friend TransformObjectVisitor;
   friend TranslateObjectVisitor;
+  friend WireframeModelDirector;
 
 public:
   void accept(BaseVisitor &vis) override;

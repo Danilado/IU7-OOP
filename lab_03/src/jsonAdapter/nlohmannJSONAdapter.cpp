@@ -71,7 +71,7 @@ NlohmannJsonAdapter::JsonParseTransformMatrix(BaseSource &src) {
   }
 
   if (type != "TransformationMatrix")
-    throw std::exception(); // add custom exceptions
+    data = data.at("transform"); // add custom exceptions
 
   std::vector<std::vector<double>> jtransmat;
   try {
@@ -148,5 +148,6 @@ NlohmannJsonAdapter::JsonParseAdjacencyListData(BaseSource &src) {
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyObjData(BaseModelData &data) {
-  return "";
+  json res = {{"type", "NodeEdgeListData"}};
+  res["nodes"] =
 }
