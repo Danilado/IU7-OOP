@@ -33,7 +33,7 @@ public:
 private:
   Ui::MainWindow *ui;
   App application;
-  SceneDataHelper sdh;
+  std::shared_ptr<SceneDataHelper> sdh;
   std::shared_ptr<QGraphicsScene> scene;
 
   void showError(const char *str);

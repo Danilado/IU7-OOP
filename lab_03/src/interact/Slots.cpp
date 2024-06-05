@@ -52,7 +52,7 @@ void MainWindow::on_load_model_clicked() {
 
   try {
     application.exec(cmd);
-    sdh.addModel(resid, "WireframeModel " + std::to_string(resid));
+    sdh->addModel(resid, "WireframeModel " + std::to_string(resid));
   } catch (const std::exception &e) {
     showError(e.what());
   }
@@ -169,7 +169,7 @@ void MainWindow::on_load_cam_clicked() {
 
   try {
     application.exec(cmd);
-    sdh.addCamera(resid, "Camera " + std::to_string(resid));
+    sdh->addCamera(resid, "Camera " + std::to_string(resid));
   } catch (const std::exception &e) {
     showError(e.what());
   }
@@ -198,7 +198,7 @@ void MainWindow::on_remove_model_clicked() {
 
   try {
     application.exec(cmd);
-    sdh.removeModel(oid);
+    sdh->removeModel(oid);
   } catch (const std::exception &e) {
     showError(e.what());
   }
@@ -207,7 +207,7 @@ void MainWindow::on_remove_model_clicked() {
 }
 
 void MainWindow::on_remove_cam_clicked() {
-  if (sdh.getCamLength() < 2)
+  if (sdh->getCamLength() < 2)
     return;
 
   qDebug() << "remove camera";
@@ -218,7 +218,7 @@ void MainWindow::on_remove_cam_clicked() {
 
   try {
     application.exec(cmd);
-    sdh.removeCamera(cid);
+    sdh->removeCamera(cid);
   } catch (const std::exception &e) {
     showError(e.what());
   }

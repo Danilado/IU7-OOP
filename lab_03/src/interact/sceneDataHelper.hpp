@@ -11,13 +11,13 @@ class SceneDataHelper {
 private:
   std::map<size_t, std::string> objects;
   std::set<size_t> cameras;
-  MainWindow *mw;
+  MainWindow &mw;
 
   void addObject(size_t id, const std::string &meta);
   void removeObject(size_t id);
 
 public:
-  SceneDataHelper(MainWindow *mw);
+  SceneDataHelper(MainWindow &mw);
   ~SceneDataHelper() = default;
 
   void addModel(size_t id, const std::string &meta);

@@ -12,14 +12,18 @@
 #include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), sdh(this) {
+    : QMainWindow(parent), ui(new Ui::MainWindow) {
   this->setFocusPolicy(Qt::StrongFocus);
   ui->setupUi(this);
   setupScene();
-  sdh.addCamera(1, "Camera 1");
+  sdh = std::make_shared<SceneDataHelper>(*this);
+  sdh->addCamera(1, "Camera 1");
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+  scene.reset();
+  delete ui;
+}
 
 void MainWindow::setupScene() {
   ui->graphicsView->setFrameShape(QFrame::NoFrame);
@@ -68,12 +72,12 @@ Point3D MainWindow::getTranslation() {
 }
 
 void MainWindow::addModelToBox(size_t id, const std::string &name) {
-  ui->modelbox->addItem(QString::fromStdString(name), id);
+  ui->modelbox->addItem(QString::fromStdString(name), int(id));
   ui->modelbox->setCurrentIndex(ui->modelbox->count() - 1);
 }
 
 void MainWindow::addCameraToBox(size_t id, const std::string &name) {
-  ui->cambox->addItem(QString::fromStdString(name), id);
+  ui->cambox->addItem(QString::fromStdString(name), int(id));
   ui->cambox->setCurrentIndex(ui->cambox->count() - 1);
 }
 
