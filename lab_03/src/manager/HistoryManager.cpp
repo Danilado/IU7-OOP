@@ -1,4 +1,5 @@
 #include "HistoryManager.hpp"
+#include "BaseException.hpp"
 #include "SceneManager.hpp"
 #include "SingletonTemplate.hpp"
 
@@ -21,7 +22,9 @@ void HistoryManager::save(size_t object_id) {
 
 void HistoryManager::undo(size_t object_id) {
   if (!past->contains(object_id))
-    throw std::exception(); // TODO: add custon exceptions
+    throw myException(BaseException, "undo",
+                      "Object with id " + std::to_string(object_id) +
+                          " not found in history");
 
   SceneManager &sm = Singleton<SceneManager>::instance();
   std::shared_ptr<Scene> scene = sm.getScene();
@@ -36,7 +39,9 @@ void HistoryManager::undo(size_t object_id) {
 
 void HistoryManager::redo(size_t object_id) {
   if (!future->contains(object_id))
-    throw std::exception(); // TODO: add custon exceptions
+    throw myException(BaseException, "undo",
+                      "Object with id " + std::to_string(object_id) +
+                          " not found in future history");
   save(object_id);
 
   SceneManager &sm = Singleton<SceneManager>::instance();

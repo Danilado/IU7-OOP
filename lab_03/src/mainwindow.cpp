@@ -7,6 +7,7 @@
 #include "QtDrawerFactory.hpp"
 #include "RenderCommand.hpp"
 #include "SingletonTemplate.hpp"
+#include <QMessageBox>
 
 #include <cstring>
 
@@ -42,8 +43,12 @@ void MainWindow::setupScene() {
 }
 
 void MainWindow::updateScene() {
-  auto cmd = std::make_shared<RenderCommand>();
-  application.exec(cmd);
+  try {
+    auto cmd = std::make_shared<RenderCommand>();
+    application.exec(cmd);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 }
 
 Point3D MainWindow::getOrigin() {
@@ -83,3 +88,7 @@ void MainWindow::removeCameraFromBox() {
 size_t MainWindow::getObjId() { return ui->modelbox->currentData().toInt(); }
 
 size_t MainWindow::getCamId() { return ui->cambox->currentData().toInt(); }
+
+void MainWindow::showError(const char *str) {
+  QMessageBox::critical(nullptr, "Ошибка", QString(str));
+}

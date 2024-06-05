@@ -36,6 +36,8 @@ private:
   SceneDataHelper sdh;
   std::shared_ptr<QGraphicsScene> scene;
 
+  void showError(const char *str);
+
   void setupScene();
   void updateScene();
   void keyPressEvent(QKeyEvent *e) override;

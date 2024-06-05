@@ -3,7 +3,8 @@
 double OrthoPTSCAdapter::shadyExpFunc(double x) {
   if (x >= 1)
     return x;
-  return exp(x / 2.71828);
+
+  return exp((x - 1) / 2.71828);
 }
 
 std::shared_ptr<Point2D> OrthoPTSCAdapter::convert(const Point3D &pt) {

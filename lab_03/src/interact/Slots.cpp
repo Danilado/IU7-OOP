@@ -22,11 +22,14 @@ void MainWindow::on_save_model_clicked() {
   char *buf = (char *)calloc(filename.length() + 1, sizeof(char));
   if (buf == nullptr)
     return;
-
   strcpy(buf, filename.toLocal8Bit().data());
 
-  auto cmd = std::make_shared<SaveModelCommand>(std::string(buf), getObjId());
-  application.exec(cmd);
+  try {
+    auto cmd = std::make_shared<SaveModelCommand>(std::string(buf), getObjId());
+    application.exec(cmd);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 }
 
 void MainWindow::on_load_model_clicked() {
@@ -47,9 +50,12 @@ void MainWindow::on_load_model_clicked() {
   // auto cmd = std::make_shared<LoadModelCommand>(
   //     "D:\\develop\\IU7-OOP\\lab_03\\models\\cubeincude.json");
 
-  application.exec(cmd);
-
-  sdh.addModel(resid, "WireframeModel " + std::to_string(resid));
+  try {
+    application.exec(cmd);
+    sdh.addModel(resid, "WireframeModel " + std::to_string(resid));
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 
   updateScene();
 }
@@ -136,8 +142,13 @@ void MainWindow::on_save_cam_clicked() {
 
   strcpy(buf, filename.toLocal8Bit().data());
 
-  auto cmd = std::make_shared<SaveCameraCommand>(std::string(buf), getCamId());
-  application.exec(cmd);
+  try {
+    auto cmd =
+        std::make_shared<SaveCameraCommand>(std::string(buf), getCamId());
+    application.exec(cmd);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 }
 
 void MainWindow::on_load_cam_clicked() {
@@ -156,16 +167,23 @@ void MainWindow::on_load_cam_clicked() {
 
   auto cmd = std::make_shared<LoadCameraCommand>(std::string(buf), resid);
 
-  application.exec(cmd);
-
-  sdh.addCamera(resid, "Camera " + std::to_string(resid));
+  try {
+    application.exec(cmd);
+    sdh.addCamera(resid, "Camera " + std::to_string(resid));
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 
   updateScene();
 }
 
 void MainWindow::on_cambox_currentIndexChanged(int index) {
   auto cmd = std::make_shared<SetCameraCommand>(getCamId());
-  application.exec(cmd);
+  try {
+    application.exec(cmd);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
   updateScene();
 }
 
@@ -177,9 +195,13 @@ void MainWindow::on_remove_model_clicked() {
   qDebug() << "remove model";
 
   auto cmd = std::make_shared<RemoveObjectCommand>(oid);
-  application.exec(cmd);
 
-  sdh.removeModel(oid);
+  try {
+    application.exec(cmd);
+    sdh.removeModel(oid);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 
   updateScene();
 }
@@ -193,9 +215,13 @@ void MainWindow::on_remove_cam_clicked() {
   size_t cid = getCamId();
 
   auto cmd = std::make_shared<RemoveObjectCommand>(cid);
-  application.exec(cmd);
 
-  sdh.removeCamera(cid);
+  try {
+    application.exec(cmd);
+    sdh.removeCamera(cid);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
 
   updateScene();
 }

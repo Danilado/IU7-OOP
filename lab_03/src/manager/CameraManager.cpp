@@ -1,4 +1,5 @@
 #include "CameraManager.hpp"
+#include "BaseException.hpp"
 #include "OrthogonalCamera.hpp"
 #include "PTSCSolutionVisitor.hpp"
 #include "ProjectionCamera.hpp"
@@ -19,11 +20,14 @@ void CameraManager::setCamera(size_t id) {
 
   ObjectPtr objp = sm.getScene()->getObject(id);
   if (objp == nullptr) {
-    throw std::exception(); // todo: add custom exceptoion
+    throw myException(BaseException, "setCamera",
+                      "Object with id " + std::to_string(id) + " not found");
   }
 
   if (dynamic_cast<const BaseCamera *>(objp.get()) == nullptr)
-    return; // TODO: add exception;
+    throw myException(BaseException, "setCamera",
+                      "Object with id " + std::to_string(id) +
+                          " is not a camera");
 
   cam = objp;
   this->id = id;

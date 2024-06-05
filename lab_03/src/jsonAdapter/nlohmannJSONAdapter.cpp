@@ -1,4 +1,5 @@
 #include "nlohmannJSONAdapter.hpp"
+#include "BaseException.hpp"
 #include "BaseModelData.hpp"
 #include "NodeEdgeListData.hpp"
 #include "OrthogonalCamera.hpp"
@@ -10,6 +11,9 @@
 #include <array>
 #include <tuple>
 #include <vector>
+
+// TODO: Refactor everything
+// INCLUDING EXCEPTION HANDLING
 
 std::string NlohmannJsonAdapter::JsonStringifyTransformMatrix(
     TransformationMatrix &transform) {
@@ -41,9 +45,13 @@ NlohmannJsonAdapter::JsonParseType(BaseSource &src) {
     json::reference datatype = data.at("type");
     key = datatype.get_ref<json::string_t &>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(
+        BaseException, "JsonParseType",
+        "Не удалось определить тип объекта\nПоле type не найдено");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(
+        BaseException, "JsonParseType",
+        "Не удалось определить тип объекта\nПоле type не является строкой");
   }
 
   return get_type(key);
@@ -52,13 +60,15 @@ NlohmannJsonAdapter::JsonParseType(BaseSource &src) {
 void NlohmannJsonAdapter::validateJTransMat(
     std::vector<std::vector<double>> &transmat) {
   if (transmat.size() != TransformationMatrix::dim + 1)
-    throw std::exception();
+    throw myException(BaseException, "validateJTransMat",
+                      "Число строк матрицы трансформации в файле некорректно");
   for (size_t i = 0; i < TransformationMatrix::dim + 1; ++i) {
     if (transmat[i].size() != TransformationMatrix::dim + 1)
-      throw std::exception();
+      throw myException(
+          BaseException, "validateJTransMat",
+          "Число столбцов на " + std::to_string(i) +
+              " строке матрицы трансформации в файле некорректно");
   }
-
-  // todo: add custom exceptions
 }
 
 std::unique_ptr<TransformationMatrix>
@@ -74,25 +84,33 @@ NlohmannJsonAdapter::JsonParseTransformMatrix(BaseSource &src) {
   try {
     type = data.at("type").get<std::string>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseTransformMatrix",
+                      "У считываемого объекта не обнаружено поле type");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseTransformMatrix",
+                      "Поле type считываемого объекта не является строкой");
   }
 
   if (type != "TransformationMatrix")
     try {
       data = data.at("transform"); // add custom exceptions
     } catch (const json::out_of_range &e) {
-      // TODO: add handlers
+      throw myException(
+          BaseException, "JsonParseTransformMatrix",
+          "Переданный объект не является матрицей трансформации\n(Тип не "
+          "совпал, а поле transform отсутствует)");
     }
 
   std::vector<std::vector<double>> jtransmat;
   try {
     jtransmat = data.at("data").get<std::vector<std::vector<double>>>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(
+        BaseException, "JsonParseTransformMatrix",
+        "У матрицы трансформации в файле не обнаружено поле data");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseTransformMatrix",
+                      "Поле data матрицы трансформации в файле некорректно");
   }
 
   validateJTransMat(jtransmat);
@@ -118,9 +136,11 @@ NlohmannJsonAdapter::JsonParseObjData(BaseSource &src) {
   try {
     type = data.at("type").get<std::string>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseObjData",
+                      "У считываемого объекта не обнаружено поле type");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseObjData",
+                      "Поле type считываемого объекта не является строкой");
   }
 
   if (type == "NodeEdgeListData") {
@@ -183,9 +203,12 @@ NlohmannJsonAdapter::JsonParseNodes(std::string data) {
     jsonnodevector =
         jsondata.get<std::vector<std::tuple<double, double, double>>>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseNodes",
+                      "Считываемый объект что-то типа пуст");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(
+        BaseException, "JsonParseNodes",
+        "Судя по всему, массив вершин в файле неправильно отформатирован");
   }
 
   for (auto &entry : jsonnodevector)
@@ -205,9 +228,12 @@ NlohmannJsonAdapter::jsonParseIdEdges(std::string data) {
   try {
     jsonedgevector = jsondata.get<std::vector<std::pair<size_t, size_t>>>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseIdEdges",
+                      "Считываемый объект что-то типа пуст");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(
+        BaseException, "JsonParseIdEdges",
+        "Судя по всему, массив рёбер в файле неправильно отформатирован");
   }
 
   for (auto &entry : jsonedgevector)
@@ -228,23 +254,27 @@ NlohmannJsonAdapter::JsonParseNodeEdgeListData(BaseSource &src) {
   try {
     type = data.at("type").get<std::string>();
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseNodeEdgeListData",
+                      "У считываемого объекта не обнаружено поле type");
   } catch (const json::type_error &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseNodeEdgeListData",
+                      "Поле type считываемого объекта не является строкой");
   }
 
   if (type != "NodeEdgeListData")
     try {
-      data = data.at("data"); // add custom exceptions
+      data = data.at("data");
     } catch (const json::out_of_range &e) {
-      // TODO: add handlers
+      throw myException(BaseException, "JsonParseNodeEdgeListData",
+                        "У считываемого объекта не обнаружено поле data");
     }
 
   std::unique_ptr<std::vector<NodeEdgeListData::Node>> nodes;
   try {
     nodes = JsonParseNodes(data.at("nodes").dump());
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseNodeEdgeListData",
+                      "У считываемого объекта не обнаружено поле nodes");
   }
 
   res->nodes = *nodes;
@@ -254,7 +284,8 @@ NlohmannJsonAdapter::JsonParseNodeEdgeListData(BaseSource &src) {
   try {
     edges = jsonParseIdEdges(data.at("edges").dump());
   } catch (const json::out_of_range &e) {
-    // TODO: add handlers
+    throw myException(BaseException, "JsonParseNodeEdgeListData",
+                      "У считываемого объекта не обнаружено поле edges");
   }
 
   res->idedges = std::move(edges);

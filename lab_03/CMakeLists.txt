@@ -59,6 +59,8 @@ src/command/SceneEditCommand/SetCameraCommand.cpp
 src/drawer/QtDrawer.cpp
 src/drawer/QtDrawerFactory.cpp
 
+src/exception/BaseException.cpp
+
 src/interact/KeyHandlers.cpp
 src/interact/Slots.cpp
 src/interact/sceneDataHelper.cpp
@@ -122,6 +124,7 @@ src/command/IoCommand
 src/command/SceneEditCommand
 src/common
 src/drawer
+src/exception
 src/interact
 src/io
 src/jsonAdapter

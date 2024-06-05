@@ -1,4 +1,5 @@
 #include "DrawManager.hpp"
+#include "BaseException.hpp"
 #include "BasePTSCAdapter.hpp"
 #include "CameraManager.hpp"
 #include "RenderVisitor.hpp"
@@ -29,5 +30,6 @@ void DrawManager::clear() {
 
 void DrawManager::validateDrawer() {
   if (ctx == nullptr)
-    throw std::exception(); // todo: add exception
+    throw myException(BaseException, "validateDrawer",
+                      "drawer was not initialised");
 }
