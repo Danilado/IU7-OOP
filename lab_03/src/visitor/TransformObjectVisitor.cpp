@@ -24,5 +24,6 @@ void TransformObjectVisitor::visit(ProjectionCamera &ref) { transform(ref); }
 
 void TransformObjectVisitor::visit(Scene &ref) {
   for (auto &[_, objptr] : ref)
-    transform(*objptr);
+    if (objptr->isVisible())
+      transform(*objptr);
 }

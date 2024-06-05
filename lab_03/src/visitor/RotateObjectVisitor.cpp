@@ -47,5 +47,6 @@ void RotateObjectVisitor::visit(ProjectionCamera &ref) {
 
 void RotateObjectVisitor::visit(Scene &ref) {
   for (auto &[_, objptr] : ref)
-    rotate_object_around_origin(*objptr);
+    if (objptr->isVisible())
+      rotate_object_around_origin(*objptr);
 }

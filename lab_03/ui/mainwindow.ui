@@ -333,6 +333,9 @@
               <property name="maximum">
                <double>1000.000000000000000</double>
               </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
              </widget>
             </item>
            </layout>
@@ -360,6 +363,9 @@
               <property name="maximum">
                <double>1000.000000000000000</double>
               </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
              </widget>
             </item>
            </layout>
@@ -386,6 +392,9 @@
               </property>
               <property name="maximum">
                <double>1000.000000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
               </property>
              </widget>
             </item>

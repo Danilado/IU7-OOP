@@ -25,5 +25,6 @@ void TranslateObjectVisitor::visit(ProjectionCamera &ref) { translate(ref); }
 
 void TranslateObjectVisitor::visit(Scene &ref) {
   for (auto &[_, objptr] : ref)
-    translate(*objptr);
+    if (objptr->isVisible())
+      translate(*objptr);
 }

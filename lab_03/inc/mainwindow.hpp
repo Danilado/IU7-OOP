@@ -50,5 +50,13 @@ private slots:
   void on_rotate_clicked();
   void on_rotate_all_clicked();
   void on_save_model_clicked();
+  void on_cam_tl_clicked();
+  void on_cam_t_clicked();
+  void on_cam_tr_clicked();
+  void on_cam_r_clicked();
+  void on_cam_br_clicked();
+  void on_cam_b_clicked();
+  void on_cam_bl_clicked();
+  void on_cam_l_clicked();
 };
 #endif // MAINWINDOW_H

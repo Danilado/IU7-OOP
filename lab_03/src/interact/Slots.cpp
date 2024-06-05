@@ -9,21 +9,20 @@
 void MainWindow::on_save_model_clicked() {}
 
 void MainWindow::on_load_model_clicked() {
-  // QString filename = QFileDialog::getOpenFileName(this, tr("Выбрать файл"),
-  // "",
-  //                                                 tr("*.txt, *.json"));
-  // if (filename.isNull())
-  //   return;
+  QString filename = QFileDialog::getOpenFileName(
+      this, tr("Выбрать файл"), "../models/", tr("*.txt, *.json"));
+  if (filename.isNull())
+    return;
 
-  // char *buf = (char *)calloc(filename.length() + 1, sizeof(char));
-  // if (buf == nullptr)
-  //   return;
+  char *buf = (char *)calloc(filename.length() + 1, sizeof(char));
+  if (buf == nullptr)
+    return;
 
-  // strcpy(buf, filename.toLocal8Bit().data());
+  strcpy(buf, filename.toLocal8Bit().data());
 
-  // auto cmd = std::make_shared<LoadModelCommand>(std::string(buf));
-  auto cmd = std::make_shared<LoadModelCommand>(
-      "D:\\develop\\IU7-OOP\\lab_03\\models\\cubeincude.json");
+  auto cmd = std::make_shared<LoadModelCommand>(std::string(buf));
+  // auto cmd = std::make_shared<LoadModelCommand>(
+  //     "D:\\develop\\IU7-OOP\\lab_03\\models\\cubeincude.json");
 
   application.exec(cmd);
 
@@ -81,3 +80,19 @@ void MainWindow::on_rotate_all_clicked() {
   application.exec(cmd);
   updateScene();
 }
+
+void MainWindow::on_cam_tl_clicked() { rotateCamera(-5, 5, 0); }
+
+void MainWindow::on_cam_t_clicked() { rotateCamera(-5, 0, 0); }
+
+void MainWindow::on_cam_tr_clicked() { rotateCamera(-5, -5, 0); }
+
+void MainWindow::on_cam_r_clicked() { rotateCamera(0, -5, 0); }
+
+void MainWindow::on_cam_br_clicked() { rotateCamera(5, -5, 0); }
+
+void MainWindow::on_cam_b_clicked() { rotateCamera(5, 0, 0); }
+
+void MainWindow::on_cam_bl_clicked() { rotateCamera(5, 5, 0); }
+
+void MainWindow::on_cam_l_clicked() { rotateCamera(0, 5, 0); }

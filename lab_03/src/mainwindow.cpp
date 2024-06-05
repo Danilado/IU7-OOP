@@ -8,7 +8,6 @@
 #include "RenderCommand.hpp"
 #include "SingletonTemplate.hpp"
 
-
 #include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)

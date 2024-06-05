@@ -43,43 +43,43 @@ void MainWindow::handleKey(Qt::Key key) {
   switch (key) {
   case (Key::Key_W): {
     qDebug() << "W";
-    moveCamera(0, 0, 10);
+    moveCamera(0, 0, -10);
   } break;
   case (Key::Key_D): {
     qDebug() << "D";
-    moveCamera(10, 0, 0);
+    moveCamera(-10, 0, 0);
   } break;
   case (Key::Key_S): {
     qDebug() << "S";
-    moveCamera(0, 0, -10);
+    moveCamera(0, 0, 10);
   } break;
   case (Key::Key_A): {
     qDebug() << "A";
-    moveCamera(-10, 0, 0);
+    moveCamera(10, 0, 0);
   } break;
   case (Key::Key_Shift): {
     qDebug() << "Shift";
-    moveCamera(0, 10, 0);
+    moveCamera(0, -10, 0);
   } break;
   case (Key::Key_Space): {
     qDebug() << "Space";
-    moveCamera(0, -10, 0);
+    moveCamera(0, 10, 0);
   } break;
   case (Key::Key_I): {
     qDebug() << "I";
-    rotateCamera(10, 0, 0);
+    rotateCamera(-5, 0, 0);
   } break;
   case (Key::Key_L): {
     qDebug() << "L";
-    rotateCamera(0, 10, 0);
+    rotateCamera(0, -5, 0);
   } break;
   case (Key::Key_K): {
     qDebug() << "K";
-    rotateCamera(-10, 0, 0);
+    rotateCamera(5, 0, 0);
   } break;
   case (Key::Key_J): {
     qDebug() << "J";
-    rotateCamera(0, -10, 0);
+    rotateCamera(0, 5, 0);
   } break;
   case (Key::Key_Z): {
     qDebug() << "Z";

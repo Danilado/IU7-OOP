@@ -40,5 +40,6 @@ void ScaleObjectVisitor::visit(ProjectionCamera &ref) {
 
 void ScaleObjectVisitor::visit(Scene &ref) {
   for (auto &[_, objptr] : ref)
-    scale_object_around_origin(*objptr);
+    if (objptr->isVisible())
+      scale_object_around_origin(*objptr);
 }
