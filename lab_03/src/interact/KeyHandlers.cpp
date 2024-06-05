@@ -57,8 +57,8 @@ void MainWindow::handleKey(Qt::Key key) {
     qDebug() << "A";
     moveCamera(10, 0, 0);
   } break;
-  case (Key::Key_Shift): {
-    qDebug() << "Shift";
+  case (Key::Key_B): {
+    qDebug() << "B";
     moveCamera(0, -10, 0);
   } break;
   case (Key::Key_Space): {

@@ -72,12 +72,12 @@ void MainWindow::addCameraToBox(size_t id, const std::string &name) {
   ui->cambox->setCurrentIndex(ui->cambox->count() - 1);
 }
 
-void MainWindow::removeModelFromBox(size_t id) {
-  ui->modelbox->removeItem(getCamId());
+void MainWindow::removeModelFromBox() {
+  ui->modelbox->removeItem(ui->modelbox->currentIndex());
 }
 
-void MainWindow::removeCameraFromBox(size_t id) {
-  ui->cambox->removeItem(getCamId());
+void MainWindow::removeCameraFromBox() {
+  ui->cambox->removeItem(ui->cambox->currentIndex());
 }
 
 size_t MainWindow::getObjId() { return ui->modelbox->currentData().toInt(); }

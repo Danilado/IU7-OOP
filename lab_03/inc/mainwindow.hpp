@@ -25,8 +25,8 @@ public:
 
   void addModelToBox(size_t id, const std::string &name);
   void addCameraToBox(size_t id, const std::string &name);
-  void removeModelFromBox(size_t id);
-  void removeCameraFromBox(size_t id);
+  void removeModelFromBox();
+  void removeCameraFromBox();
   size_t getObjId();
   size_t getCamId();
 

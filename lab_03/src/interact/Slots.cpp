@@ -1,13 +1,15 @@
 #include "LoadCameraCommand.hpp"
 #include "LoadModelCommand.hpp"
+#include "RemoveObjectCommand.hpp"
+#include "RotateObjectCommand.hpp"
 #include "SaveCameraCommand.hpp"
 #include "SaveModelCommand.hpp"
+#include "ScaleObjectCommand.hpp"
 #include "SetCameraCommand.hpp"
+#include "TranslateObjectCommand.hpp"
 #include "mainwindow.hpp"
 
-#include "RotateObjectCommand.hpp"
-#include "ScaleObjectCommand.hpp"
-#include "TranslateObjectCommand.hpp"
+#include <QDebug>
 
 void MainWindow::on_save_model_clicked() {
   if (!getObjId())
@@ -120,8 +122,6 @@ void MainWindow::on_cam_bl_clicked() { rotateCamera(5, 5, 0); }
 
 void MainWindow::on_cam_l_clicked() { rotateCamera(0, 5, 0); }
 
-void MainWindow::on_remove_model_clicked() {}
-
 void MainWindow::on_save_cam_clicked() {
   if (!getCamId())
     return;
@@ -163,10 +163,39 @@ void MainWindow::on_load_cam_clicked() {
   updateScene();
 }
 
-void MainWindow::on_remove_cam_clicked() {}
-
 void MainWindow::on_cambox_currentIndexChanged(int index) {
   auto cmd = std::make_shared<SetCameraCommand>(getCamId());
   application.exec(cmd);
+  updateScene();
+}
+
+void MainWindow::on_remove_model_clicked() {
+  size_t oid = getObjId();
+  if (!oid)
+    return;
+
+  qDebug() << "remove model";
+
+  auto cmd = std::make_shared<RemoveObjectCommand>(oid);
+  application.exec(cmd);
+
+  sdh.removeModel(oid);
+
+  updateScene();
+}
+
+void MainWindow::on_remove_cam_clicked() {
+  if (sdh.getCamLength() < 2)
+    return;
+
+  qDebug() << "remove camera";
+
+  size_t cid = getCamId();
+
+  auto cmd = std::make_shared<RemoveObjectCommand>(cid);
+  application.exec(cmd);
+
+  sdh.removeCamera(cid);
+
   updateScene();
 }

@@ -22,6 +22,9 @@ void CameraManager::setCamera(size_t id) {
     throw std::exception(); // todo: add custom exceptoion
   }
 
+  if (dynamic_cast<const BaseCamera *>(objp.get()) == nullptr)
+    return; // TODO: add exception;
+
   cam = objp;
   this->id = id;
 }
