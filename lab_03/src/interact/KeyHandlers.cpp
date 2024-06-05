@@ -10,7 +10,7 @@ void MainWindow::zoomCamera(double coeff) {
   Point3D origin = Point3D();
   Point3D scale = Point3D(coeff, coeff, coeff);
   std::shared_ptr<ScaleObjectCommand> cmd =
-      std::make_shared<ScaleObjectCommand>(origin, scale, 1);
+      std::make_shared<ScaleObjectCommand>(origin, scale, getCamId());
   application.exec(cmd);
   updateScene();
 }
@@ -18,7 +18,7 @@ void MainWindow::zoomCamera(double coeff) {
 void MainWindow::moveCamera(double dx, double dy, double dz) {
   Point3D translation = Point3D(dx, dy, dz);
   std::shared_ptr<TranslateObjectCommand> cmd =
-      std::make_shared<TranslateObjectCommand>(translation, 1);
+      std::make_shared<TranslateObjectCommand>(translation, getCamId());
   application.exec(cmd);
   updateScene();
 }
@@ -27,7 +27,7 @@ void MainWindow::rotateCamera(double ax, double ay, double az) {
   Point3D origin = Point3D();
   Point3D rotation = Point3D(ax, ay, az);
   std::shared_ptr<RotateObjectCommand> cmd =
-      std::make_shared<RotateObjectCommand>(origin, rotation, 1, true);
+      std::make_shared<RotateObjectCommand>(origin, rotation, getCamId(), true);
   application.exec(cmd);
   updateScene();
 }

@@ -823,7 +823,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Сохранение сцены</string>
+             <string>Сохранение сцены (пока нельзя)</string>
             </property>
            </widget>
           </item>

@@ -13,7 +13,7 @@ private:
 
 public:
   NodeEdgeListData();
-  ~NodeEdgeListData() = default;
+  ~NodeEdgeListData() override = default;
 
   std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>>
   getIdEdges() const override;

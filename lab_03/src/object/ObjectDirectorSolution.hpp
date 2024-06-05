@@ -1,6 +1,8 @@
 #ifndef OBJECT_DIRECTOR_SOLUTION_HPP
 #define OBJECT_DIRECTOR_SOLUTION_HPP
 
+#include "OrthocamBuilder.hpp"
+#include "ProjcamBuilder.hpp"
 #include "WireframeBuilder.hpp"
 #include <map>
 
@@ -11,6 +13,8 @@ public:
 private:
   std::map<types, std::shared_ptr<BaseObjectDirector>> typemap{
       {types::WIREFRAME, std::make_shared<WireframeModelDirector>()},
+      {types::ORTHOCAM, std::make_shared<OrthogonalCameraDirector>()},
+      {types::PROJCAM, std::make_shared<ProjectionCameraDirector>()},
   };
 
 public:

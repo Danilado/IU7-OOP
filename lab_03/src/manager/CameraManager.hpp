@@ -8,7 +8,7 @@
 class CameraManager {
 private:
   size_t id;
-  std::shared_ptr<BaseCamera> cam;
+  std::shared_ptr<Object> cam;
 
 public:
   CameraManager();
@@ -17,7 +17,7 @@ public:
   void setCamera(size_t id);
   size_t getActiveId();
 
-  std::shared_ptr<BaseCamera> getCamera();
+  std::shared_ptr<Object> getCamera();
   std::shared_ptr<BasePTSCAdapter> getAdapter();
 
   CameraManager(const CameraManager &) = delete;

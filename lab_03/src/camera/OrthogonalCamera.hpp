@@ -4,7 +4,11 @@
 #include "BaseCamera.hpp"
 #include "BaseVisitor.hpp"
 
+class OrthogonalCameraDirector;
+
 class OrthogonalCamera : public BaseCamera {
+  friend OrthogonalCameraDirector;
+
 public:
   OrthogonalCamera();
   void accept(BaseVisitor &vis) override;

@@ -32,6 +32,8 @@ protected:
   std::vector<Node> nodes;
 
 public:
+  virtual ~BaseModelData() = default;
+
   const std::vector<Node> &getNodes() const noexcept;
   virtual std::shared_ptr<std::vector<Edge>> getEdges() const;
   virtual IdEdgeVector getIdEdges() const = 0;

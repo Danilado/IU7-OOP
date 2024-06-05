@@ -4,7 +4,11 @@
 #include "BaseCamera.hpp"
 #include "BaseVisitor.hpp"
 
+class ProjectionCameraDirector;
+
 class ProjectionCamera : public BaseCamera {
+  friend ProjectionCameraDirector;
+
 public:
   ProjectionCamera() = default;
   ~ProjectionCamera() = default;

@@ -10,7 +10,7 @@ private:
 
 public:
   FileDestination() = delete;
-  explicit FileDestination(std::string &filename);
+  explicit FileDestination(const std::string &filename);
   ~FileDestination() = default;
 
   void write(const std::string &data) override;

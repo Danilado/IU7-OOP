@@ -6,7 +6,8 @@
 
 class DestinationSolution {
 public:
-  static std::shared_ptr<BaseDestination> createFileDst(std::string &filename);
+  static std::shared_ptr<BaseDestination>
+  createFileDst(const std::string &filename);
   static std::shared_ptr<BaseDestination> createStringDst(std::string &dst);
 };
 

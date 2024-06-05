@@ -22,18 +22,13 @@ void CameraManager::setCamera(size_t id) {
     throw std::exception(); // todo: add custom exceptoion
   }
 
-  std::shared_ptr<BaseCamera> res = dynamic_pointer_cast<BaseCamera>(res);
-  if (res == nullptr) {
-    throw std::exception(); // todo: add custom exceptoion
-  }
-
-  cam = res;
+  cam = objp;
   this->id = id;
 }
 
 size_t CameraManager::getActiveId() { return id; }
 
-std::shared_ptr<BaseCamera> CameraManager::getCamera() { return cam; }
+std::shared_ptr<Object> CameraManager::getCamera() { return cam; }
 
 std::shared_ptr<BasePTSCAdapter> CameraManager::getAdapter() {
   std::shared_ptr<BasePTSCAdapter> res;

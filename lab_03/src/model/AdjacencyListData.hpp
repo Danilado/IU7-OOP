@@ -22,7 +22,7 @@ private:
 
 public:
   AdjacencyListData();
-  ~AdjacencyListData() = default;
+  ~AdjacencyListData() override = default;
 
   std::shared_ptr<std::vector<std::shared_ptr<IdEdge>>>
   getIdEdges() const override;

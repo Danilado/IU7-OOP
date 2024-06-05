@@ -11,10 +11,11 @@
 #include <cstring>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), sdh(this) {
   this->setFocusPolicy(Qt::StrongFocus);
   ui->setupUi(this);
   setupScene();
+  sdh.addCamera(1, "Camera 1");
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -60,3 +61,25 @@ Point3D MainWindow::getScale() {
 Point3D MainWindow::getTranslation() {
   return Point3D(ui->dx->value(), ui->dy->value(), ui->dz->value());
 }
+
+void MainWindow::addModelToBox(size_t id, const std::string &name) {
+  ui->modelbox->addItem(QString::fromStdString(name), id);
+  ui->modelbox->setCurrentIndex(ui->modelbox->count() - 1);
+}
+
+void MainWindow::addCameraToBox(size_t id, const std::string &name) {
+  ui->cambox->addItem(QString::fromStdString(name), id);
+  ui->cambox->setCurrentIndex(ui->cambox->count() - 1);
+}
+
+void MainWindow::removeModelFromBox(size_t id) {
+  ui->modelbox->removeItem(getCamId());
+}
+
+void MainWindow::removeCameraFromBox(size_t id) {
+  ui->cambox->removeItem(getCamId());
+}
+
+size_t MainWindow::getObjId() { return ui->modelbox->currentData().toInt(); }
+
+size_t MainWindow::getCamId() { return ui->cambox->currentData().toInt(); }

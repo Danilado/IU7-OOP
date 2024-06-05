@@ -3,10 +3,6 @@
 
 #include "InvisibleObject.hpp"
 
-class BasePTSCAdapter;
-
-class BaseCamera : public InvisibleObject {
-  friend BasePTSCAdapter;
-};
+class BaseCamera : public InvisibleObject {};
 
 #endif

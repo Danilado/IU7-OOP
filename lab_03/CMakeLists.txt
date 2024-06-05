@@ -36,11 +36,16 @@ src/camera/ProjPTSCAdapter.cpp
 src/camera/OrthoPTSCAdapter.cpp
 src/camera/OrthogonalCamera.cpp
 src/camera/ProjectionCamera.cpp
+src/camera/ProjcamBuilder.cpp
+src/camera/OrthocamBuilder.cpp
 
 src/command/DrawCommand/CleanCommand.cpp
 src/command/DrawCommand/RenderCommand.cpp
 
+src/command/IoCommand/LoadCameraCommand.cpp
 src/command/IoCommand/LoadModelCommand.cpp
+src/command/IoCommand/SaveCameraCommand.cpp
+src/command/IoCommand/SaveModelCommand.cpp
 
 src/command/SceneEditCommand/UndoCommand.cpp
 src/command/SceneEditCommand/RedoCommand.cpp
@@ -56,6 +61,7 @@ src/drawer/QtDrawerFactory.cpp
 
 src/interact/KeyHandlers.cpp
 src/interact/Slots.cpp
+src/interact/sceneDataHelper.cpp
 
 src/io/FileSource.cpp
 src/io/StringSource.cpp

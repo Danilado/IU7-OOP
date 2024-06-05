@@ -4,6 +4,7 @@
 #include "Point3D.hpp"
 #include "Scene.hpp"
 #include "app.hpp"
+#include "sceneDataHelper.hpp"
 #include <QErrorMessage>
 #include <QFileDialog>
 #include <QGraphicsScene>
@@ -22,9 +23,17 @@ public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
+  void addModelToBox(size_t id, const std::string &name);
+  void addCameraToBox(size_t id, const std::string &name);
+  void removeModelFromBox(size_t id);
+  void removeCameraFromBox(size_t id);
+  size_t getObjId();
+  size_t getCamId();
+
 private:
   Ui::MainWindow *ui;
   App application;
+  SceneDataHelper sdh;
   std::shared_ptr<QGraphicsScene> scene;
 
   void setupScene();
@@ -58,5 +67,10 @@ private slots:
   void on_cam_b_clicked();
   void on_cam_bl_clicked();
   void on_cam_l_clicked();
+  void on_remove_model_clicked();
+  void on_save_cam_clicked();
+  void on_load_cam_clicked();
+  void on_remove_cam_clicked();
+  void on_cambox_currentIndexChanged(int index);
 };
 #endif // MAINWINDOW_H

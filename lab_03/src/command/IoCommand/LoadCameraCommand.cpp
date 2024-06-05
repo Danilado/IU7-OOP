@@ -1,9 +1,9 @@
-#include "LoadModelCommand.hpp"
+#include "LoadCameraCommand.hpp"
 #include "IoManager.hpp"
 #include "SceneManager.hpp"
 #include "SingletonTemplate.hpp"
 
-void LoadModelCommand::exec() {
+void LoadCameraCommand::exec() {
   IoManager &iom = Singleton<IoManager>::instance();
   SceneManager &sm = Singleton<SceneManager>::instance();
 

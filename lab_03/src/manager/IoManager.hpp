@@ -14,16 +14,17 @@ public:
   IoManager() = default;
   ~IoManager() = default;
 
-  void saveScene(const Scene &scene, BaseDestination &dst);
+  void saveScene(Scene &scene, BaseDestination &dst);
   std::unique_ptr<Scene> loadScene(BaseSource &src);
 
-  void saveObject(const Object &obj, BaseDestination &dst);
+  void saveObject(Object &obj, BaseDestination &dst);
   std::unique_ptr<Object> loadObject(BaseSource &src);
 
   IoManager(const IoManager &) = delete;
   IoManager &operator=(const IoManager &) = delete;
 
   std::unique_ptr<Object> loadObject(const std::string &filename);
+  void saveObject(Object &obj, const std::string &filename);
 };
 
 #endif

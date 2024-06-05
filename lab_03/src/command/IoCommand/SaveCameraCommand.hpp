@@ -4,6 +4,11 @@
 #include "IoCommand.hpp"
 
 class SaveCameraCommand : public SaveCommand {
+private:
+  size_t id;
+
+public:
+  SaveCameraCommand(std::string dest, size_t id) : SaveCommand(dest), id(id) {}
   void exec() override;
 };
 

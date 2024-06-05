@@ -149,22 +149,25 @@ std::string NlohmannJsonAdapter::JsonStringifyScene(Scene &scene) {
 
 std::string NlohmannJsonAdapter::JsonStringifyWireframe(WireframeModel &src) {
   json res = {{"type", "WireframeModel"}};
-  res["transform"] = JsonStringifyTransformMatrix(*src.getTransformation());
-  res["data"] = JsonStringifyObjData(*src.data);
+  res["transform"] =
+      json::parse(JsonStringifyTransformMatrix(*src.getTransformation()));
+  res["data"] = json::parse(JsonStringifyObjData(*src.data));
 
   return res.dump();
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyOrthoCam(OrthogonalCamera &src) {
   json res = {{"type", "OrthogonalCamera"}};
-  res["transform"] = JsonStringifyTransformMatrix(*src.getTransformation());
+  res["transform"] =
+      json::parse(JsonStringifyTransformMatrix(*src.getTransformation()));
 
   return res.dump();
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyProjCam(ProjectionCamera &src) {
   json res = {{"type", "ProjectionCamera"}};
-  res["transform"] = JsonStringifyTransformMatrix(*src.getTransformation());
+  res["transform"] =
+      json::parse(JsonStringifyTransformMatrix(*src.getTransformation()));
 
   return res.dump();
 }
@@ -271,7 +274,8 @@ std::string NlohmannJsonAdapter::JsonStringifyNodes(
     res.push_back(std::tuple<double, double, double>(
         node->get_x(), node->get_y(), node->get_z()));
 
-  return json{res}.dump();
+  json j = res;
+  return j.dump();
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyIdEdges(
@@ -282,13 +286,14 @@ std::string NlohmannJsonAdapter::JsonStringifyIdEdges(
     res.push_back(std::pair<size_t, size_t>(idedgeptr->getFirstId(),
                                             idedgeptr->getSecondId()));
 
-  return json{res}.dump();
+  json j = res;
+  return j.dump();
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyObjData(BaseModelData &data) {
   json res = {{"type", "NodeEdgeListData"}};
-  res["nodes"] = JsonStringifyNodes(data.getNodes());
-  res["edges"] = JsonStringifyIdEdges(data.getIdEdges());
+  res["nodes"] = json::parse(JsonStringifyNodes(data.getNodes()));
+  res["edges"] = json::parse(JsonStringifyIdEdges(data.getIdEdges()));
 
   return res.dump();
 }

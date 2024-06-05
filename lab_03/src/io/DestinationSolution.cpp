@@ -3,7 +3,7 @@
 #include "StringDestination.hpp"
 
 std::shared_ptr<BaseDestination>
-DestinationSolution::createFileDst(std::string &filename) {
+DestinationSolution::createFileDst(const std::string &filename) {
   return std::make_shared<FileDestination>(filename);
 }
 std::shared_ptr<BaseDestination>
