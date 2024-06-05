@@ -12,7 +12,7 @@
 #include <tuple>
 #include <vector>
 
-// TODO: Refactor everything
+// TODO: Refactor everything (in this file)
 // INCLUDING EXCEPTION HANDLING
 
 std::string NlohmannJsonAdapter::JsonStringifyTransformMatrix(

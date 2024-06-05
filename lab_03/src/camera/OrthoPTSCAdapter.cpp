@@ -1,6 +1,7 @@
 #include "OrthoPTSCAdapter.hpp"
 
 double OrthoPTSCAdapter::shadyExpFunc(double x) {
+  // https://www.desmos.com/calculator/uf7isgsby3
   if (x >= 1)
     return x;
 
