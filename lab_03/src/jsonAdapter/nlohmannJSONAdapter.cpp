@@ -17,6 +17,11 @@
 
 std::string NlohmannJsonAdapter::JsonStringifyTransformMatrix(
     TransformationMatrix &transform) {
+  return JsonifyTransformMatrix(transform).dump();
+}
+
+NlohmannJsonAdapter::json
+NlohmannJsonAdapter::JsonifyTransformMatrix(TransformationMatrix &transform) {
   std::array<std::array<double, TransformationMatrix::dim + 1>,
              TransformationMatrix::dim + 1>
       mat_values;
@@ -25,34 +30,16 @@ std::string NlohmannJsonAdapter::JsonStringifyTransformMatrix(
     for (size_t j = 0; j <= TransformationMatrix::dim; ++j)
       mat_values[i][j] = transform.transform[i][j];
 
-  json transmatjson = {
+  return json({
       {"type", "TransformationMatrix"},
       {"data", mat_values},
-  };
-
-  return transmatjson.dump();
+  });
 }
 
 ObjectDirectorSolution::types
 NlohmannJsonAdapter::JsonParseType(BaseSource &src) {
-  src.reset();
-
-  auto data = json::parse(src.readall());
-
-  std::string key;
-
-  try {
-    json::reference datatype = data.at("type");
-    key = datatype.get_ref<json::string_t &>();
-  } catch (const json::out_of_range &e) {
-    throw myException(
-        BaseException, "JsonParseType",
-        "Не удалось определить тип объекта\nПоле type не найдено");
-  } catch (const json::type_error &e) {
-    throw myException(
-        BaseException, "JsonParseType",
-        "Не удалось определить тип объекта\nПоле type не является строкой");
-  }
+  auto data = myParse(src, __FUNCTION__);
+  std::string key = getTypeAt<std::string>(data, "type", __FUNCTION__);
 
   return get_type(key);
 }
@@ -60,12 +47,12 @@ NlohmannJsonAdapter::JsonParseType(BaseSource &src) {
 void NlohmannJsonAdapter::validateJTransMat(
     std::vector<std::vector<double>> &transmat) {
   if (transmat.size() != TransformationMatrix::dim + 1)
-    throw myException(BaseException, "validateJTransMat",
+    throw myException(BaseException, __FUNCTION__,
                       "Число строк матрицы трансформации в файле некорректно");
   for (size_t i = 0; i < TransformationMatrix::dim + 1; ++i) {
     if (transmat[i].size() != TransformationMatrix::dim + 1)
       throw myException(
-          BaseException, "validateJTransMat",
+          BaseException, __FUNCTION__,
           "Число столбцов на " + std::to_string(i) +
               " строке матрицы трансформации в файле некорректно");
   }
@@ -73,83 +60,46 @@ void NlohmannJsonAdapter::validateJTransMat(
 
 std::unique_ptr<TransformationMatrix>
 NlohmannJsonAdapter::JsonParseTransformMatrix(BaseSource &src) {
-  src.reset();
-
+  auto data = myParse(src, __FUNCTION__);
   std::unique_ptr<TransformationMatrix> res =
       std::make_unique<TransformationMatrix>();
 
-  auto data = json::parse(src.readall());
-
-  std::string type;
-  try {
-    type = data.at("type").get<std::string>();
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseTransformMatrix",
-                      "У считываемого объекта не обнаружено поле type");
-  } catch (const json::type_error &e) {
-    throw myException(BaseException, "JsonParseTransformMatrix",
-                      "Поле type считываемого объекта не является строкой");
-  }
+  std::string type = getTypeAt<std::string>(data, "type", __FUNCTION__);
 
   if (type != "TransformationMatrix")
     try {
       data = data.at("transform"); // add custom exceptions
     } catch (const json::out_of_range &e) {
       throw myException(
-          BaseException, "JsonParseTransformMatrix",
+          BaseException, __FUNCTION__,
           "Переданный объект не является матрицей трансформации\n(Тип не "
           "совпал, а поле transform отсутствует)");
     }
 
-  std::vector<std::vector<double>> jtransmat;
-  try {
-    jtransmat = data.at("data").get<std::vector<std::vector<double>>>();
-  } catch (const json::out_of_range &e) {
-    throw myException(
-        BaseException, "JsonParseTransformMatrix",
-        "У матрицы трансформации в файле не обнаружено поле data");
-  } catch (const json::type_error &e) {
-    throw myException(BaseException, "JsonParseTransformMatrix",
-                      "Поле data матрицы трансформации в файле некорректно");
-  }
-
-  validateJTransMat(jtransmat);
-
-  for (size_t i = 0; i <= TransformationMatrix::dim; ++i)
-    for (size_t j = 0; j <= TransformationMatrix::dim; ++j)
-      res->transform[i][j] = jtransmat[i][j];
-
+  return JsonParseTransformMatrix(data);
   return std::move(res);
 }
 
 std::unique_ptr<Scene> NlohmannJsonAdapter::JsonParseScene(BaseSource &src) {
-  src.reset();
+  throw myException(BaseException, __FUNCTION__, "\nUNIMPLEMENTED");
   return nullptr;
 }
 
 std::unique_ptr<BaseModelData>
 NlohmannJsonAdapter::JsonParseObjData(BaseSource &src) {
-  src.reset();
-  auto data = json::parse(src.readall());
-  data = data.at("data");
-  std::string type;
-  try {
-    type = data.at("type").get<std::string>();
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseObjData",
-                      "У считываемого объекта не обнаружено поле type");
-  } catch (const json::type_error &e) {
-    throw myException(BaseException, "JsonParseObjData",
-                      "Поле type считываемого объекта не является строкой");
-  }
+  auto data = myParse(src, __FUNCTION__);
+  data = getReference(data, "data", __FUNCTION__);
 
-  if (type == "NodeEdgeListData") {
-    return std::move(JsonParseNodeEdgeListData(src));
-  } else if (type == "AdjacencyListData") {
-  } else
-    throw std::exception(); // add custom exceptions
+  std::string type = getTypeAt<std::string>(data, "type", __FUNCTION__);
 
-  return nullptr;
+  if (type == "NodeEdgeListData")
+    return std::move(JsonParseNodeEdgeListData(data));
+  else if (type == "AdjacencyListData")
+    return std::move(JsonParseAdjacencyListData(data));
+  else
+    throw myException(BaseException, __FUNCTION__, "UNKNOWN DATA TYPE");
+
+  return JsonParseObjData(data);
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyScene(Scene &scene) {
@@ -169,47 +119,91 @@ std::string NlohmannJsonAdapter::JsonStringifyScene(Scene &scene) {
 
 std::string NlohmannJsonAdapter::JsonStringifyWireframe(WireframeModel &src) {
   json res = {{"type", "WireframeModel"}};
-  res["transform"] =
-      json::parse(JsonStringifyTransformMatrix(*src.getTransformation()));
-  res["data"] = json::parse(JsonStringifyObjData(*src.data));
+  res["transform"] = JsonifyTransformMatrix(*src.getTransformation());
+  res["data"] = JsonifyObjData(*src.data);
 
   return res.dump();
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyOrthoCam(OrthogonalCamera &src) {
   json res = {{"type", "OrthogonalCamera"}};
-  res["transform"] =
-      json::parse(JsonStringifyTransformMatrix(*src.getTransformation()));
+  res["transform"] = JsonifyTransformMatrix(*src.getTransformation());
 
   return res.dump();
 }
 
 std::string NlohmannJsonAdapter::JsonStringifyProjCam(ProjectionCamera &src) {
   json res = {{"type", "ProjectionCamera"}};
-  res["transform"] =
-      json::parse(JsonStringifyTransformMatrix(*src.getTransformation()));
+  res["transform"] = JsonifyTransformMatrix(*src.getTransformation());
 
   return res.dump();
 }
 
+std::unique_ptr<BaseModelData>
+NlohmannJsonAdapter::JsonParseNodeEdgeListData(BaseSource &src) {
+  auto data = myParse(src, __FUNCTION__);
+  return JsonParseNodeEdgeListData(data);
+}
+
+std::unique_ptr<BaseModelData>
+NlohmannJsonAdapter::JsonParseAdjacencyListData(BaseSource &src) {
+  throw myException(BaseException, __FUNCTION__, "UNIMPLEMENTED");
+  return nullptr;
+}
+
+std::string NlohmannJsonAdapter::JsonStringifyObjData(BaseModelData &data) {
+  json res = {{"type", "NodeEdgeListData"}};
+  res["nodes"] = JsonifyNodes(data.getNodes());
+  res["edges"] = JsonifyIdEdges(data.getIdEdges());
+
+  return res.dump();
+}
+
+NlohmannJsonAdapter::json NlohmannJsonAdapter::myParse(BaseSource &src,
+                                                       std::string funcname) {
+  src.reset();
+
+  try {
+    return json::parse(src.readall());
+  } catch (const json::parse_error &e) {
+    throw myException(
+        BaseException, funcname,
+        "Файл не содержит объект. (Это не json, или файл повреждён?)");
+  }
+}
+
+NlohmannJsonAdapter::json::reference
+NlohmannJsonAdapter::getReference(json &data, std::string key,
+                                  std::string funcname) {
+  try {
+    return data.at(key);
+  } catch (const json::out_of_range &e) {
+    throw myException(BaseException, funcname,
+                      "У считываемого объекта не обнаружено поле " + key);
+  } catch (const json::type_error &e) {
+    throw myException(BaseException, funcname,
+                      "Считываемый файл не содержит обект");
+  }
+}
+
+NlohmannJsonAdapter::json NlohmannJsonAdapter::JsonifyNodes(
+    const std::vector<BaseModelData::Node> &nodes) {
+  std::vector<std::tuple<double, double, double>> res;
+  for (auto &node : nodes)
+    res.push_back(std::tuple<double, double, double>(
+        node->get_x(), node->get_y(), node->get_z()));
+
+  return res;
+}
+
 std::unique_ptr<std::vector<BaseModelData::Node>>
-NlohmannJsonAdapter::JsonParseNodes(std::string data) {
+NlohmannJsonAdapter::JsonParseNodes(json &data) {
   std::unique_ptr<std::vector<BaseModelData::Node>> res =
       std::make_unique<std::vector<BaseModelData::Node>>();
 
-  auto jsondata = json::parse(data);
-  std::vector<std::tuple<double, double, double>> jsonnodevector;
-  try {
-    jsonnodevector =
-        jsondata.get<std::vector<std::tuple<double, double, double>>>();
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseNodes",
-                      "Считываемый объект что-то типа пуст");
-  } catch (const json::type_error &e) {
-    throw myException(
-        BaseException, "JsonParseNodes",
-        "Судя по всему, массив вершин в файле неправильно отформатирован");
-  }
+  std::vector<std::tuple<double, double, double>> jsonnodevector =
+      getTypeFromReference<std::vector<std::tuple<double, double, double>>>(
+          data, __FUNCTION__);
 
   for (auto &entry : jsonnodevector)
     res->push_back(std::make_shared<Point3D>(
@@ -218,23 +212,25 @@ NlohmannJsonAdapter::JsonParseNodes(std::string data) {
   return std::move(res);
 }
 
+NlohmannJsonAdapter::json NlohmannJsonAdapter::JsonifyIdEdges(
+    const BaseModelData::IdEdgeVector &idEdges) {
+  std::vector<std::pair<size_t, size_t>> res;
+
+  for (auto &idedgeptr : *idEdges)
+    res.push_back(std::pair<size_t, size_t>(idedgeptr->getFirstId(),
+                                            idedgeptr->getSecondId()));
+
+  return res;
+}
+
 std::unique_ptr<std::vector<std::shared_ptr<BaseModelData::IdEdge>>>
-NlohmannJsonAdapter::jsonParseIdEdges(std::string data) {
+NlohmannJsonAdapter::jsonParseIdEdges(json &data) {
   std::unique_ptr<std::vector<std::shared_ptr<BaseModelData::IdEdge>>> res =
       std::make_unique<std::vector<std::shared_ptr<BaseModelData::IdEdge>>>();
 
-  auto jsondata = json::parse(data);
-  std::vector<std::pair<size_t, size_t>> jsonedgevector;
-  try {
-    jsonedgevector = jsondata.get<std::vector<std::pair<size_t, size_t>>>();
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseIdEdges",
-                      "Считываемый объект что-то типа пуст");
-  } catch (const json::type_error &e) {
-    throw myException(
-        BaseException, "JsonParseIdEdges",
-        "Судя по всему, массив рёбер в файле неправильно отформатирован");
-  }
+  std::vector<std::pair<size_t, size_t>> jsonedgevector =
+      getTypeFromReference<std::vector<std::pair<size_t, size_t>>>(
+          data, __FUNCTION__);
 
   for (auto &entry : jsonedgevector)
     res->push_back(
@@ -244,49 +240,18 @@ NlohmannJsonAdapter::jsonParseIdEdges(std::string data) {
 }
 
 std::unique_ptr<BaseModelData>
-NlohmannJsonAdapter::JsonParseNodeEdgeListData(BaseSource &src) {
+NlohmannJsonAdapter::JsonParseNodeEdgeListData(json &src) {
   std::unique_ptr<NodeEdgeListData> res = std::make_unique<NodeEdgeListData>();
 
-  src.reset();
-  auto data = json::parse(src.readall());
+  std::string type = getTypeAt<std::string>(src, "type", __FUNCTION__);
 
-  std::string type;
-  try {
-    type = data.at("type").get<std::string>();
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseNodeEdgeListData",
-                      "У считываемого объекта не обнаружено поле type");
-  } catch (const json::type_error &e) {
-    throw myException(BaseException, "JsonParseNodeEdgeListData",
-                      "Поле type считываемого объекта не является строкой");
-  }
-
-  if (type != "NodeEdgeListData")
-    try {
-      data = data.at("data");
-    } catch (const json::out_of_range &e) {
-      throw myException(BaseException, "JsonParseNodeEdgeListData",
-                        "У считываемого объекта не обнаружено поле data");
-    }
-
-  std::unique_ptr<std::vector<NodeEdgeListData::Node>> nodes;
-  try {
-    nodes = JsonParseNodes(data.at("nodes").dump());
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseNodeEdgeListData",
-                      "У считываемого объекта не обнаружено поле nodes");
-  }
+  std::unique_ptr<std::vector<NodeEdgeListData::Node>> nodes =
+      JsonParseNodes(getReference(src, "nodes", __FUNCTION__));
 
   res->nodes = *nodes;
 
-  std::unique_ptr<std::vector<std::shared_ptr<BaseModelData::IdEdge>>> edges;
-
-  try {
-    edges = jsonParseIdEdges(data.at("edges").dump());
-  } catch (const json::out_of_range &e) {
-    throw myException(BaseException, "JsonParseNodeEdgeListData",
-                      "У считываемого объекта не обнаружено поле edges");
-  }
+  std::unique_ptr<std::vector<std::shared_ptr<BaseModelData::IdEdge>>> edges =
+      jsonParseIdEdges(getReference(src, "edges", __FUNCTION__));
 
   res->idedges = std::move(edges);
 
@@ -294,37 +259,52 @@ NlohmannJsonAdapter::JsonParseNodeEdgeListData(BaseSource &src) {
 }
 
 std::unique_ptr<BaseModelData>
-NlohmannJsonAdapter::JsonParseAdjacencyListData(BaseSource &src) {
+NlohmannJsonAdapter::JsonParseAdjacencyListData(json &src) {
+  throw myException(BaseException, __FUNCTION__, "UNIMPLEMENTED");
   return nullptr;
 }
 
-std::string NlohmannJsonAdapter::JsonStringifyNodes(
-    const std::vector<BaseModelData::Node> &nodes) {
-  std::vector<std::tuple<double, double, double>> res;
-  for (auto &node : nodes)
-    res.push_back(std::tuple<double, double, double>(
-        node->get_x(), node->get_y(), node->get_z()));
+std::unique_ptr<BaseModelData>
+NlohmannJsonAdapter::JsonParseObjData(json &src) {
+  std::string type = getTypeAt<std::string>(src, "type", __FUNCTION__);
 
-  json j = res;
-  return j.dump();
+  if (type == "NodeEdgeListData")
+    return std::move(JsonParseNodeEdgeListData(src));
+  else if (type == "AdjacencyListData")
+    return std::move(JsonParseAdjacencyListData(src));
+  else
+    throw myException(BaseException, __FUNCTION__, "UNKNOWN DATA TYPE");
+
+  return nullptr;
 }
 
-std::string NlohmannJsonAdapter::JsonStringifyIdEdges(
-    const BaseModelData::IdEdgeVector &idEdges) {
-  std::vector<std::pair<size_t, size_t>> res;
+std::unique_ptr<TransformationMatrix>
+NlohmannJsonAdapter::JsonParseTransformMatrix(json &src) {
+  std::unique_ptr<TransformationMatrix> res =
+      std::make_unique<TransformationMatrix>();
 
-  for (auto &idedgeptr : *idEdges)
-    res.push_back(std::pair<size_t, size_t>(idedgeptr->getFirstId(),
-                                            idedgeptr->getSecondId()));
+  std::string type = getTypeAt<std::string>(src, "type", __FUNCTION__);
+  if (type != "TransformationMatrix")
+    throw myException(BaseException, __FUNCTION__,
+                      "Переданный объект не является матрицей трансформации");
 
-  json j = res;
-  return j.dump();
+  auto jtransmat =
+      getTypeAt<std::vector<std::vector<double>>>(src, "data", __FUNCTION__);
+
+  validateJTransMat(jtransmat);
+
+  for (size_t i = 0; i <= TransformationMatrix::dim; ++i)
+    for (size_t j = 0; j <= TransformationMatrix::dim; ++j)
+      res->transform[i][j] = jtransmat[i][j];
+
+  return std::move(res);
 }
 
-std::string NlohmannJsonAdapter::JsonStringifyObjData(BaseModelData &data) {
+NlohmannJsonAdapter::json
+NlohmannJsonAdapter::JsonifyObjData(BaseModelData &data) {
   json res = {{"type", "NodeEdgeListData"}};
-  res["nodes"] = json::parse(JsonStringifyNodes(data.getNodes()));
-  res["edges"] = json::parse(JsonStringifyIdEdges(data.getIdEdges()));
+  res["nodes"] = JsonifyNodes(data.getNodes());
+  res["edges"] = JsonifyIdEdges(data.getIdEdges());
 
-  return res.dump();
+  return res;
 }
