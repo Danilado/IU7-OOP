@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e" pages="5">
     <diagram name="Информационная модель" id="Z06VgBOMTk1LqCOjDFpn">
-        <mxGraphModel dx="1306" dy="682" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1518" dy="682" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -137,7 +137,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="ZtXt1KJk45wriWs4VpeA" name="Модель переходов состояний">
-        <mxGraphModel dx="2506" dy="682" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="2718" dy="682" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -1265,7 +1265,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="k9xXeqvl5peETQn-Gs0b" name="Модель взаимодействия объектов">
-        <mxGraphModel dx="1706" dy="682" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1918" dy="682" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -2125,7 +2125,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="i62eECwSucodof1M-47Q" name="Каналы управления">
-        <mxGraphModel dx="1306" dy="1082" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1518" dy="1082" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
