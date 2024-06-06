@@ -89,6 +89,14 @@ void MainWindow::handleKey(Qt::Key key) {
     qDebug() << "C";
     zoomCamera(0.9);
   } break;
+  case (Key::Key_U): {
+    qDebug() << "U";
+    undo();
+  } break;
+  case (Key::Key_R): {
+    qDebug() << "R";
+    redo();
+  } break;
   default: {
   } break;
   }

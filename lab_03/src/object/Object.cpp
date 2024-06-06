@@ -1,4 +1,7 @@
 #include "Object.hpp"
+#include <QDebug>
+#include <algorithm>
+#include <map>
 
 Object::Object() { transform = std::make_unique<TransformationMatrix>(); }
 
@@ -60,11 +63,13 @@ ObjectCaretaker::MemPtr ObjectCaretaker::get(size_t id) {
   return res;
 }
 
+ObjectCaretaker::ObjectCaretaker() {}
+
 void ObjectCaretaker::clear_expired() {
   auto tmp = saveData;
 
-  for (auto [id, data] : tmp)
-    if (data.first.expired())
+  for (auto &[id, data] : tmp)
+    if (data.first.expired() || data.second.size() == 0)
       saveData.erase(id);
 }
 

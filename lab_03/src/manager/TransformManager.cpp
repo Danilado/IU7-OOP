@@ -1,4 +1,5 @@
 #include "TransformManager.hpp"
+#include "HistoryManager.hpp"
 #include "RotateObjectVisitor.hpp"
 #include "ScaleObjectVisitor.hpp"
 #include "SceneManager.hpp"
@@ -7,12 +8,16 @@
 
 void TransformManager::apply(BaseVisitor &vis, size_t target) {
   SceneManager &sm = Singleton<SceneManager>::instance();
+  HistoryManager &hm = Singleton<HistoryManager>::instance();
   auto scene = sm.getScene();
 
   if (target == 0)
     vis.visit(*scene);
-  else
-    scene->getObject(target)->accept(vis);
+  else {
+    hm.save(target);
+    ObjectPtr tar = scene->getObject(target);
+    tar->accept(vis);
+  }
 }
 
 void TransformManager::TranslateObject(Point3D &offset, size_t target) {

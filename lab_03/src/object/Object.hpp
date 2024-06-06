@@ -74,6 +74,7 @@ private:
   void clear_expired();
 
 public:
+  ObjectCaretaker();
   std::shared_ptr<ObjectMemento> get(size_t id);
   void set(size_t id, std::weak_ptr<Object> origin, MemPtr memento);
   void clear_id(size_t id);

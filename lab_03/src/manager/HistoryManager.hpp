@@ -13,7 +13,7 @@ public:
   HistoryManager();
   ~HistoryManager() = default;
 
-  void save(size_t object_id);
+  void save(size_t object_id, bool from_future = false);
   void undo(size_t object_id);
   void redo(size_t object_id);
   void clear(void);

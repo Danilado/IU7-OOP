@@ -1,5 +1,6 @@
 #include "LoadCameraCommand.hpp"
 #include "LoadModelCommand.hpp"
+#include "RedoCommand.hpp"
 #include "RemoveObjectCommand.hpp"
 #include "RotateObjectCommand.hpp"
 #include "SaveCameraCommand.hpp"
@@ -7,6 +8,7 @@
 #include "ScaleObjectCommand.hpp"
 #include "SetCameraCommand.hpp"
 #include "TranslateObjectCommand.hpp"
+#include "UndoCommand.hpp"
 #include "mainwindow.hpp"
 
 #include <QDebug>
@@ -219,6 +221,30 @@ void MainWindow::on_remove_cam_clicked() {
   try {
     application.exec(cmd);
     sdh->removeCamera(cid);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
+
+  updateScene();
+}
+
+void MainWindow::undo() {
+  auto cmd = std::make_shared<UndoCommand>(getObjId());
+
+  try {
+    application.exec(cmd);
+  } catch (const std::exception &e) {
+    showError(e.what());
+  }
+
+  updateScene();
+}
+
+void MainWindow::redo() {
+  auto cmd = std::make_shared<RedoCommand>(getObjId());
+
+  try {
+    application.exec(cmd);
   } catch (const std::exception &e) {
     showError(e.what());
   }

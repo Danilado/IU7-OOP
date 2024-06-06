@@ -52,6 +52,9 @@ private:
   void moveCamera(double dx, double dy, double dz);
   void rotateCamera(double ax, double ay, double az);
 
+  void undo();
+  void redo();
+
 private slots:
   void on_load_model_clicked();
   void on_translate_clicked();

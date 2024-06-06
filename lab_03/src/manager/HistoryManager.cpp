@@ -2,15 +2,17 @@
 #include "BaseException.hpp"
 #include "SceneManager.hpp"
 #include "SingletonTemplate.hpp"
+#include <QDebug>
 
 HistoryManager::HistoryManager() {
-  std::unique_ptr<ObjectCaretaker> past = std::make_unique<ObjectCaretaker>();
-  std::unique_ptr<ObjectCaretaker> future = std::make_unique<ObjectCaretaker>();
+  past = std::make_unique<ObjectCaretaker>();
+  future = std::make_unique<ObjectCaretaker>();
 }
 
-void HistoryManager::save(size_t object_id) {
-  if (future->contains(object_id))
-    future->clear_id(object_id);
+void HistoryManager::save(size_t object_id, bool from_future) {
+  if (!from_future)
+    if (future->contains(object_id))
+      future->clear_id(object_id);
 
   SceneManager &sm = Singleton<SceneManager>::instance();
   std::shared_ptr<Scene> scene = sm.getScene();
@@ -42,7 +44,7 @@ void HistoryManager::redo(size_t object_id) {
     throw myException(BaseException, "undo",
                       "Object with id " + std::to_string(object_id) +
                           " not found in future history");
-  save(object_id);
+  save(object_id, true);
 
   SceneManager &sm = Singleton<SceneManager>::instance();
   std::shared_ptr<Scene> scene = sm.getScene();
